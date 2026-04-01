@@ -3,7 +3,7 @@
 
 `PYTHON 3.13+` `PYQT6` `GPL-3.0+`
 
-**[English](README.en.md) | [Русский](README.ru.md)**
+**[English](README.md) | [Русский](README.ru.md)**
 
 </div>
 
