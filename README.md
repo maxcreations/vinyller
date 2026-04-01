@@ -7,10 +7,8 @@
 
 </div>
 
----
 
 # Vinyller
-
 
 Vinyller is a modern cross-platform player for local music collections with support for all major audio formats and the ability to read monolithic FLAC+CUE albums by tracks. 
 The player allows you to flexibly customize the interface and easily organize your music library using the built-in tag editor and creating your own music encyclopedia. 
@@ -93,7 +91,6 @@ Create song compilations in a couple of clicks — automatic export to a separat
 
 Vinyller is available in 18 languages and supports easy [addition of new localizations](docs/MANUAL.en.md#adding-new-localizations).
 
----
 
 ## User Manual
 The documentation details the player's features, interaction methods, descriptions of the encyclopedia and metadata editor functions, as well as the logic behind chart generation and instructions for adding new translation files:
@@ -102,8 +99,6 @@ The documentation details the player's features, interaction methods, descriptio
 ## Privacy and Network Activity
 Vinyller is an application focused on local operation and respecting privacy. The player **does not collect telemetry, does not require account creation, and does not send your library data or listening history to third-party servers**. 
 Learn more in the [User Manual](docs/MANUAL.en.md#privacy-and-network-activity).
-
----
 
 ## Download Latest Releases
 
@@ -115,8 +110,6 @@ Learn more in the [User Manual](docs/MANUAL.en.md#privacy-and-network-activity).
 
 **Minimum system requirements:** Dual-core processor, 4 GB RAM. 
 **Supported OS:** Windows 10/11, macOS 14+, Ubuntu 22.04+
-
----
 
 ## Quick Start
 <details>
@@ -171,8 +164,6 @@ pyinstaller --noconfirm --name Vinyller --onedir --noconsole --add-data "assets:
 ```
 </details>
 
------
-
 ## Roadmap
 
 - [ ] **Linux Improvements:** Fix potential font size issues.
@@ -180,8 +171,6 @@ pyinstaller --noconfirm --name Vinyller --onedir --noconsole --add-data "assets:
 - [ ] **Theme Unification:** Refactor styles to create convenient tools for generating custom themes.
 - [ ] **Magic Numbers:** Refactor and move all non-design-related hardcoded numbers into a separate file.
 - [ ] **General Refactoring:** Perform general code optimization to comply with MVC.
-
------
 
 ## Acknowledgments
 
@@ -208,8 +197,6 @@ pyinstaller --noconfirm --name Vinyller --onedir --noconsole --add-data "assets:
 ### AI Usage
 
 Complex functions, methods, and translations into different languages were implemented with AI support.
-
------
 
 ## Legal Information
 
