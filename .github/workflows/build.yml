@@ -1,0 +1,137 @@
+name: Build and Release Vinyller
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on tag creation, e.g., v1.0.0
+
+permissions:
+  contents: write
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  # --- MACOS BUILD (Intel & Apple Silicon) ---
+  build-macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ macos-15-intel, macos-14 ]
+        include:
+          - os: macos-15-intel
+            arch: Intel
+          - os: macos-14
+            arch: Apple_Silicon
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Inject Version from Tag
+        run: python update_version.py ${{ github.ref_name }}
+      - name: Build
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "11.0"
+        run: |
+          pyinstaller --noconfirm --name Vinyller --onedir --windowed --icon="assets/logo/app_icon.png" --add-data "assets:assets" --add-data "translations:translations" --add-data "LICENSE:." --osx-bundle-identifier "ru.maxcreations.vinyller" vinyller.py
+      - name: Create DMG
+        run: |
+          # Create the image structure (Vinyller.app is capitalized)
+          mkdir -p dist/dmg_staging
+          cp -R dist/Vinyller.app dist/dmg_staging/
+          ln -s /Applications dist/dmg_staging/Applications
+          
+          # Build the DMG
+          hdiutil create -volname "Vinyller" -srcfolder dist/dmg_staging -ov -format UDZO dist/Vinyller_macOS_${{ matrix.arch }}.dmg
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}
+          path: dist/Vinyller_macOS_${{ matrix.arch }}.dmg
+
+  # --- WINDOWS BUILD (Installer & Portable) ---
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Inject Version from Tag
+        shell: pwsh
+        run: python update_version.py ${{ github.ref_name }}
+
+      - name: Build Regular (OneDir)
+        run: |
+          pyinstaller --noconfirm --name Vinyller --onedir --noconsole --version-file="version_info.txt" --add-data "assets;assets" --icon="assets/logo/app_icon_win.ico" --add-data "translations;translations" --add-data "LICENSE;." vinyller.py
+
+      - name: Build Portable (OneFile)
+        run: |
+          pyinstaller --noconfirm --onefile --noconsole --version-file="version_info.txt" --add-data "assets;assets" --icon="assets/logo/app_icon_win.ico" --add-data "translations;translations" --add-data "LICENSE;." --name Vinyller_Portable vinyller.py
+
+      - name: Compile Inno Setup Installer
+        run: iscc installer.iss
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: |
+            dist/Vinyller_Windows_Setup.exe
+            dist/Vinyller_Portable.exe
+
+  # --- LINUX BUILD ---
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1-mesa libxcb-xinerama0 libqt6multimedia6
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Inject Version from Tag
+        run: python update_version.py ${{ github.ref_name }}
+      - name: Build
+        run: |
+          pyinstaller --noconfirm --name Vinyller --onedir --noconsole --add-data "assets:assets" --icon="assets/logo/app_icon.png" --add-data "translations:translations" --add-data "LICENSE:." vinyller.py
+      - name: Archive
+        run: |
+          # Archive the Vinyller directory (capitalized)
+          cd dist && tar -czvf ../Vinyller_Linux.tar.gz Vinyller/
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: Vinyller_Linux.tar.gz
+
+  # --- RELEASE PUBLICATION ---
+  release:
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

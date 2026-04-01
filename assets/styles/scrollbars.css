@@ -1,0 +1,135 @@
+QScrollBar:horizontal
+{
+    height: 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: $SCROLLBAR_BG;
+}
+
+QScrollBar::handle:horizontal
+{
+    background-color: $SCROLLBAR_HANDLE;
+    min-width: 16px;
+    border-radius: 3px;
+}
+
+QScrollBar::add-line:horizontal
+{
+    margin: 5px;
+    border-image: url(assets/control/arrows/arrow_solid_right_disabled.svg);
+    width: 0px;
+    height: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+    opacity: 0.5;
+}
+
+QScrollBar::sub-line:horizontal
+{
+    margin: 5px;
+    border-image: url(assets/control/arrows/arrow_solid_left_disabled.svg);
+    height: 0px;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal:hover,QScrollBar::add-line:horizontal:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_right.svg);
+    height: 0px;
+    width: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+
+QScrollBar::sub-line:horizontal:hover, QScrollBar::sub-line:horizontal:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_left.svg);
+    height: 0px;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
+{
+    background: none;
+}
+
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
+{
+    background: none;
+}
+
+QScrollBar:vertical
+{
+    width: 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 3px;
+    background-color: $SCROLLBAR_BG;
+}
+
+QScrollBar::handle:vertical
+{
+    background-color: $SCROLLBAR_HANDLE;
+    min-height: 16px;
+    border-radius: 3px;
+}
+
+QScrollBar::handle:vertical:hover, QScrollBar::handle:horizontal:hover
+{
+    background-color: $SCROLLBAR_HANDLE_HOVER;
+}
+
+QScrollBar::sub-line:vertical
+{
+    margin: 5px;
+    border-image: url(assets/control/arrows/arrow_solid_up_disabled.svg);
+    height: 0px;
+    width: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical
+{
+    margin: 5px;
+    border-image: url(assets/control/arrows/arrow_solid_down_disabled.svg);
+    height: 0px;
+    width: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_up.svg);
+}
+
+QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_down.svg);
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical
+{
+    background: none;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
+{
+    background: none;
+}
+
+QTabBar QToolButton::left-arrow {
+    image: url(assets/control/arrows/arrow_solid_left.svg);
+}
+
+QTabBar QToolButton::right-arrow {
+    image: url(assets/control/arrows/arrow_solid_right.svg);
+}

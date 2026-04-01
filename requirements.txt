@@ -1,0 +1,14 @@
+# Main Requirements
+PyQt6>=6.10.2
+mutagen>=1.47.0
+requests>=2.33.0
+urllib3>=2.6.3
+Pillow>=12.1.1
+send2trash>=2.1.0
+
+# macOS specific API wrappers
+pyobjc-framework-Cocoa>=12.1 ; sys_platform == 'darwin'
+pyobjc-framework-MediaPlayer>=12.1 ; sys_platform == 'darwin'
+
+# Build Tools
+pyinstaller>=6.18.0

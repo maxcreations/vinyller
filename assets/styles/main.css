@@ -1,0 +1,1355 @@
+.backgroundPrimary{
+    background: $SECONDARY;
+}
+.backgroundTransparent{
+    background: transparent;
+}
+
+QScrollArea{
+    outline: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+QToolTip {
+    color: $PRIMARY;
+    background-color: $TOOLTIP_BG;
+    border: 1px solid $TOOLTIP_BRD;
+    white-space: pre-wrap;
+    padding: 4px;
+    font-size: 12px;
+}
+TrackListWidget, queueWidget{
+    font-size: 12px;
+}
+.controlPanel {
+    border-top: 1px solid $CONTROL_PANEL_BRD;
+    background: $CONTROL_PANEL_BG;
+}
+
+.borderBottomRadius8 {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.controlPanelVinyl {
+    border: 1px solid $CONTROL_PANEL_BRD;
+    border-bottom: none;
+    background: $CONTROL_PANEL_BG;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
+
+.controlPanelVinylFloat {
+    border: 1px solid $CONTROL_PANEL_BRD;
+    background: $CONTROL_PANEL_BG;
+    border-radius: 24px;
+}
+
+
+
+.widgetVinnyHiddenControl{
+    border-radius: 24px;
+    background-color: $OVERLAY_THEME_BG;
+}
+
+QSplitter{
+    background-color: transparent;
+}
+
+QSplitter::handle, QSplitterHandle{
+    margin: 0;
+    background-color: $WIDGET_BRD_PRIMARY;
+}
+
+QSplitter::handle:hover, QSplitterHandle:hover {
+    padding: 0;
+    margin:0;
+    background-color: $ACCENT;
+}
+
+.navBar {
+    background-color: $NAV_PANEL_BG;
+    border-right: 1px solid $NAV_PANEL_BRD;
+}
+
+.navButtonFavorite{
+    border: none;
+    padding: 0px;
+    margin: 0;
+    width: 56px;
+    height: 56px;
+    background-color: $VINYLLER_BUTTON;
+    border-radius: 0px;
+    border-right: 1px solid $VINYLLER_BUTTON_BRD;
+    border-bottom: 1px solid $VINYLLER_BUTTON_BRD;
+
+}
+
+.navButtonFavorite:hover{
+    background-color: $VINYLLER_BUTTON_HOVER;
+}
+
+.navButtonFavorite:checked{
+    border-right: 1px solid $ACCENT;
+    border-bottom: 1px solid $ACCENT;
+    background-color: $ACCENT;
+}
+.navButtonFavorite:checked:hover{
+    border-right: 1px solid $ACCENT_HOVER;
+    border-bottom: 1px solid $ACCENT_HOVER;
+    background-color: $ACCENT_HOVER;
+}
+
+.navButton, .navButtonSettings {
+    border: none;
+    padding: 0px;
+    width: 42px;
+    height: 42px;
+    background-color: $NAV_PANEL_BG;
+    border-radius: 6px;
+    margin: 6px;
+    margin-bottom: 0px;
+}
+
+.navButtonSettings {
+    margin: 6px;
+}
+
+.navButton:hover {
+    padding: 0px;
+    background-color: $INPUT_BG_HOVER;
+    border: none;
+}
+
+.navButton:checked{
+    padding: 0px;
+    background-color: $ACCENT_SELECTED;
+    border: none;
+}
+
+.navButton:checked:hover {
+    padding: 0px;
+    background-color: $ACCENT_SELECTED_HOVER;
+    border: none;
+}
+
+.navButtonSettings:hover {
+    padding: 0px;
+    background-color: $INPUT_BG_HOVER;
+    border: none;
+}
+.navButtonSettings:checked {
+    padding: 0px;
+    background-color: $ACCENT_SELECTED;
+    border-right: none;
+}
+
+.headerBackground{
+    background-color: $HEADER_BG;
+}
+
+.headerBorder{
+    border-bottom: 1px solid $HEADER_BRD;
+}
+
+.headerDivider{
+    border: none;
+    border-left: 2px solid $WIDGET_BRD_PRIMARY;
+}
+
+.borderRight{
+    border-right: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.borderBottom{
+    border-bottom: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+
+.borderTop{
+    border-top: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.borderRadius4{
+    border-radius: 4px;
+}
+
+.borderRadius6{
+    border-radius: 6px;
+}
+
+.borderRadius8{
+    border-radius: 8px;
+}
+
+QMenu{
+    background-color: $SECONDARY;
+    border: 1px solid $INPUT_BRD_HOVER;
+    border-radius: 6px;
+    padding: 4px;
+    margin: 0px;
+}
+
+QMenu::item {
+    min-height: 32px;
+    padding: 0px 12px;
+    color: $PRIMARY;
+    background-color: transparent;
+    border-radius: 3px;
+    padding-right: 24px;
+}
+QMenu::item:checked {
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
+QMenu::item:selected, QMenu::item:checked:selected {
+    background-color: $WIDGET_BG_PRIMARY;
+}
+
+QMenu::item:disabled {
+    color: $TERTIARY;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: $WIDGET_BRD_SECONDARY;
+    margin: 5px 5px;
+}
+
+QMenu::icon {
+    width: 16px;
+    height: 16px;
+    subcontrol-origin: padding;
+    subcontrol-position: center left;
+    left: 8px;
+}
+
+QMenu::right-arrow {
+    image: url(assets/control/arrows/arrow_solid_right.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 8px;
+}
+QMenu::indicator{
+    left: 8px;
+    width: 16px;
+    height: 16px;
+}
+QMenu::indicator:checked {
+    image: url(assets/control/check.svg);
+    subcontrol-origin: padding;
+    subcontrol-position: center left;
+}
+QLabel{
+    color: $PRIMARY;
+}
+
+QLineEdit, QTextEdit{
+    margin: 0;
+    padding: 0;
+    background-color: $SECONDARY;
+    border-radius: 6px;
+    border: 1px solid $INPUT_BRD;
+    line-height: 20px;
+    padding: 0 4px;
+    height: 34px;
+    min-width: 34px;
+    outline: 0px;
+    color: $PRIMARY;
+}
+
+QTextEdit{
+    padding: 0;
+}
+
+QTextEdit:disabled{
+    color: $TERTIARY;
+}
+
+QPushButton, QComboBox  {
+    margin: 0;
+    padding: 0;
+    background-color: $SECONDARY;
+    border-radius: 6px;
+    border: 1px solid $INPUT_BRD;
+    line-height: 20px;
+    outline: 0px;
+    color: $PRIMARY;
+    font-size: 12px;
+}
+
+QComboBox{
+    padding: 0px 6px;
+    height: 34px;
+    min-width: 34px;
+}
+
+QLineEdit:hover, QPushButton:hover, QComboBox:hover {
+    border: 1px solid $INPUT_BRD_HOVER;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 6px;
+    width: 24px;
+    height: 16px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: transparent;
+}
+
+QComboBox::down-arrow {
+    image: url(assets/control/arrows/arrow_solid_down.svg);
+    width: 10px;
+    height: 10px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: $SECONDARY;
+    color: $PRIMARY;
+    border: 1px solid $INPUT_BRD_HOVER;
+    border-radius: 6px;
+    selection-color: $PRIMARY;
+    outline: none;
+    padding: 2px;
+    min-width:40px;
+    margin: 0px;
+}
+
+QComboBox QAbstractItemView::item {
+    min-height: 32px;
+    padding: 0px 6px;
+    border: none;
+    border-radius: 3px;
+    min-width:100%;
+}
+
+QComboBox QAbstractItemView::item:hover, QStyledItemDelegate:hover {
+    background-color: $INPUT_BG_HOVER;
+}
+
+
+.btnText{
+    padding: 0px 12px;
+    height: 34px;
+    min-width: 34px;
+    font-weight: bold;
+    border: 1px solid $INPUT_BRD;
+}
+
+.btnText:hover{
+    background-color: $INPUT_BG_HOVER;
+    border: 1px solid $INPUT_BRD_HOVER;
+}
+
+.btnText:disabled{
+    color: $TERTIARY;
+}
+.btnColorSwatch{
+    border: 1px solid $INPUT_BRD;
+    border-radius: 6px;
+}
+
+.btnColorSwatch:hover{
+    border: 1px solid $INPUT_BRD_HOVER;
+}
+
+.btnListAction {
+    border: none;
+    background-color: transparent;
+    padding: 0px;
+    margin: 0px;
+}
+
+.btnListAction:hover {
+    background-color: $WIDGET_BG_PRIMARY;
+    border: none;
+}
+
+.btnWndControl {
+    border: 1px solid transparent;
+    background-color: transparent;
+    padding: 0px;
+    margin: 0px;
+    border-radius:12;
+}
+
+.btnWndControl:hover {
+    background-color: $WIDGET_BG_PRIMARY;
+    border: 1px solid transparent;
+}
+
+.inputBorderMultiLeft{
+    padding: 0px 0px;
+    height: 34px;
+    min-width: 34px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 0px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-right: 1px solid transparent;
+}
+
+.inputBorderSingle{
+    padding: 0px 0px;
+    height: 34px;
+    min-width: 34px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 6px;
+    background-color: $SECONDARY;
+
+}
+
+.inputBorderSinglePadding{
+    padding: 0px 6px;
+    height: 34px;
+    min-width: 34px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 6px;
+}
+
+.inputBorderMultiMiddle{
+    padding: 0px 0px;
+    height: 34px;
+    min-width: 34px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 0px;
+    border-right: 1px solid transparent;
+}
+
+.inputBorderMultiRight{
+    padding: 0px 0px;
+    height: 34px;
+    min-width: 34px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 0px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.inputBorderMultiLeft:hover, .inputBorderMultiMiddle:hover, .inputBorderMultiRight:hover, .inputBorderSingle:hover{
+    background-color: $SECONDARY;
+    border-color: $INPUT_BRD_HOVER;
+}
+
+.inputBorderSinglePadding:disabled, .inputBorderMultiLeft:disabled, .inputBorderMultiMiddle:disabled, .inputBorderMultiRight:disabled, .inputBorderSingle:disabled{
+    background-color: $INPUT_BG_DISABLED;
+    border-right: 1px solid $INPUT_BRD_DISABLED;
+    color: $TERTIARY;
+}
+
+.inputBorderPaddingButton{
+    padding: 0px 12px;
+}
+
+.inputBorderPaddingTextEdit{
+    padding: 0px 6px;
+}
+
+.filterInput {
+    margin: 0;
+    padding: 0;
+    background-color: $HEADER_BG;
+    border-radius: 0;
+    border: none;
+    outline: 0px;
+    font-size: 14px;
+    height: 36px;
+}
+
+.filterInput:hover, .filterInput:selected {
+    border: none;
+}
+
+.btnCover {
+    padding:0;
+    margin:0;
+    border: 1px solid $INPUT_BRD;
+    border-radius:3px;
+}
+
+.btnCover:hover{
+    border: 1px solid $INPUT_BRD_HOVER;
+}
+
+.btnCover:disabled{
+    border: 1px solid $INPUT_BRD;
+}
+
+.btnTool{
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    width: 34px;
+    height: 34px;
+    background-color: transparent;
+    border: 1px solid transparent;
+}
+
+.btnToolText{
+    border: none;
+    padding: 0 12px;
+    margin: 0px;
+    height: 34px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    font-weight: bold;
+}
+
+.btnTool:hover, .btnToolText:hover, .btnControl:pressed, .btnControl:checked, .btnControl:hover {
+    background-color: $INPUT_BG_HOVER;
+    border: 1px solid $INPUT_BG_HOVER;
+}
+
+.btnToolVinny{
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    background-color: $OVERLAY_THEME_BG;
+}
+
+.btnToolVinny:hover{
+    border: none;
+    background-color: $OVERLAY_THEME_BG;
+}
+
+
+.btnVinnyControl{
+    border-radius: 18px;
+    background-color: transparent;
+}
+
+.btnVinnyControlPlay{
+    border-radius: 18px;
+    background-color: transparent;
+}
+
+.btnControl{
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    width: 38px;
+    height: 38px;
+    border-radius: 20px;
+    background-color: transparent;
+    border: 1px solid transparent;
+}
+
+.btnPlay{
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+}
+
+.btnPlay:checked{
+    border-radius: 20px;
+    border: 1px solid $ACCENT;
+}
+
+.btnPlay:checked:hover{
+    background-color: $ACCENT;
+}
+
+.btnToolMenu{
+    background-color: $INPUT_BG;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0px 6px;
+    padding-right: 24px;
+    height: 34px;
+    color: $PRIMARY;
+    font-weight: bold;
+}
+
+.btnToolMenu:hover, .btnToolMenu:pressed , .btnToolMenu:selected {
+    background-color: $INPUT_BG_HOVER;
+    border: 1px solid $INPUT_BG_HOVER;
+}
+
+.btnToolMenu::menu-indicator {
+    image: url(assets/control/arrows/arrow_solid_down.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 8px;
+}
+
+.btnToolMenuBorder{
+    background-color: $INPUT_BG;
+    border: 1px solid $INPUT_BRD;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 0px 10px;
+    padding-right: 20px;
+    height: 34px;
+    color: $PRIMARY;
+    font-size: 12px;
+}
+
+.btnToolMenuBorder:hover, .btnToolMenuBorder:pressed , .btnToolMenuBorder:selected {
+    background-color: $INPUT_BG_HOVER;
+    border: 1px solid $INPUT_BRD_HOVER;
+}
+
+.btnToolMenuBorder::menu-indicator {
+    image: url(assets/control/arrows/arrow_solid_down.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 8px;
+}
+
+.popMenu{
+    background-color: $SECONDARY;
+    margin: 0px;
+
+}
+
+.textBannerPrimary{
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.textBannerSecondary{
+    font-size: 14px;
+}
+
+.textHeaderPrimary{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.textHeaderSecondary{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.textPrimary{
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.textSecondary{
+    font-size: 12px;
+}
+
+.textTertiary{
+    font-size: 10px;
+}
+
+.btnLink{
+    margin: 0;
+    padding: 0px;
+    border: none;
+    font-weight: bold;
+    color: $PRIMARY;
+}
+
+.btnLink:hover{
+    margin: 0;
+    padding: 0px;
+    border: none;
+    font-weight: bold;
+    color: $ACCENT_HOVER;
+}
+
+.btnRelationLink{
+    margin: 0;
+    padding: 0;
+    height: 34px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 18px;
+    font-weight: bold;
+    background-clip: padding-box;
+}
+
+.btnRelationLink:hover{
+    margin: 0;
+    border: none;
+    border: 1px solid $INPUT_BRD_HOVER;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.italic{
+    font-style: italic;
+}
+
+.separator {
+    border-bottom: 1px solid $WIDGET_BRD_SECONDARY;
+}
+.separatorAlpha{
+    color: $TERTIARY;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QListWidget {
+    outline: none;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+QListWidget::item {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    outline: none;
+}
+
+.listWidget{
+    outline: none;
+    margin: 0px;
+    padding: 4px;
+    background-color: $SECONDARY;
+    color: $PRIMARY;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 6px;
+    selection-color: $PRIMARY;
+}
+
+.listWidget::item {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 4px;
+    outline: 0;
+    border: 0;
+    background-color: $SECONDARY;
+    height: 32px;
+    border-radius: 3px;
+}
+
+.listWidget::item:selected {
+    background-color: $WIDGET_BG_SECONDARY;
+    color: $PRIMARY;
+    outline: none;
+}
+
+.listWidget::item:hover {
+    background-color: $WIDGET_BG_PRIMARY;
+}
+
+.queueWidget{
+    padding: 0px;
+    margin: 0px;
+    background-color: $SECONDARY;
+}
+
+.queueWidget::item {
+    border: none;
+    border-bottom: 1px solid $WIDGET_BRD_SECONDARY;
+}
+
+.queueWidget::item:selected {
+    border: 2px solid transparent; /* Hack to correct the height */
+    background-color: $LIST_ITEM_SELECTED;
+    border-bottom: 1px solid $LIST_ITEM_BRD;
+}
+
+.queueWidget::item:hover {
+    border: 2px solid transparent; /* Hack to correct the height */
+    background-color: $LIST_ITEM_HOVER;
+    border-bottom: 1px solid $LIST_ITEM_BRD;
+}
+
+.listWidgetNav{
+    padding: 0px;
+    margin: 0px;
+    outline: none;
+    background-color: $SECONDARY;
+    color: $PRIMARY;
+    border-radius: 6px;
+    font-weight: bold;
+    selection-color: $PRIMARY;
+}
+
+.listWidgetNav::item {
+    margin: 0px;
+    margin-right: 0px;
+    min-height: 40px;
+    border-radius: 6px;
+    padding: 0px 12px;
+    color: $PRIMARY;
+}
+
+.listWidgetNav::item:focus {
+    outline: none;
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
+.listWidgetNav::item:selected {
+    background-color: $WIDGET_BG_PRIMARY;
+    color: $PRIMARY;
+}
+
+.listWidgetNav::item:hover {
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
+CardWidget, .contentWidget{
+    background-color: $CARD_BG;
+    border-radius: 6px;
+}
+
+CardWidget:hover, .contentWidget:hover{
+    background-color: $CARD_BG_HOVER;
+}
+
+.popup{
+    background-color: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-radius: 6px;
+}
+
+QSlider:horizontal {
+    height: 8px;
+}
+
+QSlider::groove:horizontal {
+    height: 4px;
+    background: $WIDGET_BRD_SECONDARY;
+    border-radius: 2px;
+}
+
+QSlider::handle:horizontal {
+    background: $ACCENT;
+    width: 8px;
+    padding: 0px;
+    margin: -2px 0;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: $ACCENT_HOVER;
+    padding: 0px;
+    margin: -2px 0;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:horizontal {
+    background: $ACCENT;
+    border-radius: 2px;
+}
+
+QSlider::add-page:horizontal {
+    background: $WIDGET_BG_SECONDARY;
+    border-radius: 2px;
+}
+
+.muted::handle:horizontal {
+    background: $TERTIARY;
+}
+
+.muted::sub-page:horizontal {
+    background: $WIDGET_BG_PRIMARY;
+}
+
+.unmuted::handle:horizontal {
+    background: $ACCENT;
+}
+
+.unmuted::sub-page:horizontal {
+    background: $ACCENT;
+}
+
+QSlider:vertical {
+    width: 8px;
+}
+
+QSlider::groove:vertical {
+    width: 4px;
+    background: $WIDGET_BG_SECONDARY;
+    border-radius: 2px;
+}
+
+QSlider::handle:vertical {
+    background: $ACCENT;
+    height: 8px;
+    padding: 0px;
+    margin: 0 -2px;
+    border-radius: 4px;
+}
+
+QSlider::handle:vertical:hover {
+    background: $ACCENT_HOVER;
+    padding: 0px;
+    margin: 0 -2px;
+    border-radius: 4px;
+}
+
+QSlider::sub-page:vertical {
+    background: $WIDGET_BG_SECONDARY;
+    border-radius: 2px;
+}
+
+QSlider::add-page:vertical {
+    background: $ACCENT;
+    border-radius: 2px;
+}
+
+.muted::handle:horizontal, .muted::handle:vertical {
+    background: $TERTIARY;
+}
+
+.muted::sub-page:horizontal{
+    background: $TERTIARY;
+}
+
+.muted::add-page:vertical {
+    background: $TERTIARY;
+}
+
+.unmuted::handle:horizontal, .unmuted::handle:vertical{
+    background: $ACCENT;
+}
+
+.unmuted::sub-page:horizontal{
+    background: $ACCENT;
+}
+
+.unmuted::sub-page:vertical {
+    background: $WIDGET_BG_SECONDARY;
+}
+
+
+QFrame#dropZoneContainer {
+    background-color: $DZ_CONTAINER_BG;
+}
+
+QFrame#dropZone {
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px dashed $DZ_CONTAINER_FRAME;
+    margin: 8px;
+    border-radius: 6px;
+}
+
+QFrame#dropZone[active="true"] {
+    background-color: $DZ_CONTAINER_ACCENT;
+    border: 2px dashed $ACCENT;
+}
+
+.tabWidget::pane {
+    border: none;
+}
+
+.tabWidget::tab-bar {
+    alignment: center;
+}
+
+QTabBar::tab {
+    margin: 0;
+    padding: 0;
+    background-color: $SECONDARY;
+    border-radius: 6px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    line-height: 20px;
+    padding: 5px 16px;
+    min-height: 28px;
+    min-width:28px;
+    color: $PRIMARY;
+}
+
+QTabBar::tab {
+    border-radius: 0px;
+    border-right: 0px;
+    border-left: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+QTabBar::tab:first {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-right: 0px;
+}
+
+QTabBar::tab:last {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+QTabBar::tab:selected {
+    background-color: $WIDGET_BG_PRIMARY;
+    color: $PRIMARY;
+    border-color: $WIDGET_BRD_PRIMARY;
+    font-weight: bold;
+}
+
+QTabBar::tab:hover {
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
+QTabBar::tab:disabled {
+    color: $TERTIARY;
+}
+
+QTabBar QToolButton {
+    background-color: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-radius: 6px;
+    margin: 0px;
+    width: 36px;
+}
+
+QTabBar QToolButton:hover {
+    background-color: $WIDGET_BG_SECONDARY;
+    border-color: $WIDGET_BRD_PRIMARY;
+}
+
+QTabBar QToolButton:pressed {
+    background-color: $WIDGET_BG_SECONDARY;
+    border-color: $WIDGET_BRD_PRIMARY;
+}
+
+QTabBar QToolButton:disabled {
+    background-color: $SECONDARY;
+    border-color: $WIDGET_BRD_SECONDARY;
+}
+
+.alphaJumpPopup{
+    background-color: $SECONDARY;
+    border-radius: 6px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.btnAlphaJump{
+    background-color: $WIDGET_BG_SECONDARY;
+    border: none;
+    font-weight: bold;
+    color: $TERTIARY;
+    padding: 8px;
+    min-width: 16px;
+}
+
+.btnAlphaJump:hover{
+    background-color: $WIDGET_BG_PRIMARY;
+    font-weight: bold;
+    border: none;
+    color: $PRIMARY;
+}
+
+.btnAlphaJump:checked{
+    background-color: $WIDGET_BG_PRIMARY;
+    font-weight: bold;
+    border: none;
+    color: $PRIMARY;
+}
+
+.suggestionBlock{
+    background: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-radius: 6px;
+}
+
+.encyclopediaCompact{
+    background: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-radius: 6px;
+}
+
+QCheckBox {
+    outline: none;
+    spacing: 12px;
+    color: $PRIMARY;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 3px;
+    background-color: $SECONDARY;
+}
+
+QCheckBox::indicator:unchecked:hover {
+    border: 1px solid $ACCENT;
+    border-radius: 3px;
+}
+
+QCheckBox::indicator:checked {
+    background-color: $SECONDARY;
+    border: 1px solid $INPUT_BRD;
+    image: url(assets/control/check.svg);
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: $SECONDARY;
+    border: 1px solid $ACCENT;
+    border-radius: 3px;
+}
+
+QCheckBox:disabled {
+    color: $TERTIARY;
+}
+
+QCheckBox::indicator:disabled {
+    background-color: $WIDGET_BG_SECONDARY;
+    border: 1px solid $INPUT_BRD;
+}
+
+QRadioButton {
+    spacing: 12px;
+    color: $PRIMARY;
+}
+
+QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+    border: 1px solid $INPUT_BRD;
+    border-radius: 8px;
+    background-color: $SECONDARY;
+}
+
+QRadioButton::indicator:unchecked:hover {
+    border: 1px solid $ACCENT;
+}
+
+QRadioButton::indicator:checked {
+    background-color: $SECONDARY;
+    border: 1px solid $INPUT_BRD;
+    image: url(assets/control/radio_circle.svg);
+}
+
+QRadioButton::indicator:checked:hover {
+    background-color: $SECONDARY;
+    border: 1px solid $INPUT_BRD;
+}
+
+QRadioButton:disabled {
+    color: $TERTIARY;
+}
+
+QRadioButton::indicator:disabled {
+    background-color: $WIDGET_BG_SECONDARY;
+    border: 1px solid $INPUT_BRD;
+}
+
+.pendingUpdatesWidget{
+    background-color: $SECONDARY;
+    border-radius: 6px;
+}
+
+.miniVinny{
+    background-color: $SECONDARY;
+    border-radius: 8px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.textColorPrimary{
+    color: $PRIMARY;
+}
+
+.textColorSecondary{
+    color: $SECONDARY;
+}
+
+.textColorTertiary{
+    color: $TERTIARY;
+}
+
+.textColorAccent{
+    color: $ACCENT;
+}
+
+.textColorWhite{
+    color: $WHITE;
+}
+
+.textAlignLeft{
+    text-align: left;
+}
+
+.textAlignCenter{
+    text-align: center;
+}
+
+.notificationWidget{
+    background-color: $SECONDARY;
+    border-radius: 6px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.notificationJumpWidget{
+    background-color: $SECONDARY;
+    border-radius: 16px;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.TableComboBox, .TableMatchComboBoxReplace{
+    margin: 0;
+    padding: 0px;
+    outline: 0px;
+    background-color: $SECONDARY;
+    border-radius: 6px;
+    border: 1px solid $INPUT_BRD;
+    color: $PRIMARY;
+}
+
+.TableMatchComboBox{
+    padding: 0 6px;
+}
+
+.TableMatchComboBoxReplace{
+    color: $ACCENT;
+}
+
+QTableWidget {
+    margin: 0;
+    padding: 0;
+    background-color: $SECONDARY;
+    gridline-color: $WIDGET_BRD_PRIMARY;
+    color: $PRIMARY;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-radius: 6px;
+    selection-background-color: $WIDGET_BG_SECONDARY;
+    selection-color: $PRIMARY;
+    outline: 0;
+}
+
+QTableWidget::item {
+    padding: 0 6px;
+    border: none;
+    background-color: $SECONDARY;
+}
+
+QTableWidget::item:hover {
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
+QTableWidget::item:selected {
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
+QHeaderView {
+    background-color: transparent;
+    border: none;
+}
+
+QHeaderView::section {
+    background-color: transparent;
+    color: $TERTIARY;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+QTableCornerButton::section {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid $WIDGET_BRD_PRIMARY;
+}
+
+.bannerMyWave{
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 $ACCENT, stop:1 $ACCENT_SECONDARY);
+    border-radius: 12px;
+}
+
+.btnBanner{
+    padding: 0px 12px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    background-color: $WHITE;
+    font-weight: bold;
+}
+
+.btnBanner QLabel{
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.btnBanner:hover{
+    background-color: $LIGHT_GRAY;
+    border: none;
+}
+
+.ImageViewer{
+    background-color: $OVERLAY_DARK_BG;
+}
+
+.ImageViewerCaption{
+    background-color: $OVERLAY_DARK_BG;
+    border-radius: 16px;
+    border: none;
+    color: $WHITE;
+}
+
+.ImageViewerControl{
+    background-color: $OVERLAY_DARK_BG;
+    border-radius: 26px;
+    border: none;
+}
+
+.btnImageViewer{
+    background-color: transparent;
+    border: none;
+    border-radius: 18px;
+    font-size: 14px;
+    padding: 0px;
+    color: $WHITE;
+    font-weight: bold;
+}
+
+.galleryThumbOverlay{
+    background-color: $HOVER_OVERLAY;
+    border: none;
+    border-radius: 6px;
+}
+
+.btnTranslucentBG{
+    background-color: transparent;
+    padding: 0px;
+    color: $WHITE;
+    font-weight: bold;
+    border: none;
+    font-size: 12px;
+}
+
+.btnTranslucentBG:hover{
+    background-color: $HOVER_OVERLAY;
+    padding: 0px;
+    border: none;
+}
+
+.textImageViewer{
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    padding: 0px;
+    color: $WHITE;
+    font-weight: bold;
+}
+
+.btnImageViewer:hover{
+    background-color: $OVERLAY_DARK_BG;
+    border: none;
+}
+
+.btnImageViewer:disabled{
+    color: $TERTIARY;
+    border: none;
+}
+
+.EncyclopediaTextBlock{
+    border: none;
+    outline: none;
+    padding: 0px;
+    margin: 0px;
+}
+.colorPicker{
+    background: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_PRIMARY;
+    border-radius: 6px;
+}
+/*QPushButton:focus, QLineEdit:focus, QToolButton:focus, QCheckBox:focus, QComboBox:focus, QAbstractItemView::item:focus, QTextEdit:focus{
+    border: 1px solid $ACCENT;
+}*/

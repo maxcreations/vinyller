@@ -1,0 +1,6 @@
+docs/
+tools/
+*.md
+pyproject.toml
+installer.iss
+requirements.txt

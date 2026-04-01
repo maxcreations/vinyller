@@ -1,0 +1,101 @@
+QMenu::right-arrow {
+    image: url(assets/control/arrows/arrow_solid_right_theme_dk.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 8px;
+}
+
+QComboBox::down-arrow {
+    image: url(assets/control/arrows/arrow_solid_down_theme_dk.svg);
+    width: 10px;
+    height: 10px;
+}
+
+.btnToolMenu::menu-indicator {
+    image: url(assets/control/arrows/arrow_solid_down_theme_dk.svg);
+    width: 10px;
+    height: 10px;
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    right: 8px;
+}
+
+.navButton:checked{
+    padding: 0px;
+    background-color: $ACCENT;
+    border: none;
+}
+QMenu::indicator:checked {
+    image: url(assets/control/check_theme_dk.svg);
+}
+QCheckBox::indicator:checked {
+    background-color: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_SECONDARY;
+    image: url(assets/control/check_theme_dk.svg);
+}
+
+QRadioButton::indicator:checked {
+    background-color: $SECONDARY;
+    border: 1px solid $WIDGET_BRD_SECONDARY;
+    image: url(assets/control/radio_circle_theme_dk.svg);
+}
+
+QScrollBar::add-line:horizontal
+{
+    border-image: url(assets/control/arrows/arrow_solid_right_disabled_theme_dk.svg);
+}
+
+QScrollBar::sub-line:horizontal
+{
+    border-image: url(assets/control/arrows/arrow_solid_left_disabled_theme_dk.svg);
+}
+
+QScrollBar::add-line:horizontal:hover,QScrollBar::add-line:horizontal:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_right_theme_dk.svg);
+}
+
+
+QScrollBar::sub-line:horizontal:hover, QScrollBar::sub-line:horizontal:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_left_theme_dk.svg);
+}
+
+QScrollBar::sub-line:vertical
+{
+    border-image: url(assets/control/arrows/arrow_solid_up_disabled_theme_dk.svg);
+}
+
+QScrollBar::add-line:vertical
+{
+    border-image: url(assets/control/arrows/arrow_solid_down_disabled_theme_dk.svg);
+}
+
+QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_up_theme_dk.svg);
+}
+
+QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on
+{
+    border-image: url(assets/control/arrows/arrow_solid_down_theme_dk.svg);
+}
+
+
+QTabBar QToolButton::left-arrow {
+    image: url(assets/control/arrows/arrow_solid_left_theme_dk.svg);
+}
+
+QTabBar QToolButton::right-arrow {
+    image: url(assets/control/arrows/arrow_solid_right_theme_dk.svg);
+}
+
+.btnToolMenuBorder::menu-indicator {
+    image: url(assets/control/arrows/arrow_solid_down_theme_dk.svg);
+}
+.bannerMyWave{
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 $ACCENT_HOVER, stop:1 $ACCENT_SELECTED);
+    border-radius: 12px;
+}

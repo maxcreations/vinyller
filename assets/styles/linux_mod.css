@@ -1,0 +1,15 @@
+.ImageViewer {
+    border-radius: 8px;
+}
+
+StyledMainWindow[maximized="true"] .ImageViewer,
+StyledDialog[maximized="true"] .ImageViewer {
+    border-radius: 0px;
+}
+
+.controlPanel {
+    border-top: 1px solid $CONTROL_PANEL_BRD;
+    background: $CONTROL_PANEL_BG;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
