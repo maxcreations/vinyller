@@ -25,10 +25,10 @@ from collections import defaultdict
 from PyQt6.QtCore import (
     pyqtSignal, QByteArray, QEvent, QLibraryInfo, QPoint, QProcess,
     QSize, Qt,
-    QThread, QTimer, QTranslator
+    QThread, QTimer, QTranslator, QUrl
 )
 from PyQt6.QtGui import (
-    QIcon, QAction, QPainter, QPixmap
+    QIcon, QAction, QPainter, QPixmap, QDesktopServices
 )
 from PyQt6.QtMultimedia import QMediaDevices, QMediaPlayer
 from PyQt6.QtWidgets import (
@@ -44,6 +44,7 @@ from src.core.library_processor import (
     DataManager, LibraryProcessor, PlaylistIndexingWorker, LibraryChangeChecker
 )
 from src.core.state_manager import PlayerController
+from src.core.update_checker import UpdateCheckerThread
 from src.encyclopedia.encyclopedia_manager import EncyclopediaManager
 from src.encyclopedia.encyclopedia_manager_window import EncyclopediaWindow
 from src.player.player import Player, RepeatMode
@@ -68,7 +69,7 @@ from src.ui.ui_settings import SettingsWindow
 from src.utils import theme
 from src.utils.constants import (ArtistSource,
                                  STATS_AWARD_CAP_S, STATS_AWARD_MIN_S, STATS_AWARD_PERCENTAGE, STATS_POLL_INTERVAL_S,
-                                 STATS_SAVE_TRIGGER_INTERVAL_M
+                                 STATS_SAVE_TRIGGER_INTERVAL_M, APP_VERSION
                                  )
 from src.utils.constants_linux import IS_LINUX
 from src.utils.utils import (
@@ -103,6 +104,11 @@ class MainWindow(StyledMainWindow):
         self.pending_external_changes_count = 0
         self.pending_added_modified_paths = []
         self.pending_removed_paths = []
+
+        self.app_update_available = False
+        self.app_update_version = ""
+        self.app_update_url = ""
+        self.update_ignored_this_session = False
 
         self.encyclopedia_manager = EncyclopediaManager(
             self.library_manager.app_data_dir
@@ -241,6 +247,16 @@ class MainWindow(StyledMainWindow):
         self.is_loading_charts_all_genres = False
         self.last_charts_all_genres_group = None
         self.current_charts_all_genres_flow_layout = None
+
+        self.current_charts_all_composers_list = []
+        self.charts_all_composers_loaded_count = 0
+        self.is_loading_charts_all_composers = False
+        self.last_charts_all_composers_group = None
+        self.current_charts_all_composers_flow_layout = None
+
+        self.current_charts_composer_album_list = []
+        self.charts_composer_albums_loaded_count = 0
+        self.is_loading_charts_composer_albums = False
 
         self.current_fav_all_artists_list = []
         self.fav_all_artists_loaded_count = 0
@@ -405,8 +421,9 @@ class MainWindow(StyledMainWindow):
 
         self.pending_updates_widget = PendingUpdatesPopup(
             parent = self,
-            update_callback = self._process_pending_metadata_updates,
-            hide_callback = self._on_pending_updates_hidden
+            update_callback = self._process_pending_updates,
+            hide_callback = self._on_pending_updates_hidden,
+            postpone_callback = self._on_update_postponed
         )
         self.pending_updates_widget.hide()
 
@@ -465,6 +482,23 @@ class MainWindow(StyledMainWindow):
 
         QTimer.singleShot(0, self._sync_search_bar_width)
         QTimer.singleShot(2000, self.start_library_change_detection)
+        if getattr(self, "check_updates_at_startup", True):
+            QTimer.singleShot(3000, self.check_for_updates)
+
+    def check_for_updates(self):
+        """Starts a background thread to check for new versions on GitHub."""
+        self.update_checker = UpdateCheckerThread(current_version = APP_VERSION)
+        self.update_checker.update_available.connect(self.on_update_available)
+        self.update_checker.finished.connect(self.update_checker.deleteLater)
+        self.update_checker.start()
+
+    def on_update_available(self, latest_version, release_url):
+        """Triggered when a new version is found on GitHub."""
+        self.app_update_available = True
+        self.app_update_version = latest_version
+        self.app_update_url = release_url
+
+        self._update_pending_updates_widget()
 
     def load_qt_translations(self, lang_code):
         """Loads and installs Qt standard translations for base interactions."""
@@ -499,36 +533,73 @@ class MainWindow(StyledMainWindow):
         )
 
     def _update_pending_updates_widget(self):
-        """Updates the text and visibility of the notification widget."""
+        """
+        Updates the state and visibility of the pending updates notification widget.
+
+        Evaluates the current state of pending metadata changes, external file modifications,
+        and available application updates. Based on the highest priority event, it configures
+        the widget's title, message text, and button visibility (e.g., showing the 'Later'
+        button for app updates). It also syncs the tooltip of the toggle button in the sidebar.
+        """
         count = self.pending_metadata_items_count
         ext_count = getattr(self, "pending_external_changes_count", 0)
 
         msg = ""
         show_button = False
         has_file_changes = False
+        show_later_btn = False
+        is_app_update = False
+        app_update_link = ""
+
+        popup_title = translate("Library update required")
+        tooltip_text = translate("Library update required")
 
         if count > 0:
             msg = translate(
                 "You have changed metadata for {count} item(s). Refresh the library to apply changes.",
-                count=count,
+                count = count,
             )
             show_button = True
+
         elif ext_count > 0:
             msg = translate(
                 "Detected {count} changes in your music folders (files added, removed or edited externally). Refresh required.",
-                count=ext_count
+                count = ext_count
             )
             show_button = True
             has_file_changes = True
+
         elif self.pending_settings_rescan:
             msg = translate(
                 "You have changed settings or files changed externally. Refresh the library to apply changes."
             )
             show_button = True
 
+        elif getattr(self, "app_update_available", False) and not self.update_ignored_this_session:
+            msg = translate(
+                "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.",
+                version = self.app_update_version
+            )
+            show_button = True
+            has_file_changes = False
+            show_later_btn = True
+
+            is_app_update = True
+            app_update_link = self.app_update_url
+
+            popup_title = translate("A new version is available")
+            tooltip_text = translate("A new version is available")
+
         if show_button:
+            self.pending_updates_widget.set_title(popup_title)
             self.pending_updates_widget.set_message(msg)
             self.pending_updates_widget.set_changes_button_visible(has_file_changes)
+            self.pending_updates_widget.set_later_button_visible(show_later_btn)
+
+            self.pending_updates_widget.set_app_update_mode(is_app_update, app_update_link)
+
+            set_custom_tooltip(self.notification_toggle_button, title = tooltip_text)
+
             self.notification_toggle_button.show()
         else:
             self.notification_toggle_button.hide()
@@ -536,6 +607,20 @@ class MainWindow(StyledMainWindow):
                 self.notification_toggle_button.setChecked(False)
             else:
                 self.pending_updates_widget.hide()
+
+    def _on_update_postponed(self):
+        """
+        Callback invoked when the user clicks the 'Later' button on the update notification.
+
+        Sets a session flag to ignore the application update prompt until the next
+        application launch, and hides the notification UI elements.
+        """
+        self.update_ignored_this_session = True
+
+        if hasattr(self, "notification_toggle_button") and self.notification_toggle_button.isChecked():
+            self.notification_toggle_button.setChecked(False)
+
+        self._update_pending_updates_widget()
 
     def _position_pending_updates_widget(self):
         """Positions the notification widget relative to the button (Global coords)."""
@@ -559,47 +644,59 @@ class MainWindow(StyledMainWindow):
         if hasattr(self, "notification_toggle_button") and self.notification_toggle_button.isChecked():
             self.notification_toggle_button.setChecked(False)
 
-    def _process_pending_metadata_updates(self):
-        """Starts processing pending metadata updates (Smart Update)."""
-        if (not self.pending_metadata_updates
-                and not self.pending_settings_rescan
-                and self.pending_external_changes_count == 0):
+    def _process_pending_updates(self):
+        """Starts processing pending metadata updates, library changes, or app updates."""
+
+        has_library_updates = (
+                bool(self.pending_metadata_updates)
+                or getattr(self, "pending_external_changes_count", 0) > 0
+                or getattr(self, "pending_settings_rescan", False)
+        )
+
+        if has_library_updates:
+            print("Processing pending library updates...")
+
+            current_tracks = self.data_manager.all_tracks
+            tracks_to_keep = []
+
+            changed_paths_only = [item[1] for item in self.pending_added_modified_paths]
+
+            paths_to_remove = set(self.pending_removed_paths) | set(changed_paths_only)
+
+            for track in current_tracks:
+                p = track.get("real_path", track.get("path"))
+                p_norm = os.path.normpath(p)
+
+                if p_norm not in paths_to_remove:
+                    tracks_to_keep.append(track)
+
+            paths_to_scan = list(changed_paths_only)
+
+            self.pending_metadata_updates.clear()
+            self.pending_metadata_items_count = 0
+            self.pending_settings_rescan = False
+            self.pending_external_changes_count = 0
+            self.pending_added_modified_paths = []
+            self.pending_removed_paths = []
+
+            self.library_manager.clear_pending_updates()
+            self._update_pending_updates_widget()
+
+            self.action_handler.start_library_processing_with_restore(
+                from_cache = False,
+                user_initiated = True,
+                tracks_to_reprocess = tracks_to_keep,
+                partial_scan_paths = paths_to_scan
+            )
             return
 
-        print("Processing pending updates...")
+        if getattr(self, "app_update_available", False):
+            QDesktopServices.openUrl(QUrl(self.app_update_url))
 
-        current_tracks = self.data_manager.all_tracks
-        tracks_to_keep = []
-
-        changed_paths_only = [item[1] for item in self.pending_added_modified_paths]
-
-        paths_to_remove = set(self.pending_removed_paths) | set(changed_paths_only)
-
-        for track in current_tracks:
-            p = track.get("real_path", track.get("path"))
-            p_norm = os.path.normpath(p)
-
-            if p_norm not in paths_to_remove:
-                tracks_to_keep.append(track)
-
-        paths_to_scan = list(changed_paths_only)
-
-        self.pending_metadata_updates.clear()
-        self.pending_metadata_items_count = 0
-        self.pending_settings_rescan = False
-        self.pending_external_changes_count = 0
-        self.pending_added_modified_paths = []
-        self.pending_removed_paths = []
-
-        self.library_manager.clear_pending_updates()
-        self._update_pending_updates_widget()
-
-        self.action_handler.start_library_processing_with_restore(
-            from_cache = False,
-            user_initiated = True,
-            tracks_to_reprocess = tracks_to_keep,
-            partial_scan_paths = paths_to_scan
-        )
+            self.app_update_available = False
+            self._update_pending_updates_widget()
+            self.pending_updates_widget.hide()
+            return
 
     def _handle_deferred_rescan_request(self):
         """Called when 'Later' is selected in settings, sets a flag to rescan on next start."""
@@ -1169,64 +1266,118 @@ class MainWindow(StyledMainWindow):
                 ),
             )
 
-    def open_settings(self, tab_index=0):
+    def _get_core_settings_dict(self) -> dict:
         """
-        Opens the settings window.
-        If 'Update library' is clicked, ONLY folder paths are applied.
+        Generates and returns a dictionary of the core configurable user settings.
+
+        This method acts as the single source of truth for the application's configuration state,
+        preventing code duplication when passing settings to the UI or saving them to disk.
+        It strictly contains cross-session preferences and UI modes, excluding transient
+        window geometries or temporary application states.
+
+        Returns:
+            dict: A dictionary containing key-value pairs of all core settings.
         """
-        current_settings = {
+        return {
             "musicLibraryPaths": self.music_library_paths,
-            "nav_tab_order": self.nav_tab_order,
+            "nav_tab_order": getattr(self, "nav_tab_order", []),
             "theme": self.current_theme,
             "accent_color": self.current_accent,
             "artist_source_tag": self.artist_source_tag,
-            "show_separators": self.show_separators,
-            "ignore_articles": self.ignore_articles,
-            "show_favorites_separators": self.show_favorites_separators,
-            "ignore_genre_case": self.ignore_genre_case,
-            "remember_queue_mode": self.remember_queue_mode,
-            "playback_history_mode": self.playback_history_mode,
-            "history_store_unique_only": self.history_store_unique_only,
-            "treat_folders_as_unique": self.treat_folders_as_unique,
-            "allow_drag_export": self.allow_drag_export,
-            "remember_last_view": self.remember_last_view,
-            "remember_window_size": self.remember_window_size,
-            "stylize_vinyl_covers": self.stylize_vinyl_covers,
-            "warm_sound": self.warm_sound,
-            "scratch_sound": self.scratch_sound,
-            "mini_opacity": self.mini_opacity,
-            "show_random_suggestions": self.show_random_suggestions,
-            "queueCompactMode": self.queue_compact_mode,
-            "queueCompactHideArtist": self.queue_compact_hide_artist,
-            "queueShowCover": self.queue_show_cover,
-            "collect_statistics": self.collect_statistics,
-            "language": self.current_language,
-            "favorite_icon_name": self.favorite_icon_name,
-            "autoplay_on_queue": self.autoplay_on_queue,
+            "show_separators": getattr(self, "show_separators", True),
+            "ignore_articles": getattr(self, "ignore_articles", True),
+            "show_favorites_separators": getattr(self, "show_favorites_separators", False),
+            "ignore_genre_case": getattr(self, "ignore_genre_case", True),
+            "treat_folders_as_unique": getattr(self, "treat_folders_as_unique", False),
+            "allow_drag_export": getattr(self, "allow_drag_export", False),
+            "check_updates_at_startup": getattr(self, "check_updates_at_startup", True),
+            "remember_queue_mode": getattr(self, "remember_queue_mode", 3),
+            "playback_history_mode": getattr(self, "playback_history_mode", 2),
+            "history_store_unique_only": getattr(self, "history_store_unique_only", True),
+            "remember_last_view": getattr(self, "remember_last_view", False),
+            "remember_window_size": getattr(self, "remember_window_size", True),
+            "stylize_vinyl_covers": getattr(self, "stylize_vinyl_covers", False),
+            "warm_sound": getattr(self, "warm_sound", False),
+            "scratch_sound": getattr(self, "scratch_sound", False),
+            "mini_opacity": getattr(self, "mini_opacity", True),
+            "show_random_suggestions": getattr(self, "show_random_suggestions", True),
+            "queueCompactMode": getattr(self, "queue_compact_mode", False),
+            "queueCompactHideArtist": getattr(self, "queue_compact_hide_artist", False),
+            "queueShowCover": getattr(self, "queue_show_cover", True),
+            "collect_statistics": getattr(self, "collect_statistics", True),
+            "language": getattr(self, "current_language", "en"),
+            "favorite_icon_name": getattr(self, "favorite_icon_name", "favorite_heart"),
+            "autoplay_on_queue": getattr(self, "autoplay_on_queue", False),
             "view_modes": {
-                "artists": self.artist_view_mode,
-                "artist_albums": self.artist_album_view_mode,
-                "albums": self.album_view_mode,
-                "genres": self.genre_view_mode,
-                "catalog": self.catalog_view_mode,
-                "playlists": self.playlist_view_mode,
-                "favorites": self.favorite_view_mode,
-                "composers": self.composer_view_mode,
-                "composer_albums": self.composer_album_view_mode,
+                "artists": getattr(self, "artist_view_mode", ViewMode.GRID),
+                "artist_albums": getattr(self, "artist_album_view_mode", ViewMode.GRID),
+                "albums": getattr(self, "album_view_mode", ViewMode.GRID),
+                "genres": getattr(self, "genre_view_mode", ViewMode.GRID),
+                "catalog": getattr(self, "catalog_view_mode", ViewMode.TILE_SMALL),
+                "playlists": getattr(self, "playlist_view_mode", ViewMode.TILE_BIG),
+                "favorites": getattr(self, "favorite_view_mode", ViewMode.GRID),
+                "composers": getattr(self, "composer_view_mode", ViewMode.GRID),
+                "composer_albums": getattr(self, "composer_album_view_mode", ViewMode.GRID),
+
+                "favorite_playlists": getattr(self, "favorite_playlists_view_mode", ViewMode.GRID),
+                "favorite_albums": getattr(self, "favorite_albums_view_mode", ViewMode.GRID),
+                "favorite_artists": getattr(self, "favorite_artists_view_mode", ViewMode.GRID),
+                "favorite_composers": getattr(self, "favorite_composers_view_mode", ViewMode.GRID),
+                "favorite_genres": getattr(self, "favorite_genres_view_mode", ViewMode.GRID),
+                "favorite_folders": getattr(self, "favorite_folders_view_mode", ViewMode.GRID),
+                "favorite_artist_albums": getattr(self, "favorite_artist_album_view_mode", ViewMode.GRID),
+                "favorite_composer_albums": getattr(self, "favorite_composer_album_view_mode", ViewMode.GRID),
+                "favorite_genre_albums": getattr(self, "favorite_genre_album_view_mode", ViewMode.GRID),
+
+                "charts": getattr(self, "charts_view_mode", ViewMode.GRID),
+                "charts_artist_albums": getattr(self, "charts_artist_album_view_mode", ViewMode.GRID),
+                "charts_composer_albums": getattr(self, "charts_composer_album_view_mode", ViewMode.GRID),
+                "charts_genre_albums": getattr(self, "charts_genre_album_view_mode", ViewMode.GRID),
             },
             "sort_modes": {
-                "artists": self.artist_sort_mode,
-                "albums": self.album_sort_mode,
-                "genres": self.genre_sort_mode,
-                "artist_albums": self.artist_album_sort_mode,
-                "songs": self.song_sort_mode,
-                "playlists": self.playlist_sort_mode,
-                "catalog": self.catalog_sort_mode,
-                "favorite_tracks": self.favorite_tracks_sort_mode,
-                "composers": self.composer_sort_mode,
-                "composer_albums": self.composer_album_sort_mode,
+                "artists": getattr(self, "artist_sort_mode", SortMode.ALPHA_ASC),
+                "albums": getattr(self, "album_sort_mode", SortMode.YEAR_DESC),
+                "genres": getattr(self, "genre_sort_mode", SortMode.ALPHA_ASC),
+                "artist_albums": getattr(self, "artist_album_sort_mode", SortMode.YEAR_DESC),
+                "songs": getattr(self, "song_sort_mode", SortMode.ARTIST_ASC),
+                "playlists": getattr(self, "playlist_sort_mode", SortMode.ALPHA_ASC),
+                "catalog": getattr(self, "catalog_sort_mode", SortMode.ALPHA_ASC),
+                "composers": getattr(self, "composer_sort_mode", SortMode.ALPHA_ASC),
+                "composer_albums": getattr(self, "composer_album_sort_mode", SortMode.YEAR_DESC),
+
+                "charts_albums": getattr(self, "charts_album_sort_mode", SortMode.DATE_ADDED_DESC),
+                "charts_artists": getattr(self, "charts_artist_sort_mode", SortMode.DATE_ADDED_DESC),
+                "charts_composers": getattr(self, "charts_composer_sort_mode", SortMode.DATE_ADDED_DESC),
+                "charts_genres": getattr(self, "charts_genre_sort_mode", SortMode.DATE_ADDED_DESC),
+                "charts_artist_albums": getattr(self, "charts_artist_album_sort_mode", SortMode.YEAR_DESC),
+                "charts_composer_albums": getattr(self, "charts_composer_album_sort_mode", SortMode.YEAR_DESC),
+                "charts_genre_albums": getattr(self, "charts_genre_album_sort_mode", SortMode.YEAR_DESC),
+
+                "favorite_tracks": getattr(self, "favorite_tracks_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_playlists": getattr(self, "favorite_playlists_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_albums": getattr(self, "favorite_albums_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_artists": getattr(self, "favorite_artists_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_composers": getattr(self, "favorite_composers_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_genres": getattr(self, "favorite_genres_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_folders": getattr(self, "favorite_folders_sort_mode", SortMode.DATE_ADDED_DESC),
+                "favorite_artist_albums": getattr(self, "favorite_artist_album_sort_mode", SortMode.YEAR_DESC),
+                "favorite_composer_albums": getattr(self, "favorite_composer_album_sort_mode", SortMode.YEAR_DESC),
+                "favorite_genre_albums": getattr(self, "favorite_genre_album_sort_mode", SortMode.YEAR_DESC),
+
             },
         }
+
+    def open_settings(self, tab_index = 0):
+        """
+        Opens the settings window dialog.
+
+        Fetches the core settings state, initializes the SettingsWindow, and handles
+        custom signals emitted by the dialog (such as rescan, reset, or theme changes).
+
+        Args:
+            tab_index (int, optional): The index of the tab to be displayed initially. Defaults to 0.
+        """
+        current_settings = self._get_core_settings_dict()
 
         dialog = SettingsWindow(current_settings, self, start_tab_index = tab_index)
         dialog.settings_were_reset = False
@@ -1241,9 +1392,7 @@ class MainWindow(StyledMainWindow):
 
         dialog.rescan_requested.connect(handle_rescan_request)
         dialog.reset_requested.connect(lambda: self.handle_settings_reset(dialog))
-        dialog.clear_stats_requested.connect(
-            lambda: self._handle_clear_stats_request(dialog)
-        )
+        dialog.clear_stats_requested.connect(lambda: self._handle_clear_stats_request(dialog))
         dialog.theme_change_requires_restart.connect(self._handle_theme_change_request)
         dialog.deferred_rescan_requested.connect(self._handle_deferred_rescan_request)
 
@@ -1254,19 +1403,296 @@ class MainWindow(StyledMainWindow):
 
         if result == RESCAN_CODE:
             new_settings = dialog.get_settings()
-
             new_paths = new_settings.get("musicLibraryPaths", [])
-
             self.music_library_paths = new_paths
-
             self.save_current_settings()
-
             print("Library update initiated with new paths...")
-            self.start_library_processing(from_cache=False, user_initiated=True)
+            self.start_library_processing(from_cache = False, user_initiated = True)
 
         elif result == 1:
             new_settings = dialog.get_settings()
             self.apply_new_settings(new_settings, current_settings)
+
+    def save_current_settings(self):
+        """
+        Gathers both the core user settings and the transient window/application state,
+        then writes them to the JSON settings file via the LibraryManager.
+
+        This method computes current geometries, splitter sizes, and active volumes
+        before appending them to the core settings dictionary.
+        """
+        current_geometry = None
+        if self.remember_window_size:
+            if self.vinyl_toggle_button.isChecked() and self.original_geometry:
+                current_geometry = self.original_geometry.toHex().data().decode()
+            else:
+                current_geometry = self.saveGeometry().toHex().data().decode()
+
+        if self.vinyl_toggle_button.isChecked():
+            queue_is_visible = self.queue_visible_before_vinyl
+        else:
+            queue_is_visible = self.right_panel.isVisible()
+
+        splitter_sizes = self.splitter.sizes() if self.remember_window_size else None
+
+        if self.vinyl_toggle_button.isChecked():
+            current_vinyl_w = self.width()
+            current_vinyl_h = self.height()
+            self.vinyl_window_geometry = self.saveGeometry().toHex().data().decode()
+        else:
+            current_vinyl_w = self.saved_vinyl_size[0]
+            current_vinyl_h = self.saved_vinyl_size[1]
+
+        final_vinyl_size = [current_vinyl_w, current_vinyl_h]
+
+        if getattr(self, "mini_window", None) and self.mini_window.isVisible():
+            self.mini_geometry = self.mini_window.saveGeometry().toHex().data().decode()
+            self.mini_pos = self.mini_window.pos()
+
+        mini_pos_list = [self.mini_pos.x(), self.mini_pos.y()] if getattr(self, "mini_pos", None) else None
+
+        settings = self._get_core_settings_dict()
+
+        settings.update({
+            "dismissed_album_merge_warning": getattr(self, "dismissed_album_merge_warning", False),
+            "dismissed_add_folder_hint": getattr(self, "dismissed_add_folder_hint", False),
+            "volume": self.control_panel.volume_slider.value(),
+            "shuffle": self.player.is_shuffled(),
+            "repeatMode": self.player.get_repeat_mode().value,
+            "queueVisible": queue_is_visible,
+            "lastRightPanelWidth": self.last_right_panel_width,
+            "windowGeometry": current_geometry,
+            "vinyl_window_size": final_vinyl_size,
+            "vinyl_window_geometry": getattr(self, "vinyl_window_geometry", None),
+            "mini_geometry": getattr(self, "mini_geometry", None),
+            "mini_pos": mini_pos_list,
+            "splitterSizes": splitter_sizes,
+            "charts_period": getattr(self, "charts_period", ChartsPeriod.MONTHLY),
+            "pending_settings_rescan": getattr(self, "pending_settings_rescan", False),
+            "encyclopedia_collapsed": getattr(self, "encyclopedia_collapsed", False),
+        })
+
+        self.library_manager.save_settings(settings)
+
+    def apply_new_settings(self, new_settings, old_settings):
+        """
+        Applies changes generated by the SettingsWindow.
+
+        Triggers library rescans, restarts, or UI updates depending on the severity
+        and impact of the modified settings. Dynamic mappings are used to update simple flags.
+
+        Args:
+            new_settings (dict): The dictionary containing the newly modified user preferences.
+            old_settings (dict): The dictionary containing the previous state to detect deltas.
+        """
+        reprocess_needed = False
+        restart_required = False
+
+        new_paths_norm = [os.path.normcase(os.path.abspath(p)) for p in new_settings["musicLibraryPaths"]]
+        old_paths_norm = [os.path.normcase(os.path.abspath(p)) for p in old_settings["musicLibraryPaths"]]
+
+        if set(new_paths_norm) != set(old_paths_norm):
+            self.music_library_paths = new_settings["musicLibraryPaths"]
+            reprocess_needed = True
+
+        if old_settings["artist_source_tag"] != new_settings["artist_source_tag"]:
+            self.artist_source_tag = new_settings["artist_source_tag"]
+            reprocess_needed = True
+
+        if old_settings["ignore_articles"] != new_settings["ignore_articles"]:
+            self.ignore_articles = new_settings["ignore_articles"]
+            self.data_manager.ignore_articles = self.ignore_articles
+            reprocess_needed = True
+
+        if old_settings.get("nav_tab_order") != new_settings.get("nav_tab_order"):
+            self.nav_tab_order = new_settings.get("nav_tab_order")
+            restart_required = True
+
+        if old_settings["ignore_genre_case"] != new_settings["ignore_genre_case"]:
+            self.ignore_genre_case = new_settings["ignore_genre_case"]
+            reprocess_needed = True
+
+        if old_settings.get("treat_folders_as_unique") != new_settings.get("treat_folders_as_unique"):
+            new_val = new_settings.get("treat_folders_as_unique")
+            if self.data_manager.all_tracks:
+                self.library_manager.migrate_album_favorites_on_setting_change(
+                    self.data_manager.all_tracks, to_unique_folders = new_val
+                )
+            self.treat_folders_as_unique = new_val
+            reprocess_needed = True
+
+        old_history_mode = old_settings.get("playback_history_mode", 2)
+        self.playback_history_mode = new_settings.get("playback_history_mode", 2)
+
+        if self.playback_history_mode == 0 and old_history_mode != 0:
+            self.library_manager.save_playback_history([])
+            if hasattr(self.ui_manager, "history_ui_manager"):
+                self.ui_manager.history_ui_manager.populate_history_tab()
+
+        if old_settings.get("collect_statistics") != new_settings.get("collect_statistics"):
+            self.collect_statistics = new_settings.get("collect_statistics")
+            if not self.collect_statistics:
+                self.stats_save_trigger_timer.stop()
+                self.stats_poll_timer.stop()
+                self.library_manager.process_stats_log()
+                self.data_manager.recalculate_ratings(self.charts_period, {})
+            else:
+                if self.player.get_current_state() == QMediaPlayer.PlaybackState.PlayingState:
+                    self.stats_save_trigger_timer.start()
+                    self.stats_poll_timer.start()
+                current_stats = self.library_manager.load_play_stats()
+                self.data_manager.recalculate_ratings(self.charts_period, current_stats)
+            self.charts_data_is_stale = True
+
+        simple_keys = [
+            "show_separators", "show_favorites_separators", "allow_drag_export",
+            "favorite_icon_name", "remember_queue_mode", "remember_last_view",
+            "remember_window_size", "warm_sound", "scratch_sound", "mini_opacity",
+            "show_random_suggestions", "check_updates_at_startup", "autoplay_on_queue",
+            "history_store_unique_only", "stylize_vinyl_covers"
+        ]
+
+        for key in simple_keys:
+            setattr(self, key, new_settings.get(key, getattr(self, key)))
+
+        if self.vinyl_widget:
+            self.vinyl_widget.set_stylize_covers(self.stylize_vinyl_covers)
+        if getattr(self, "mini_window", None):
+            self.mini_window._update_opacity()
+
+        self.player.set_warm_sound(self.warm_sound)
+        self.player.set_scratch_sound(self.scratch_sound)
+
+        view_modes = new_settings.get("view_modes", {})
+        self.artist_view_mode = view_modes.get("artists", getattr(self, "artist_view_mode", ViewMode.GRID))
+        self.artist_album_view_mode = view_modes.get("artist_albums",
+                                                     getattr(self, "artist_album_view_mode", ViewMode.GRID))
+        self.album_view_mode = view_modes.get("albums", getattr(self, "album_view_mode", ViewMode.GRID))
+        self.genre_view_mode = view_modes.get("genres", getattr(self, "genre_view_mode", ViewMode.GRID))
+        self.catalog_view_mode = view_modes.get("catalog", getattr(self, "catalog_view_mode", ViewMode.TILE_SMALL))
+        self.playlist_view_mode = view_modes.get("playlists", getattr(self, "playlist_view_mode", ViewMode.TILE_BIG))
+        self.favorite_view_mode = view_modes.get("favorites", getattr(self, "favorite_view_mode", ViewMode.GRID))
+        self.composer_view_mode = view_modes.get("composers", getattr(self, "composer_view_mode", ViewMode.GRID))
+        self.composer_album_view_mode = view_modes.get("composer_albums",
+                                                       getattr(self, "composer_album_view_mode", ViewMode.GRID))
+
+        self.favorite_playlists_view_mode = view_modes.get("favorite_playlists",
+                                                           getattr(self, "favorite_playlists_view_mode", ViewMode.GRID))
+        self.favorite_albums_view_mode = view_modes.get("favorite_albums",
+                                                        getattr(self, "favorite_albums_view_mode", ViewMode.GRID))
+        self.favorite_artists_view_mode = view_modes.get("favorite_artists",
+                                                         getattr(self, "favorite_artists_view_mode", ViewMode.GRID))
+        self.favorite_composers_view_mode = view_modes.get("favorite_composers",
+                                                           getattr(self, "favorite_composers_view_mode", ViewMode.GRID))
+        self.favorite_genres_view_mode = view_modes.get("favorite_genres",
+                                                        getattr(self, "favorite_genres_view_mode", ViewMode.GRID))
+        self.favorite_folders_view_mode = view_modes.get("favorite_folders",
+                                                         getattr(self, "favorite_folders_view_mode", ViewMode.GRID))
+        self.favorite_artist_album_view_mode = view_modes.get("favorite_artist_albums",
+                                                              getattr(self, "favorite_artist_album_view_mode",
+                                                                      ViewMode.GRID))
+        self.favorite_composer_album_view_mode = view_modes.get("favorite_composer_albums",
+                                                                getattr(self, "favorite_composer_album_view_mode",
+                                                                        ViewMode.GRID))
+        self.favorite_genre_album_view_mode = view_modes.get("favorite_genre_albums",
+                                                             getattr(self, "favorite_genre_album_view_mode",
+                                                                     ViewMode.GRID))
+
+        self.charts_view_mode = view_modes.get("charts", getattr(self, "charts_view_mode", ViewMode.GRID))
+        self.charts_artist_album_view_mode = view_modes.get("charts_artist_albums",
+                                                            getattr(self, "charts_artist_album_view_mode",
+                                                                    ViewMode.GRID))
+        self.charts_composer_album_view_mode = view_modes.get("charts_composer_albums",
+                                                              getattr(self, "charts_composer_album_view_mode",
+                                                                      ViewMode.GRID))
+        self.charts_genre_album_view_mode = view_modes.get("charts_genre_albums",
+                                                           getattr(self, "charts_genre_album_view_mode", ViewMode.GRID))
+
+        sort_modes = new_settings.get("sort_modes", {})
+        self.artist_sort_mode = sort_modes.get("artists", getattr(self, "artist_sort_mode", SortMode.ALPHA_ASC))
+        self.album_sort_mode = sort_modes.get("albums", getattr(self, "album_sort_mode", SortMode.YEAR_DESC))
+        self.song_sort_mode = sort_modes.get("songs", getattr(self, "song_sort_mode", SortMode.ARTIST_ASC))
+        self.genre_sort_mode = sort_modes.get("genres", getattr(self, "genre_sort_mode", SortMode.ALPHA_ASC))
+        self.composer_sort_mode = sort_modes.get("composers", getattr(self, "composer_sort_mode", SortMode.ALPHA_ASC))
+
+        self.favorite_tracks_sort_mode = sort_modes.get("favorite_tracks", getattr(self, "favorite_tracks_sort_mode",
+                                                                                   SortMode.DATE_ADDED_DESC))
+        self.favorite_playlists_sort_mode = sort_modes.get("favorite_playlists",
+                                                           getattr(self, "favorite_playlists_sort_mode",
+                                                                   SortMode.DATE_ADDED_DESC))
+        self.favorite_albums_sort_mode = sort_modes.get("favorite_albums", getattr(self, "favorite_albums_sort_mode",
+                                                                                   SortMode.DATE_ADDED_DESC))
+        self.favorite_artists_sort_mode = sort_modes.get("favorite_artists", getattr(self, "favorite_artists_sort_mode",
+                                                                                     SortMode.DATE_ADDED_DESC))
+        self.favorite_composers_sort_mode = sort_modes.get("favorite_composers",
+                                                           getattr(self, "favorite_composers_sort_mode",
+                                                                   SortMode.DATE_ADDED_DESC))
+        self.favorite_genres_sort_mode = sort_modes.get("favorite_genres", getattr(self, "favorite_genres_sort_mode",
+                                                                                   SortMode.DATE_ADDED_DESC))
+        self.favorite_folders_sort_mode = sort_modes.get("favorite_folders", getattr(self, "favorite_folders_sort_mode",
+                                                                                     SortMode.DATE_ADDED_DESC))
+        self.favorite_artist_album_sort_mode = sort_modes.get("favorite_artist_albums",
+                                                              getattr(self, "favorite_artist_album_sort_mode",
+                                                                      SortMode.YEAR_DESC))
+        self.favorite_composer_album_sort_mode = sort_modes.get("favorite_composer_albums",
+                                                                getattr(self, "favorite_composer_album_sort_mode",
+                                                                        SortMode.YEAR_DESC))
+        self.favorite_genre_album_sort_mode = sort_modes.get("favorite_genre_albums",
+                                                             getattr(self, "favorite_genre_album_sort_mode",
+                                                                     SortMode.YEAR_DESC))
+
+        self.charts_album_sort_mode = sort_modes.get("charts_albums",
+                                                     getattr(self, "charts_album_sort_mode", SortMode.DATE_ADDED_DESC))
+        self.charts_artist_sort_mode = sort_modes.get("charts_artists",
+                                                      getattr(self, "charts_artist_sort_mode",
+                                                              SortMode.DATE_ADDED_DESC))
+        self.charts_composer_sort_mode = sort_modes.get("charts_composers",
+                                                        getattr(self, "charts_composer_sort_mode",
+                                                                SortMode.DATE_ADDED_DESC))
+        self.charts_genre_sort_mode = sort_modes.get("charts_genres",
+                                                     getattr(self, "charts_genre_sort_mode", SortMode.DATE_ADDED_DESC))
+
+        self.charts_artist_album_sort_mode = sort_modes.get("charts_artist_albums",
+                                                            getattr(self, "charts_artist_album_sort_mode",
+                                                                    SortMode.YEAR_DESC))
+        self.charts_composer_album_sort_mode = sort_modes.get("charts_composer_albums",
+                                                              getattr(self, "charts_composer_album_sort_mode",
+                                                                      SortMode.YEAR_DESC))
+        self.charts_genre_album_sort_mode = sort_modes.get("charts_genre_albums",
+                                                           getattr(self, "charts_genre_album_sort_mode",
+                                                                   SortMode.YEAR_DESC))
+
+        self._update_history_button_visibility()
+        self._update_charts_button_visibility()
+        self.save_current_settings()
+        self._update_favorite_icons()
+        self.player_controller.update_favorite_button_ui()
+        self.ui_manager.update_nav_button_icons()
+        self.update_ui_from_settings()
+        self.ui_manager.apply_queue_view_options()
+
+        if hasattr(self.ui_manager.components, "resize_filter"):
+            self.ui_manager.components.resize_filter.recalc_layout()
+
+        if reprocess_needed:
+            if not self.music_library_paths:
+                self.clear_library()
+                self.ui_manager.populate_all_tabs()
+            else:
+                self.start_library_processing(from_cache = False, user_initiated = True)
+        else:
+            self.ui_manager.populate_all_tabs()
+
+        if (
+                self.current_language != new_settings.get("language")
+                or self.current_theme != new_settings.get("theme")
+                or self.current_accent != new_settings.get("accent_color")
+                or restart_required
+        ):
+            self.current_language = new_settings.get("language")
+            self.current_theme = new_settings.get("theme")
+            self.current_accent = new_settings.get("accent_color")
+            self._handle_theme_change_request()
 
     def _handle_theme_change_request(self):
         """Displays a dialog instructing the user to restart the application for theme changes."""
@@ -1373,164 +1799,6 @@ class MainWindow(StyledMainWindow):
                 if old_favorite_icon_name != self.favorite_icon_name:
                     self.ui_manager.populate_all_tabs()
 
-    def apply_new_settings(self, new_settings, old_settings):
-        """
-        Applies changes from the settings dialog.
-        Includes statistics update optimization and protection against empty tabs.
-        """
-        reprocess_needed = False
-        restart_required = False
-
-        new_paths_norm = [
-            os.path.normcase(os.path.abspath(p))
-            for p in new_settings["musicLibraryPaths"]
-        ]
-        old_paths_norm = [
-            os.path.normcase(os.path.abspath(p))
-            for p in old_settings["musicLibraryPaths"]
-        ]
-
-        if set(new_paths_norm) != set(old_paths_norm):
-            self.music_library_paths = new_settings["musicLibraryPaths"]
-            reprocess_needed = True
-
-        if old_settings["artist_source_tag"] != new_settings["artist_source_tag"]:
-            self.artist_source_tag = new_settings["artist_source_tag"]
-            reprocess_needed = True
-
-        if old_settings["ignore_articles"] != new_settings["ignore_articles"]:
-            self.ignore_articles = new_settings["ignore_articles"]
-            self.data_manager.ignore_articles = self.ignore_articles
-            reprocess_needed = True
-
-        if old_settings.get("nav_tab_order") != new_settings.get("nav_tab_order"):
-            self.nav_tab_order = new_settings.get("nav_tab_order")
-            restart_required = True
-
-        if old_settings["ignore_genre_case"] != new_settings["ignore_genre_case"]:
-            self.ignore_genre_case = new_settings["ignore_genre_case"]
-            reprocess_needed = True
-
-        if old_settings.get("treat_folders_as_unique") != new_settings.get(
-            "treat_folders_as_unique"
-        ):
-            new_val = new_settings.get("treat_folders_as_unique")
-            if self.data_manager.all_tracks:
-                self.library_manager.migrate_album_favorites_on_setting_change(
-                    self.data_manager.all_tracks, to_unique_folders=new_val
-                )
-            self.treat_folders_as_unique = new_val
-            reprocess_needed = True
-
-        if old_settings.get("allow_drag_export") != new_settings.get("allow_drag_export"):
-            self.allow_drag_export = new_settings.get("allow_drag_export")
-
-        if old_settings.get("stylize_vinyl_covers") != new_settings.get("stylize_vinyl_covers"):
-            self.stylize_vinyl_covers = new_settings.get("stylize_vinyl_covers")
-            if self.vinyl_widget:
-                self.vinyl_widget.set_stylize_covers(self.stylize_vinyl_covers)
-
-        if old_settings.get("mini_opacity") != new_settings.get("mini_opacity"):
-            self.mini_opacity = new_settings.get("mini_opacity")
-            if getattr(self, "mini_window", None):
-                self.mini_window._update_opacity()
-
-        if old_settings.get("collect_statistics") != new_settings.get(
-            "collect_statistics"
-        ):
-            self.collect_statistics = new_settings.get("collect_statistics")
-
-            if not self.collect_statistics:
-                self.stats_save_trigger_timer.stop()
-                self.stats_poll_timer.stop()
-                self.library_manager.process_stats_log()
-                self.data_manager.recalculate_ratings(self.charts_period, {})
-            else:
-                if self.player.get_current_state() == QMediaPlayer.PlaybackState.PlayingState:
-                    self.stats_save_trigger_timer.start()
-                    self.stats_poll_timer.start()
-                current_stats = self.library_manager.load_play_stats()
-                self.data_manager.recalculate_ratings(self.charts_period, current_stats)
-
-            self.charts_data_is_stale = True
-
-        old_history_mode = old_settings.get("playback_history_mode", 2)
-        self.playback_history_mode = new_settings.get("playback_history_mode", 2)
-
-        if self.playback_history_mode == 0 and old_history_mode != 0:
-            self.library_manager.save_playback_history([])
-            if hasattr(self.ui_manager, "history_ui_manager"):
-                self.ui_manager.history_ui_manager.populate_history_tab()
-
-        self.history_store_unique_only = new_settings.get(
-            "history_store_unique_only", True
-        )
-        self.autoplay_on_queue = new_settings.get("autoplay_on_queue", False)
-        self.show_random_suggestions = new_settings.get("show_random_suggestions", True)
-
-        self._update_history_button_visibility()
-        self._update_charts_button_visibility()
-
-        self.show_separators = new_settings["show_separators"]
-        self.show_favorites_separators = new_settings["show_favorites_separators"]
-        self.allow_drag_export = new_settings["allow_drag_export"]
-        self.favorite_icon_name = new_settings["favorite_icon_name"]
-        self.remember_queue_mode = new_settings["remember_queue_mode"]
-        self.remember_last_view = new_settings["remember_last_view"]
-        self.remember_window_size = new_settings["remember_window_size"]
-
-        view_modes = new_settings.get("view_modes", {})
-        self.artist_view_mode = view_modes.get("artists", ViewMode.GRID)
-        self.artist_album_view_mode = view_modes.get("artist_albums", ViewMode.GRID)
-        self.album_view_mode = view_modes.get("albums", ViewMode.GRID)
-        self.genre_view_mode = view_modes.get("genres", ViewMode.GRID)
-        self.catalog_view_mode = view_modes.get("catalog", ViewMode.TILE_SMALL)
-        self.playlist_view_mode = view_modes.get("playlists", ViewMode.TILE_BIG)
-        self.favorite_view_mode = view_modes.get("favorites", ViewMode.GRID)
-        self.composer_view_mode = view_modes.get("composers", ViewMode.GRID)
-        self.composer_album_view_mode = view_modes.get("composer_albums", ViewMode.GRID)
-
-        sort_modes = new_settings.get("sort_modes", {})
-        self.artist_sort_mode = sort_modes.get("artists", SortMode.ALPHA_ASC)
-        self.album_sort_mode = sort_modes.get("albums", SortMode.YEAR_DESC)
-        self.song_sort_mode = sort_modes.get("songs", SortMode.ARTIST_ASC)
-        self.genre_sort_mode = sort_modes.get("genres", SortMode.ALPHA_ASC)
-        self.composer_sort_mode = sort_modes.get("composers", SortMode.ALPHA_ASC)
-
-        self.warm_sound = new_settings["warm_sound"]
-        self.scratch_sound = new_settings["scratch_sound"]
-        self.player.set_warm_sound(self.warm_sound)
-        self.player.set_scratch_sound(self.scratch_sound)
-
-        self.save_current_settings()
-        self._update_favorite_icons()
-        self.player_controller.update_favorite_button_ui()
-        self.ui_manager.update_nav_button_icons()
-        self.update_ui_from_settings()
-        self.ui_manager.apply_queue_view_options()
-
-        if hasattr(self.ui_manager.components, "resize_filter"):
-            self.ui_manager.components.resize_filter.recalc_layout()
-
-        if reprocess_needed:
-            if not self.music_library_paths:
-                self.clear_library()
-                self.ui_manager.populate_all_tabs()
-            else:
-                self.start_library_processing(from_cache=False, user_initiated=True)
-        else:
-            self.ui_manager.populate_all_tabs()
-
-        if (
-            self.current_language != new_settings.get("language")
-            or self.current_theme != new_settings.get("theme")
-            or self.current_accent != new_settings.get("accent_color")
-            or restart_required
-        ):
-            self.current_language = new_settings.get("language")
-            self.current_theme = new_settings.get("theme")
-            self.current_accent = new_settings.get("accent_color")
-            self._handle_theme_change_request()
 
     def handle_player_error(self, error_message):
         """Handles critical playback errors, such as missing files."""
@@ -1581,9 +1849,10 @@ class MainWindow(StyledMainWindow):
         self.ignore_genre_case = settings.get("ignore_genre_case", True)
         self.treat_folders_as_unique = settings.get("treat_folders_as_unique", False)
         self.allow_drag_export = settings.get("allow_drag_export", False)
+        self.check_updates_at_startup = settings.get("check_updates_at_startup", True)
         self.dismissed_album_merge_warning = False
         self.dismissed_add_folder_hint = False
-        self.remember_queue_mode = settings.get("remember_queue_mode", 2)
+        self.remember_queue_mode = settings.get("remember_queue_mode", 3)
         self.playback_history_mode = settings.get("playback_history_mode", 2)
         self.history_store_unique_only = settings.get("history_store_unique_only", True)
         self.remember_last_view = settings.get("remember_last_view", False)
@@ -1605,6 +1874,7 @@ class MainWindow(StyledMainWindow):
         self.current_language = settings.get("language", "en")
         self.favorite_icon_name = settings.get("favorite_icon_name", "favorite_heart")
         self.autoplay_on_queue = settings.get("autoplay_on_queue", False)
+
         view_modes = settings.get("view_modes", {})
         self.artist_view_mode = view_modes.get("artists", ViewMode.GRID)
         self.artist_album_view_mode = view_modes.get("artist_albums", ViewMode.GRID)
@@ -1615,35 +1885,52 @@ class MainWindow(StyledMainWindow):
         self.genre_view_mode = view_modes.get("genres", ViewMode.GRID)
         self.composer_view_mode = view_modes.get("composers", ViewMode.GRID)
         self.composer_album_view_mode = view_modes.get("composer_albums", ViewMode.GRID)
+
+        self.favorite_playlists_view_mode = view_modes.get("favorite_playlists", ViewMode.GRID)
+        self.favorite_albums_view_mode = view_modes.get("favorite_albums", ViewMode.GRID)
+        self.favorite_artists_view_mode = view_modes.get("favorite_artists", ViewMode.GRID)
+        self.favorite_composers_view_mode = view_modes.get("favorite_composers", ViewMode.GRID)
+        self.favorite_genres_view_mode = view_modes.get("favorite_genres", ViewMode.GRID)
+        self.favorite_folders_view_mode = view_modes.get("favorite_folders", ViewMode.GRID)
+        self.favorite_artist_album_view_mode = view_modes.get("favorite_artist_albums", ViewMode.GRID)
+        self.favorite_composer_album_view_mode = view_modes.get("favorite_composer_albums", ViewMode.GRID)
+        self.favorite_genre_album_view_mode = view_modes.get("favorite_genre_albums", ViewMode.GRID)
+
+        self.charts_view_mode = view_modes.get("charts", ViewMode.GRID)
+        self.charts_artist_album_view_mode = view_modes.get("charts_artist_albums", ViewMode.GRID)
+        self.charts_composer_album_view_mode = view_modes.get("charts_composer_albums", ViewMode.GRID)
+        self.charts_genre_album_view_mode = view_modes.get("charts_genre_albums", ViewMode.GRID)
+
         sort_modes = settings.get("sort_modes", {})
         self.artist_sort_mode = sort_modes.get("artists", SortMode.ALPHA_ASC)
         self.album_sort_mode = sort_modes.get("albums", SortMode.YEAR_DESC)
-        self.artist_album_sort_mode = sort_modes.get(
-            "artist_albums", SortMode.YEAR_DESC
-        )
+        self.artist_album_sort_mode = sort_modes.get("artist_albums", SortMode.YEAR_DESC)
         self.song_sort_mode = sort_modes.get("songs", SortMode.ARTIST_ASC)
         self.playlist_sort_mode = sort_modes.get("playlists", SortMode.ALPHA_ASC)
         self.catalog_sort_mode = sort_modes.get("catalog", SortMode.ALPHA_ASC)
-        self.favorite_tracks_sort_mode = sort_modes.get(
-            "favorite_tracks", SortMode.DATE_ADDED_DESC
-        )
         self.genre_sort_mode = sort_modes.get("genres", SortMode.ALPHA_ASC)
-        self.charts_album_sort_mode = sort_modes.get(
-            "charts_albums", SortMode.DATE_ADDED_DESC
-        )
-        self.charts_artist_sort_mode = sort_modes.get(
-            "charts_artists", SortMode.DATE_ADDED_DESC
-        )
-        self.charts_composer_sort_mode = sort_modes.get(
-            "charts_composers", SortMode.DATE_ADDED_DESC
-        )
-        self.charts_genre_sort_mode = sort_modes.get(
-            "charts_genres", SortMode.DATE_ADDED_DESC
-        )
+        self.charts_album_sort_mode = sort_modes.get("charts_albums", SortMode.DATE_ADDED_DESC)
+        self.charts_artist_sort_mode = sort_modes.get("charts_artists", SortMode.DATE_ADDED_DESC)
+        self.charts_composer_sort_mode = sort_modes.get("charts_composers", SortMode.DATE_ADDED_DESC)
+        self.charts_genre_sort_mode = sort_modes.get("charts_genres", SortMode.DATE_ADDED_DESC)
         self.composer_sort_mode = sort_modes.get("composers", SortMode.ALPHA_ASC)
-        self.composer_album_sort_mode = sort_modes.get(
-            "composer_albums", SortMode.YEAR_DESC
-        )
+        self.composer_album_sort_mode = sort_modes.get("composer_albums", SortMode.YEAR_DESC)
+
+        self.favorite_tracks_sort_mode = sort_modes.get("favorite_tracks", SortMode.DATE_ADDED_DESC)
+        self.favorite_playlists_sort_mode = sort_modes.get("favorite_playlists", SortMode.DATE_ADDED_DESC)
+        self.favorite_albums_sort_mode = sort_modes.get("favorite_albums", SortMode.DATE_ADDED_DESC)
+        self.favorite_artists_sort_mode = sort_modes.get("favorite_artists", SortMode.DATE_ADDED_DESC)
+        self.favorite_composers_sort_mode = sort_modes.get("favorite_composers", SortMode.DATE_ADDED_DESC)
+        self.favorite_genres_sort_mode = sort_modes.get("favorite_genres", SortMode.DATE_ADDED_DESC)
+        self.favorite_folders_sort_mode = sort_modes.get("favorite_folders", SortMode.DATE_ADDED_DESC)
+        self.favorite_artist_album_sort_mode = sort_modes.get("favorite_artist_albums", SortMode.YEAR_DESC)
+        self.favorite_composer_album_sort_mode = sort_modes.get("favorite_composer_albums", SortMode.YEAR_DESC)
+        self.favorite_genre_album_sort_mode = sort_modes.get("favorite_genre_albums", SortMode.YEAR_DESC)
+
+        self.charts_artist_album_sort_mode = sort_modes.get("charts_artist_albums", SortMode.YEAR_DESC)
+        self.charts_composer_album_sort_mode = sort_modes.get("charts_composer_albums", SortMode.YEAR_DESC)
+        self.charts_genre_album_sort_mode = sort_modes.get("charts_genre_albums", SortMode.YEAR_DESC)
+
         self.queue_visible = settings.get("queueVisible", True)
         self.queue_compact_mode = settings.get("queueCompactMode", False)
         self.queue_compact_hide_artist = settings.get("queueCompactHideArtist", False)
@@ -1664,119 +1951,6 @@ class MainWindow(StyledMainWindow):
 
         if self.playback_history_mode in [0, 1]:
             self.library_manager.save_playback_history([])
-
-    def save_current_settings(self):
-        """Saves current state and variables to the settings file."""
-        current_geometry = None
-        if self.remember_window_size:
-            if self.vinyl_toggle_button.isChecked() and self.original_geometry:
-                current_geometry = self.original_geometry.toHex().data().decode()
-            else:
-                current_geometry = self.saveGeometry().toHex().data().decode()
-
-        if self.vinyl_toggle_button.isChecked():
-            queue_is_visible = self.queue_visible_before_vinyl
-        else:
-            queue_is_visible = self.right_panel.isVisible()
-
-        splitter_sizes = self.splitter.sizes() if self.remember_window_size else None
-
-        if self.vinyl_toggle_button.isChecked():
-            current_vinyl_w = self.width()
-            current_vinyl_h = self.height()
-        else:
-            current_vinyl_w = self.saved_vinyl_size[0]
-            current_vinyl_h = self.saved_vinyl_size[1]
-
-        final_vinyl_size = [current_vinyl_w, current_vinyl_h]
-
-        if self.vinyl_toggle_button.isChecked():
-            self.vinyl_window_geometry = self.saveGeometry().toHex().data().decode()
-
-        if getattr(self, "mini_window", None) and self.mini_window.isVisible():
-            self.mini_geometry = self.mini_window.saveGeometry().toHex().data().decode()
-            self.mini_pos = self.mini_window.pos()
-
-        mini_pos_list = [self.mini_pos.x(), self.mini_pos.y()] if getattr(self, "mini_pos", None) else None
-
-        settings = {
-            "musicLibraryPaths": self.music_library_paths,
-            "nav_tab_order": self.nav_tab_order,
-            "theme": self.current_theme,
-            "accent_color": self.current_accent,
-            "artist_source_tag": self.artist_source_tag,
-            "show_separators": self.show_separators,
-            "ignore_articles": self.ignore_articles,
-            "show_favorites_separators": self.show_favorites_separators,
-            "ignore_genre_case": self.ignore_genre_case,
-            "treat_folders_as_unique": self.treat_folders_as_unique,
-            "allow_drag_export": self.allow_drag_export,
-            "dismissed_album_merge_warning": getattr(
-                self, "dismissed_album_merge_warning", False
-            ),
-            "dismissed_add_folder_hint": getattr(
-                self, "dismissed_add_folder_hint", False
-            ),
-            "remember_queue_mode": self.remember_queue_mode,
-            "volume": self.control_panel.volume_slider.value(),
-            "playback_history_mode": self.playback_history_mode,
-            "history_store_unique_only": self.history_store_unique_only,
-            "shuffle": self.player.is_shuffled(),
-            "repeatMode": self.player.get_repeat_mode().value,
-            "queueVisible": queue_is_visible,
-            "lastRightPanelWidth": self.last_right_panel_width,
-            "remember_last_view": self.remember_last_view,
-            "remember_window_size": self.remember_window_size,
-            "windowGeometry": current_geometry,
-            "vinyl_window_size": final_vinyl_size,
-            "vinyl_window_geometry": self.vinyl_window_geometry,
-            "mini_geometry": self.mini_geometry,
-            "mini_pos": mini_pos_list,
-            "stylize_vinyl_covers": self.stylize_vinyl_covers,
-            "warm_sound": self.warm_sound,
-            "scratch_sound": self.scratch_sound,
-            "mini_opacity": self.mini_opacity,
-            "show_random_suggestions": self.show_random_suggestions,
-            "splitterSizes": splitter_sizes,
-            "queueCompactMode": self.queue_compact_mode,
-            "queueCompactHideArtist": self.queue_compact_hide_artist,
-            "queueShowCover": self.queue_show_cover,
-            "collect_statistics": self.collect_statistics,
-            "charts_period": self.charts_period,
-            "pending_settings_rescan": getattr(self, "pending_settings_rescan", False),
-            "encyclopedia_collapsed": getattr(self, "encyclopedia_collapsed", False),
-            "language": self.current_language,
-            "favorite_icon_name": self.favorite_icon_name,
-            "autoplay_on_queue": self.autoplay_on_queue,
-            "view_modes": {
-                "artists": self.artist_view_mode,
-                "artist_albums": self.artist_album_view_mode,
-                "albums": self.album_view_mode,
-                "catalog": self.catalog_view_mode,
-                "playlists": self.playlist_view_mode,
-                "favorites": self.favorite_view_mode,
-                "genres": self.genre_view_mode,
-                "composers": self.composer_view_mode,
-                "composer_albums": self.composer_album_view_mode,
-            },
-            "sort_modes": {
-                "artists": self.artist_sort_mode,
-                "albums": self.album_sort_mode,
-                "artist_albums": self.artist_album_sort_mode,
-                "songs": self.song_sort_mode,
-                "playlists": self.playlist_sort_mode,
-                "catalog": self.catalog_sort_mode,
-                "favorite_tracks": self.favorite_tracks_sort_mode,
-                "genres": self.genre_sort_mode,
-                "charts_albums": self.charts_album_sort_mode,
-                "charts_artists": self.charts_artist_sort_mode,
-                "charts_composers": self.charts_composer_sort_mode,
-                "charts_genres": self.charts_genre_sort_mode,
-                "composers": self.composer_sort_mode,
-                "composer_albums": self.composer_album_sort_mode,
-            },
-        }
-        self.library_manager.save_settings(settings)
 
     def apply_player_settings(self):
         """Applies the initial playback configuration loaded from settings."""
@@ -1875,7 +2049,7 @@ class MainWindow(StyledMainWindow):
 
         if hasattr(self, "chart_view_button"):
             self.ui_manager.components.update_tool_button_icon(
-                self.chart_view_button, self.favorite_view_mode
+                self.chart_view_button, self.charts_view_mode
             )
 
     def set_volume(self, volume):
@@ -2529,6 +2703,18 @@ class MainWindow(StyledMainWindow):
 
                 if context == "tracks":
                     self.ui_manager.favorites_ui_manager.show_favorite_tracks_view()
+                elif context == "all_artists":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_artists_view()
+                elif context == "all_albums":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_albums_view()
+                elif context == "all_genres":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_genres_view()
+                elif context == "all_composers":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_composers_view()
+                elif context == "all_playlists":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_playlists_view()
+                elif context == "all_folders":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_folders_view()
                 elif context == "artist" and data:
                     self.ui_manager.favorites_ui_manager.show_favorite_artist_albums_view(data)
                     if "album_key" in context_data:
@@ -2746,7 +2932,7 @@ class MainWindow(StyledMainWindow):
 
     def set_chart_view_mode(self, action):
         """Sets the chart view mode based on the user's action and repopulates the UI."""
-        self.favorite_view_mode = action.data()
+        self.charts_view_mode = action.data()
         self.ui_manager.charts_ui_manager.populate_charts_tab()
 
     def set_favorite_tracks_sort_mode(self, action):
@@ -2944,6 +3130,18 @@ class MainWindow(StyledMainWindow):
 
                 if context == "tracks":
                     self.ui_manager.favorites_ui_manager.show_favorite_tracks_view()
+                elif context == "all_artists":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_artists_view()
+                elif context == "all_albums":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_albums_view()
+                elif context == "all_genres":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_genres_view()
+                elif context == "all_composers":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_composers_view()
+                elif context == "all_playlists":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_playlists_view()
+                elif context == "all_folders":
+                    self.ui_manager.favorites_ui_manager.show_all_favorite_folders_view()
                 elif context == "artist" and data:
                     self.ui_manager.favorites_ui_manager.show_favorite_artist_albums_view(
                         data
@@ -3213,7 +3411,7 @@ class MainWindow(StyledMainWindow):
         self.search_container.setFixedWidth(target_width)
 
     def _set_adjusted_min_size(self, base_w, base_h):
-        """Устанавливает минимальный размер с учетом отступов тени окна и заголовка на Linux."""
+        """Sets the minimum size, accounting for window shadow and title bar margins on Linux."""
         m = self.contentsMargins()
 
         title_bar_height = 0
@@ -3325,10 +3523,20 @@ class MainWindow(StyledMainWindow):
             ),
         }
 
-        if source_view in ["favorite_artists", "favorite_albums", "favorite_genres"]:
+        if source_view in [
+            "favorite_artists", "favorite_albums", "favorite_genres",
+            "charts_artists", "charts_albums", "charts_genres", "charts_composers"
+        ]:
+            if source_view.startswith("favorite_"):
+                target_scroll = self.favorite_detail_scroll_area
+                target_separators = self.favorite_detail_separator_widgets
+            else:
+                target_scroll = self.chart_detail_scroll_area
+                target_separators = self.chart_detail_separator_widgets
+
             view_config[source_view] = (
-                self.favorite_detail_scroll_area,
-                self.favorite_detail_separator_widgets,
+                target_scroll,
+                target_separators,
                 None,
                 lambda: 1,
                 lambda: 1

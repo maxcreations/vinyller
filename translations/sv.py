@@ -1,5 +1,5 @@
 # ../translations/sv.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Biblioteksuppdatering krävs",
     "Update": "Uppdatera",
     "Changes": "Ändringar",
+    "Later": "Senare",
+    "Go to GitHub": "Gå till GitHub",
+    "Update library": "Uppdatera biblioteket",
     "Sorting records...": "Sorterar skivor...",
     "See all": "Se alla",
     "Have you heard this?!": "Har du hört detta?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "{count} ändringar upptäcktes i dina musikmappar (filer har lagts till, tagits bort eller ändrats externt). Uppdatering krävs.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Du har ändrat inställningar eller så har filer ändrats externt. Uppdatera biblioteket för att tillämpa ändringarna.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "En ny version av Vinyller är ute nu! Kolla in {version}-releasesidan på GitHub för den fullständiga ändringsloggen, inklusive buggfixar och nya funktioner.",
+    "A new version is available": "En ny version är tillgänglig",
     "Select music folder": "Välj musikmapp",
     "The program needs to be restarted for the changes to take effect.": "Programmet måste startas om för att ändringarna ska träda i kraft.",
     "Please restart program.": "Starta om programmet.",
-    "Later": "Senare",
     "Restart Now": "Starta om nu",
     "Reset Playback Rating": "Återställ spelbetyg",
     "Reset playback rating warning text...": "Vill du verkligen återställa spelbetyget?\n\nInformation om musikpopularitet kommer att raderas. Denna åtgärd kan inte ångras.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Tack till",
     "Reset Settings": "Återställ inställningar",
     "Reset all settings and preferences": "Återställ alla inställningar och preferenser",
-    "Update library": "Uppdatera biblioteket",
     "Launch full library rescan": "Starta fullständig omskanning av biblioteket",
     "General settings": "Allmänna inställningar",
     "General settings description text...": "Välj språk, utseende och programmets beteende vid start.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "På sidor med alla favoriter och populära artister, album, genrer etc. kommer navigeringsseparatorer att visas. Klick på dem gör att du snabbt kan hoppa till vilken annan sektion som helst på sidan — till exempel för att nå artister eller album som börjar på M.",
     "Allow file export via drag-and-drop": "Tillåt filexport via dra-och-släpp",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Tillåter dig att dra och släppa låtar direkt från spelkön till din filhanterare (t.ex. Utforskaren eller Finder) för att kopiera dem.",
+    "Automatically check for Vinyller updates at startup": "Kontrollera automatiskt efter Vinyller-uppdateringar vid start",
+    "Check for Updates": "Sök efter uppdateringar",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Kontrollera automatiskt efter nya versioner av Vinyller på GitHub när programmet startar.",
     "Language": "Språk",
     "Color theme": "Färgtema",
     "Accent color": "Accentfärg",

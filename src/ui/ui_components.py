@@ -30,7 +30,7 @@ from PyQt6.QtGui import (
 from PyQt6.QtMultimedia import QMediaPlayer
 from PyQt6.QtWidgets import (
     QButtonGroup, QFrame, QGraphicsOpacityEffect, QHBoxLayout, QLabel, QPushButton,
-    QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget, QSizePolicy
+    QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget, QSizePolicy, QLayout
 )
 
 from src.core.hotkey_manager import HotkeyManager
@@ -63,20 +63,23 @@ from src.utils.utils_translator import translate
 
 class PendingUpdatesPopup(ShadowPopup):
     """
-    A popup widget that notifies the user when library updates or metadata changes are pending.
+    A popup widget that notifies the user when library updates, metadata changes,
+    or new application versions are available.
     """
-    def __init__(self, parent = None, update_callback = None, hide_callback = None):
+    def __init__(self, parent = None, update_callback = None, hide_callback = None, postpone_callback = None):
         """
         Initializes the pending updates popup.
 
         Args:
             parent (QWidget, optional): The parent widget.
-            update_callback (callable, optional): Function to call when the update button is clicked.
-            hide_callback (callable, optional): Function to call when the popup is hidden.
+            update_callback (callable, optional): Invoked when the 'Update' button is clicked.
+            hide_callback (callable, optional): Invoked when the popup is hidden or closed.
+            postpone_callback (callable, optional): Invoked when the 'Later' button is clicked to defer the update.
         """
         super().__init__(parent)
         self.hide_callback = hide_callback
         self.update_callback = update_callback
+        self.postpone_callback = postpone_callback
 
         self.setWindowFlags(
             Qt.WindowType.Tool |
@@ -89,11 +92,14 @@ class PendingUpdatesPopup(ShadowPopup):
         if parent:
             parent.removeEventFilter(self)
 
-        self.setFixedWidth(352)
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose, False)
 
         content_container = QWidget()
         content_container.setProperty("class", "pendingUpdatesWidget")
+        content_container.setFixedWidth(
+            352 - self.layout.contentsMargins().left() - self.layout.contentsMargins().right())
+
+        self.layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
 
         layout = QVBoxLayout(content_container)
         layout.setContentsMargins(16, 16, 16, 16)
@@ -103,10 +109,12 @@ class PendingUpdatesPopup(ShadowPopup):
         header_layout.setContentsMargins(0, 0, 0, 0)
         header_layout.setSpacing(8)
 
-        title = QLabel(translate("Library update required"))
-        title.setProperty("class", "textHeaderSecondary textColorPrimary")
-        header_layout.addWidget(title)
-        header_layout.addStretch()
+        self.title_label = QLabel(translate("Library update required"))
+        self.title_label.setProperty("class", "textHeaderSecondary textColorPrimary")
+        self.title_label.setWordWrap(True)
+        self.title_label.setMargin(0)
+        self.title_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        header_layout.addWidget(self.title_label, 1, Qt.AlignmentFlag.AlignTop)
 
         close_button = QPushButton()
         close_button.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -124,7 +132,7 @@ class PendingUpdatesPopup(ShadowPopup):
 
         close_button.clicked.connect(self.hide)
 
-        header_layout.addWidget(close_button)
+        header_layout.addWidget(close_button, 0, Qt.AlignmentFlag.AlignTop)
         layout.addLayout(header_layout)
 
         self.message_label = QLabel()
@@ -137,11 +145,11 @@ class PendingUpdatesPopup(ShadowPopup):
         buttons_layout.setContentsMargins(0, 0, 0, 0)
         buttons_layout.setSpacing(8)
 
-        update_btn = QPushButton(translate("Update"))
-        update_btn.setProperty("class", "btnText")
-        update_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        update_btn.clicked.connect(self._on_update_clicked)
-        buttons_layout.addWidget(update_btn)
+        self.update_btn = QPushButton(translate("Update"))
+        self.update_btn.setProperty("class", "btnText")
+        self.update_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.update_btn.clicked.connect(self._on_update_clicked)
+        buttons_layout.addWidget(self.update_btn)
 
         self.changes_btn = QPushButton(translate("Changes"))
         self.changes_btn.setProperty("class", "btnText")
@@ -150,10 +158,22 @@ class PendingUpdatesPopup(ShadowPopup):
         self.changes_btn.hide()
         buttons_layout.addWidget(self.changes_btn)
 
+        self.later_btn = QPushButton(translate("Later"))
+        self.later_btn.setProperty("class", "btnText")
+        self.later_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.later_btn.clicked.connect(self._on_later_clicked)
+        self.later_btn.hide()
+        buttons_layout.addWidget(self.later_btn)
+
         buttons_layout.addStretch()
         layout.addLayout(buttons_layout)
-
         self.layout.addWidget(content_container)
+
+    def set_title(self, text):
+        """
+        Sets the primary title of the popup window.
+        """
+        self.title_label.setText(text)
 
     def set_changes_button_visible(self, visible):
         """
@@ -161,9 +181,15 @@ class PendingUpdatesPopup(ShadowPopup):
         """
         self.changes_btn.setVisible(visible)
 
+    def set_later_button_visible(self, visible):
+        """
+        Toggles the visibility of the 'Later' button, used for deferring app updates.
+        """
+        self.later_btn.setVisible(visible)
+
     def _on_update_clicked(self):
         """
-        Handles the update button click, hiding the popup and triggering the callback.
+        Handles the update button click, hiding the popup and triggering the update callback.
         """
         self.hide()
         if self.update_callback:
@@ -185,11 +211,38 @@ class PendingUpdatesPopup(ShadowPopup):
         dialog = ChangedFilesDialog(changed_files, removed_files, parent)
         dialog.exec()
 
+    def _on_later_clicked(self):
+        """
+        Handles the 'Later' button click event. Hides the popup and triggers the postpone callback.
+        """
+        self.hide()
+        if self.postpone_callback:
+            self.postpone_callback()
+
     def set_message(self, text):
         """
         Sets the main text message displayed in the popup.
         """
         self.message_label.setText(text)
+
+    def set_app_update_mode(self, is_app_update, github_link = ""):
+        """
+        Configures the primary action button for either an app download or a library update.
+        """
+        if is_app_update:
+            self.update_btn.setText(translate("Go to GitHub"))
+            set_custom_tooltip(
+                self.update_btn,
+                title = translate("Open in browser"),
+                text = github_link,
+                activity_type = "external",
+            )
+        else:
+            self.update_btn.setText(translate("Update"))
+            set_custom_tooltip(
+                self.update_btn,
+                title = translate("Update library")
+            )
 
     def hideEvent(self, event):
         """
@@ -320,6 +373,7 @@ class ToastNotification(ShadowPopup):
 
             self.move(x, y)
 
+
 class SearchInteractionFilter(QObject):
     """
     Event filter to manage opacity effects based on hover and focus states for search interaction.
@@ -364,6 +418,7 @@ class SearchInteractionFilter(QObject):
             self._update_opacity()
 
         return super().eventFilter(obj, event)
+
 
 class NavBarResizeFilter(QObject):
     """
@@ -471,10 +526,30 @@ class NavBarResizeFilter(QObject):
         Updates the appearance and active state of the 'More' button.
         """
         self.more_button.setChecked(has_hidden_active)
-        color = theme.COLORS["ACCENT"] if has_hidden_active else theme.COLORS["PRIMARY"]
+
+        accent_color = theme.get_qcolor(theme.COLORS["ACCENT"])
+        r, g, b = accent_color.red(), accent_color.green(), accent_color.blue()
+        brightness = (r * 299 + g * 587 + b * 114) / 1000
+
+        is_dark_theme = theme.COLORS.get("IS_DARK", False)
+
+        if brightness > 160 and is_dark_theme:
+            nav_icon_active = theme.COLORS["SECONDARY"]
+        elif brightness > 220:
+            nav_icon_active = theme.COLORS["PRIMARY"]
+        elif brightness > 160:
+            nav_icon_active = theme.COLORS["PRIMARY"]
+        elif brightness < 160 and is_dark_theme:
+            nav_icon_active = theme.COLORS["WHITE"]
+        else:
+            nav_icon_active = theme.COLORS["ACCENT"]
+
+        color = nav_icon_active if has_hidden_active else theme.COLORS["PRIMARY"]
+
         self.more_button.setIcon(
             create_svg_icon("assets/control/more_horiz.svg", color, QSize(24, 24))
         )
+
 
 class UiComponents:
     """

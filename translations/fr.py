@@ -1,5 +1,5 @@
 # ../translations/fr.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Mise à jour de la bibliothèque requise",
     "Update": "Mettre à jour",
     "Changes": "Modifications",
+    "Later": "Plus tard",
+    "Go to GitHub": "Aller sur GitHub",
+    "Update library": "Mettre à jour la bibliothèque",
     "Sorting records...": "Tri des disques en cours...",
     "See all": "Voir tout",
     "Have you heard this?!": "Avez-vous entendu ça ?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "{count} changements détectés dans vos dossiers musicaux (fichiers ajoutés, supprimés ou modifiés de manière externe). Actualisation requise.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Vous avez modifié les paramètres ou des fichiers ont été modifiés de manière externe. Actualisez la bibliothèque pour appliquer les changements.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Une nouvelle version de Vinyller est disponible ! Consultez la page de publication {version} sur GitHub pour l'historique complet des modifications, y compris les corrections de bugs et les nouvelles fonctionnalités.",
+    "A new version is available": "Une nouvelle version est disponible",
     "Select music folder": "Sélectionner un dossier de musique",
     "The program needs to be restarted for the changes to take effect.": "Le programme doit être redémarré pour que les modifications prennent effet.",
     "Please restart program.": "Veuillez redémarrer le programme.",
-    "Later": "Plus tard",
     "Restart Now": "Redémarrer maintenant",
     "Reset Playback Rating": "Réinitialiser la notation de lecture",
     "Reset playback rating warning text...": "Voulez-vous vraiment réinitialiser la notation de lecture ?\n\nLes informations de popularité musicale seront supprimées. Cette action est irréversible.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Remerciements",
     "Reset Settings": "Réinitialiser les paramètres",
     "Reset all settings and preferences": "Réinitialiser tous les paramètres et préférences",
-    "Update library": "Mettre à jour la bibliothèque",
     "Launch full library rescan": "Lancer une renumérisation complète de la bibliothèque",
     "General settings": "Paramètres généraux",
     "General settings description text...": "Choisissez les paramètres de langue, l'apparence du lecteur et son comportement au démarrage.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Les pages pour tous les artistes, albums, genres, etc., favoris et populaires afficheront des séparateurs de navigation. Un clic dessus permet de passer rapidement à n'importe quel autre séparateur sur la page actuelle, par exemple, aux artistes ou albums commençant par M.",
     "Allow file export via drag-and-drop": "Autoriser l'exportation de fichiers par glisser-déposer",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Permet de faire glisser des morceaux directement de la file d'attente dans votre gestionnaire de fichiers (par exemple, l'Explorateur ou Finder) pour les copier.",
+    "Automatically check for Vinyller updates at startup": "Vérifier automatiquement les mises à jour de Vinyller au démarrage",
+    "Check for Updates": "Vérifier les mises à jour",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Rechercher automatiquement les nouvelles versions de Vinyller sur GitHub au lancement du programme.",
     "Language": "Langue",
     "Color theme": "Thème de couleur",
     "Accent color": "Couleur d'accent",

@@ -31,7 +31,7 @@ from PyQt6.QtWidgets import (
     QListWidget, QMenu, QPushButton,
     QScrollArea, QScrollBar, QSizePolicy, QTextBrowser,
     QTextEdit, QApplication, QWidget, QFrame, QListWidgetItem, QToolButton, QTableWidgetItem,
-    QTreeWidgetItem, QAbstractItemView, QVBoxLayout, QHBoxLayout
+    QTreeWidgetItem, QAbstractItemView, QVBoxLayout, QHBoxLayout, QLayout
 )
 
 from src.utils import theme
@@ -251,6 +251,7 @@ class ShadowPopup(QWidget):
             SHADOW_SIZE + SHADOW_SHIFT_Y
         )
         self.layout.setSpacing(0)
+        self.layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
 
     def paintEvent(self, event):
         """Paints the translucent background and multi-layered shadow."""

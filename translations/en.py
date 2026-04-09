@@ -1,5 +1,5 @@
 # ../translations/en.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Library update required",
     "Update": "Update",
     "Changes": "Changes",
+    "Later": "Later",
+    "Go to GitHub": "Go to GitHub",
+    "Update library": "Update library",
     "Sorting records...": "Sorting records...",
     "See all": "See all",
     "Have you heard this?!": "Have you heard this?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "Detected {count} changes in your music folders (files added, removed or edited externally). Refresh required.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "You have changed settings or files changed externally. Refresh the library to apply changes.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "A new Vinyller version is out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.",
+    "A new version is available": "A new version is available",
     "Select music folder": "Select music folder",
     "The program needs to be restarted for the changes to take effect.": "The program needs to be restarted for the changes to take effect.",
     "Please restart program.": "Please restart program.",
-    "Later": "Later",
     "Restart Now": "Restart Now",
     "Reset Playback Rating": "Reset Playback Rating",
     "Reset playback rating warning text...": "Are you sure you want to reset the playback rating?\n\nMusic popularity information will be deleted. This action cannot be undone.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Credits",
     "Reset Settings": "Reset Settings",
     "Reset all settings and preferences": "Reset all settings and preferences",
-    "Update library": "Update library",
     "Launch full library rescan": "Launch full library rescan",
     "General settings": "General settings",
     "General settings description text...": "Select language, player appearance, and startup behavior settings.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.",
     "Allow file export via drag-and-drop": "Allow file export via drag-and-drop",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.",
+    "Automatically check for Vinyller updates at startup": "Automatically check for Vinyller updates at startup",
+    "Check for Updates": "Check for Updates",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Automatically check for new versions of Vinyller on GitHub when the program starts.",
     "Language": "Language",
     "Color theme": "Color theme",
     "Accent color": "Accent color",

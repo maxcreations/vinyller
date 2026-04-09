@@ -1,5 +1,5 @@
 # ../translations/ko.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -696,6 +696,9 @@ TRANSLATIONS = {
     "Library update required": "라이브러리 업데이트 필요",
     "Update": "업데이트",
     "Changes": "변경 사항",
+    "Later": "나중에",
+    "Go to GitHub": "GitHub로 이동",
+    "Update library": "라이브러리 업데이트",
     "Sorting records...": "레코드 정렬 중...",
     "See all": "자세히 보기",
     "Have you heard this?!": "이것 들어 보셨나요?!",
@@ -752,10 +755,11 @@ TRANSLATIONS = {
         "음악 폴더에서 {count}개의 변경 사항이 감지되었습니다(파일 추가, 삭제 또는 외부 편집). 새로고침이 필요합니다.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "설정을 변경했거나 외부에서 파일이 변경되었습니다. 변경 사항을 적용하려면 라이브러리를 새로고침하세요.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "새로운 Vinyller 버전이 나왔습니다! 버그 수정 및 새로운 기능을 포함한 전체 변경 로그는 GitHub의 {version} 릴리스 페이지를 확인하세요.",
+    "A new version is available": "새 버전을 사용할 수 있습니다",
     "Select music folder": "음악 폴더 선택",
     "The program needs to be restarted for the changes to take effect.": "변경 사항이 적용되려면 프로그램을 다시 시작해야 합니다.",
     "Please restart program.": "프로그램을 다시 시작하세요.",
-    "Later": "나중에",
     "Restart Now": "지금 다시 시작",
     "Reset Playback Rating": "재생 평점 재설정",
     "Reset playback rating warning text...": "재생 평점을 재설정하시겠습니까?\n\n음악 인기도 정보가 삭제됩니다. 이 작업은 취소할 수 없습니다.",
@@ -800,7 +804,6 @@ TRANSLATIONS = {
     "Credits": "크레딧",
     "Reset Settings": "설정 재설정",
     "Reset all settings and preferences": "모든 설정 및 기본 설정 재설정",
-    "Update library": "라이브러리 업데이트",
     "Launch full library rescan": "전체 라이브러리 다시 검색 시작",
     "General settings": "일반 설정",
     "General settings description text...": "언어, 플레이어 모양, 시작 시 동작 설정을 선택합니다.",
@@ -824,6 +827,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "즐겨찾기 및 인기 아티스트, 앨범, 장르 등의 페이지에 구분 기호 링크가 표시됩니다. 클릭하면 현재 페이지의 다른 구분 기호로 빠르게 이동할 수 있습니다. 예를 들어 M으로 시작하는 아티스트나 앨범으로 이동할 수 있습니다.",
     "Allow file export via drag-and-drop": "드래그 앤 드롭을 통한 음악 내보내기 허용",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "재생 대기열에서 트랙을 직접 파일 관리자 (예: 파일 탐색기 또는 Finder)로 드래그 앤 드롭하여 복사할 수 있습니다.",
+    "Automatically check for Vinyller updates at startup": "시작 시 Vinyller 업데이트 자동 확인",
+    "Check for Updates": "업데이트 확인",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "프로그램 시작 시 GitHub에서 Vinyller 새 버전을 자동으로 확인합니다.",
     "Language": "언어",
     "Color theme": "색상 테마",
     "Accent color": "강조 색상",

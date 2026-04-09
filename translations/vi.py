@@ -1,5 +1,5 @@
 # ../translations/vi.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -696,6 +696,9 @@ TRANSLATIONS = {
     "Library update required": "Yêu cầu cập nhật thư viện",
     "Update": "Cập nhật",
     "Changes": "Thay đổi",
+    "Later": "Để sau",
+    "Go to GitHub": "Đi tới GitHub",
+    "Update library": "Cập nhật thư viện",
     "Sorting records...": "Đang sắp xếp các đĩa...",
     "See all": "Xem tất cả",
     "Have you heard this?!": "Bạn đã nghe cái này chưa?!",
@@ -752,10 +755,11 @@ TRANSLATIONS = {
         "Đã phát hiện {count} thay đổi trong các thư mục nhạc của bạn (tệp đã được thêm, xóa hoặc chỉnh sửa bên ngoài). Yêu cầu làm mới.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Bạn đã thay đổi cài đặt hoặc các tệp đã thay đổi bên ngoài. Làm mới thư viện để áp dụng các thay đổi.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Đã có phiên bản Vinyller mới! Hãy xem trang phát hành {version} trên GitHub để biết nhật ký thay đổi đầy đủ, bao gồm sửa lỗi và tính năng mới.",
+    "A new version is available": "Đã có phiên bản mới",
     "Select music folder": "Chọn thư mục nhạc",
     "The program needs to be restarted for the changes to take effect.": "Chương trình cần được khởi động lại để các thay đổi có hiệu lực.",
     "Please restart program.": "Vui lòng khởi động lại chương trình.",
-    "Later": "Để sau",
     "Restart Now": "Khởi động lại ngay",
     "Reset Playback Rating": "Đặt lại xếp hạng phát",
     "Reset playback rating warning text...": "Bạn có thực sự muốn đặt lại xếp hạng phát không?\n\nThông tin về mức độ phổ biến của nhạc sẽ bị xóa. Hành động này không thể hoàn tác.",
@@ -800,7 +804,6 @@ TRANSLATIONS = {
     "Credits": "Ghi công",
     "Reset Settings": "Đặt lại cài đặt",
     "Reset all settings and preferences": "Đặt lại tất cả cài đặt và tùy chọn",
-    "Update library": "Cập nhật thư viện",
     "Launch full library rescan": "Bắt đầu quét lại toàn bộ thư viện",
     "General settings": "Cài đặt chung",
     "General settings description text...": "Chọn cài đặt ngôn ngữ, giao diện trình phát và hành vi khi khởi động.",
@@ -824,6 +827,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Trên các trang tất cả nghệ sĩ, album, thể loại yêu thích và phổ biến sẽ hiển thị các dấu phân cách điều hướng. Nhấp vào chúng cho phép bạn nhanh chóng bỏ qua đến bất kỳ phần nào khác trên trang — ví dụ: để đến các nghệ sĩ hoặc album bắt đầu bằng chữ M.",
     "Allow file export via drag-and-drop": "Cho phép xuất tệp bằng cách kéo thả",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Cho phép bạn kéo và thả các bài hát trực tiếp từ hàng đợi phát vào trình quản lý tệp của bạn (ví dụ: File Explorer hoặc Finder) để sao chép chúng.",
+    "Automatically check for Vinyller updates at startup": "Tự động kiểm tra cập nhật Vinyller khi khởi động",
+    "Check for Updates": "Kiểm tra cập nhật",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Tự động kiểm tra phiên bản mới của Vinyller trên GitHub khi chương trình khởi động.",
     "Language": "Ngôn ngữ",
     "Color theme": "Giao diện màu sắc",
     "Accent color": "Màu nhấn",

@@ -1,5 +1,5 @@
 # ../translations/zh.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -696,6 +696,9 @@ TRANSLATIONS = {
     "Library update required": "需要更新资料库",
     "Update": "更新",
     "Changes": "更改",
+    "Later": "稍后",
+    "Go to GitHub": "前往 GitHub",
+    "Update library": "更新资料库",
     "Sorting records...": "正在整理唱片...",
     "See all": "更多",
     "Have you heard this?!": "你听过这个吗？！",
@@ -752,10 +755,11 @@ TRANSLATIONS = {
         "在您的音乐文件夹中检测到 {count} 项更改（文件已添加、删除或外部编辑）。需要刷新。",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "您已更改设置或文件在外部被更改。刷新库以应用更改。",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "新版本 Vinyller 现已发布！请查看 GitHub 上的 {version} 发布页面，获取完整的更新日志，包括错误修复和新功能。",
+    "A new version is available": "有新版本可用",
     "Select music folder": "选择音乐文件夹",
     "The program needs to be restarted for the changes to take effect.": "程序需要重新启动以使更改生效。",
     "Please restart program.": "请重新启动程序。",
-    "Later": "稍后",
     "Restart Now": "立即重启",
     "Reset Playback Rating": "重置播放评分",
     "Reset playback rating warning text...": "确定要重置播放评分吗？\n\n音乐流行度信息将被删除。此操作无法撤消。",
@@ -800,7 +804,6 @@ TRANSLATIONS = {
     "Credits": "致谢",
     "Reset Settings": "重置设置",
     "Reset all settings and preferences": "重置所有设置和偏好",
-    "Update library": "更新资料库",
     "Launch full library rescan": "启动完整库重新扫描",
     "General settings": "主要设置",
     "General settings description text...": "选择播放器的语言、外观和启动行为设置。",
@@ -824,6 +827,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "收藏和热门艺人、专辑、流派等的页面上将显示分隔符链接，点击它们可以快速跳转到当前页面上的任何其他分隔符，例如，跳到以字母 M 开头的艺人或专辑。",
     "Allow file export via drag-and-drop": "允许通过拖放从播放器导出音乐",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "允许您将曲目直接从播放器的播放队列拖放到文件管理器（例如，文件资源管理器或访达）以进行复制。",
+    "Automatically check for Vinyller updates at startup": "启动时自动检查 Vinyller 更新",
+    "Check for Updates": "检查更新",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "程序启动时自动在 GitHub 上检查 Vinyller 的新版本。",
     "Language": "语言",
     "Color theme": "颜色主题",
     "Accent color": "强调色",

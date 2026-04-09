@@ -419,7 +419,7 @@ class ChartsUIManager:
                     if pixmap:
                         all_card = CardWidget(
                             data=all_data_key,
-                            view_mode=mw.favorite_view_mode,
+                            view_mode=mw.charts_view_mode,
                             pixmaps=[pixmap],
                             title=title,
                             subtitle1=subtitle,
@@ -445,7 +445,7 @@ class ChartsUIManager:
                         widget = self.components.create_album_widget(
                             key,
                             data,
-                            mw.favorite_view_mode,
+                            mw.charts_view_mode,
                             subtitle_extra=subtitle_extra,
                         )
                         widget.activated.connect(
@@ -466,7 +466,7 @@ class ChartsUIManager:
                         widget = self.components.create_artist_widget(
                             key,
                             data,
-                            mw.favorite_view_mode,
+                            mw.charts_view_mode,
                             subtitle_extra=subtitle_extra,
                         )
                         widget.activated.connect(
@@ -488,7 +488,7 @@ class ChartsUIManager:
                         widget = self.components.create_genre_widget(
                             key,
                             data,
-                            mw.favorite_view_mode,
+                            mw.charts_view_mode,
                             subtitle_extra=subtitle_extra,
                         )
                         widget.activated.connect(
@@ -510,7 +510,7 @@ class ChartsUIManager:
                         widget = self.components.create_composer_widget(
                             key,
                             data,
-                            mw.favorite_view_mode,
+                            mw.charts_view_mode,
                             subtitle_extra=subtitle_extra,
                         )
                         widget.activated.connect(
@@ -575,7 +575,7 @@ class ChartsUIManager:
 
                 widget = CardWidget(
                     data=(month_key, "month_overview"),
-                    view_mode=mw.favorite_view_mode,
+                    view_mode=mw.charts_view_mode,
                     pixmaps=[pixmap],
                     title=title,
                     subtitle1=subtitle,
@@ -952,11 +952,11 @@ class ChartsUIManager:
                         ViewMode.TILE_SMALL,
                     ),
                 ],
-                mw.favorite_view_mode,
+                mw.charts_view_mode,
             )
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "favorite_view_mode", action.data()),
+                    setattr(mw, "charts_view_mode", action.data()),
                     self.show_all_top_albums_view(),
                 )
             )
@@ -1172,7 +1172,7 @@ class ChartsUIManager:
                 mw.current_charts_all_albums_flow_layout = None
 
             target_layout = main_layout
-            if mw.favorite_view_mode in [
+            if mw.charts_view_mode in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -1192,7 +1192,7 @@ class ChartsUIManager:
             widget = self.components.create_album_widget(
                 album_key,
                 album_data,
-                mw.favorite_view_mode,
+                mw.charts_view_mode,
                 subtitle_extra=subtitle_extra,
             )
             widget.activated.connect(
@@ -1211,7 +1211,7 @@ class ChartsUIManager:
         mw.is_loading_charts_all_albums = False
 
         if end >= len(mw.current_charts_all_albums_list):
-            if mw.favorite_view_mode not in [
+            if mw.charts_view_mode not in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -1330,11 +1330,11 @@ class ChartsUIManager:
                         ViewMode.TILE_SMALL,
                     ),
                 ],
-                mw.favorite_view_mode,
+                mw.charts_view_mode,
             )
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "favorite_view_mode", action.data()),
+                    setattr(mw, "charts_view_mode", action.data()),
                     self.show_all_top_artists_view(),
                 )
             )
@@ -1509,7 +1509,7 @@ class ChartsUIManager:
                 mw.current_charts_all_artists_flow_layout = None
 
             target_layout = main_layout
-            if mw.favorite_view_mode in [
+            if mw.charts_view_mode in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -1530,7 +1530,7 @@ class ChartsUIManager:
                 widget = self.components.create_artist_widget(
                     artist_name,
                     artist_data,
-                    mw.favorite_view_mode,
+                    mw.charts_view_mode,
                     subtitle_extra=subtitle_extra,
                 )
                 widget.activated.connect(
@@ -1553,7 +1553,7 @@ class ChartsUIManager:
         mw.is_loading_charts_all_artists = False
 
         if end >= len(mw.current_charts_all_artists_list):
-            if mw.favorite_view_mode not in [
+            if mw.charts_view_mode not in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -1670,11 +1670,11 @@ class ChartsUIManager:
                         ViewMode.TILE_SMALL,
                     ),
                 ],
-                mw.favorite_view_mode,
+                mw.charts_view_mode,
             )
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "favorite_view_mode", action.data()),
+                    setattr(mw, "charts_view_mode", action.data()),
                     self.show_all_top_genres_view(),
                 )
             )
@@ -1846,7 +1846,7 @@ class ChartsUIManager:
                 mw.current_charts_all_genres_flow_layout = None
 
             target_layout = main_layout
-            if mw.favorite_view_mode in [
+            if mw.charts_view_mode in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -1867,7 +1867,7 @@ class ChartsUIManager:
                 widget = self.components.create_genre_widget(
                     genre_name,
                     genre_data,
-                    mw.favorite_view_mode,
+                    mw.charts_view_mode,
                     subtitle_extra=subtitle_extra,
                 )
                 widget.activated.connect(
@@ -1890,7 +1890,7 @@ class ChartsUIManager:
         mw.is_loading_charts_all_genres = False
 
         if end >= len(mw.current_charts_all_genres_list):
-            if mw.favorite_view_mode not in [
+            if mw.charts_view_mode not in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -1965,11 +1965,11 @@ class ChartsUIManager:
             ]
 
             sort_button = self.components.create_tool_button_with_menu(
-                sort_options, mw.charts_artist_sort_mode
+                sort_options, mw.charts_composer_sort_mode
             )
             sort_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "charts_artist_sort_mode", action.data()),
+                    setattr(mw, "charts_composer_sort_mode", action.data()),
                     self.show_all_top_composers_view(),
                 )
             )
@@ -2007,11 +2007,11 @@ class ChartsUIManager:
                         ViewMode.TILE_SMALL,
                     ),
                 ],
-                mw.favorite_view_mode,
+                mw.charts_view_mode,
             )
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "favorite_view_mode", action.data()),
+                    setattr(mw, "charts_view_mode", action.data()),
                     self.show_all_top_composers_view(),
                 )
             )
@@ -2025,14 +2025,14 @@ class ChartsUIManager:
         items_all = mw.data_manager.composers_data.items()
         items = [item for item in items_all if item[1].get("entity_rating", 0) > 0]
 
-        if mw.charts_artist_sort_mode == SortMode.ALPHA_ASC:
+        if mw.charts_composer_sort_mode == SortMode.ALPHA_ASC:
             items.sort(
                 key=lambda i: (
                     mw.data_manager.get_sort_key(i[0]),
                     i[1].get("entity_rating", 0),
                 )
             )
-        elif mw.charts_artist_sort_mode == SortMode.ALPHA_DESC:
+        elif mw.charts_composer_sort_mode == SortMode.ALPHA_DESC:
             items.sort(
                 key=lambda i: (
                     mw.data_manager.get_sort_key(i[0]),
@@ -2040,7 +2040,7 @@ class ChartsUIManager:
                 ),
                 reverse=True,
             )
-        elif mw.charts_artist_sort_mode == SortMode.DATE_ADDED_ASC:
+        elif mw.charts_composer_sort_mode == SortMode.DATE_ADDED_ASC:
             items.sort(key=lambda i: i[1].get("entity_rating", 0))
         else:
             items.sort(
@@ -2167,7 +2167,7 @@ class ChartsUIManager:
             first_char = sort_name[0] if sort_name else "*"
 
             current_group = None
-            if mw.charts_artist_sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+            if mw.charts_composer_sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
                 current_group = first_char.upper() if first_char.isalpha() else "*"
             else:
                 current_group = translate("By rating")
@@ -2186,7 +2186,7 @@ class ChartsUIManager:
                 mw.current_charts_all_composers_flow_layout = None
 
             target_layout = main_layout
-            if mw.favorite_view_mode in [
+            if mw.charts_view_mode in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -2207,7 +2207,7 @@ class ChartsUIManager:
                 widget = self.components.create_artist_widget(
                     artist_name,
                     artist_data,
-                    mw.favorite_view_mode,
+                    mw.charts_view_mode,
                     subtitle_extra=subtitle_extra,
                 )
                 widget.activated.connect(
@@ -2230,7 +2230,7 @@ class ChartsUIManager:
         mw.is_loading_charts_all_composers = False
 
         if end >= len(mw.current_charts_all_composers_list):
-            if mw.favorite_view_mode not in [
+            if mw.charts_view_mode not in [
                 ViewMode.GRID,
                 ViewMode.TILE_BIG,
                 ViewMode.TILE_SMALL,
@@ -2356,12 +2356,12 @@ class ChartsUIManager:
                     (translate("Alphabetical (A-Z)"), sort_alpha_asc, SortMode.ALPHA_ASC),
                     (translate("Alphabetical (Z-A)"), sort_alpha_desc, SortMode.ALPHA_DESC),
                 ],
-                mw.artist_album_sort_mode,
+                mw.charts_artist_album_sort_mode,
             )
             sort_button.setFixedHeight(36)
             sort_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "artist_album_sort_mode", action.data()),
+                    setattr(mw, "charts_artist_album_sort_mode", action.data()),
                     self.show_top_artist_albums_view(artist_name),
                 )
             )
@@ -2408,12 +2408,12 @@ class ChartsUIManager:
                         ViewMode.ALL_TRACKS,
                     ),
                 ],
-                mw.artist_album_view_mode,
+                mw.charts_artist_album_view_mode,
             )
             view_button.setFixedHeight(36)
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "artist_album_view_mode", action.data()),
+                    setattr(mw, "charts_artist_album_view_mode", action.data()),
                     self.show_top_artist_albums_view(artist_name),
                 )
             )
@@ -2481,7 +2481,7 @@ class ChartsUIManager:
             if tuple(key) in mw.data_manager.albums_data
         ]
 
-        sort_mode = mw.artist_album_sort_mode
+        sort_mode = mw.charts_artist_album_sort_mode
         if sort_mode == SortMode.ALPHA_ASC:
             albums_of_artist.sort(key=lambda x: mw.data_manager.get_sort_key(x[0][1]))
         elif sort_mode == SortMode.ALPHA_DESC:
@@ -2514,7 +2514,7 @@ class ChartsUIManager:
 
         self._populate_charts_sub_view_lazy(
             mw.charts_sub_view_scroll_area,
-            "artist_album_view_mode",
+            "charts_artist_album_view_mode",
             enc_key=artist_name,
             enc_type="artist",
             enc_refresh_callback=lambda: self.show_top_artist_albums_view(artist_name),
@@ -2561,7 +2561,7 @@ class ChartsUIManager:
         start = mw.charts_artist_albums_loaded_count
         batch_size = (
             BATCH_SIZE_ALLTRACKS
-            if mw.artist_album_view_mode == ViewMode.ALL_TRACKS
+            if mw.charts_artist_album_view_mode == ViewMode.ALL_TRACKS
             else BATCH_SIZE
         )
         end = min(start + batch_size, len(mw.current_charts_artist_album_list))
@@ -2570,7 +2570,7 @@ class ChartsUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_charts_artist_album_list[i]
-            if mw.artist_album_view_mode == ViewMode.ALL_TRACKS:
+            if mw.charts_artist_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
@@ -2582,7 +2582,7 @@ class ChartsUIManager:
                     target_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
-                    album_key, data, mw.artist_album_view_mode, show_artist=False
+                    album_key, data, mw.charts_artist_album_view_mode, show_artist=False
                 )
                 widget.activated.connect(
                     partial(
@@ -2667,13 +2667,13 @@ class ChartsUIManager:
                     (translate("Alphabetical (A-Z)"), sort_alpha_asc, SortMode.ALPHA_ASC),
                     (translate("Alphabetical (Z-A)"), sort_alpha_desc, SortMode.ALPHA_DESC),
                 ],
-                mw.artist_album_sort_mode,
+                mw.charts_genre_album_sort_mode,
             )
 
             sort_button.setFixedHeight(36)
             sort_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "artist_album_sort_mode", action.data()),
+                    setattr(mw, "charts_genre_album_sort_mode", action.data()),
                     self.show_top_genre_albums_view(genre_name),
                 )
             )
@@ -2720,12 +2720,12 @@ class ChartsUIManager:
                         ViewMode.ALL_TRACKS,
                     ),
                 ],
-                mw.artist_album_view_mode,
+                mw.charts_genre_album_view_mode,
             )
             view_button.setFixedHeight(36)
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "artist_album_view_mode", action.data()),
+                    setattr(mw, "charts_genre_album_view_mode", action.data()),
                     self.show_top_genre_albums_view(genre_name),
                 )
             )
@@ -2795,7 +2795,7 @@ class ChartsUIManager:
             if key in mw.data_manager.albums_data
         ]
 
-        sort_mode = mw.artist_album_sort_mode
+        sort_mode = mw.charts_genre_album_sort_mode
         if sort_mode == SortMode.ALPHA_ASC:
             albums_of_genre.sort(key=lambda x: mw.data_manager.get_sort_key(x[0][1]))
         elif sort_mode == SortMode.ALPHA_DESC:
@@ -2829,7 +2829,7 @@ class ChartsUIManager:
 
         self._populate_charts_sub_view_lazy(
             mw.charts_sub_view_scroll_area,
-            "artist_album_view_mode",
+            "charts_genre_album_view_mode",
             enc_key=genre_name,
             enc_type="genre",
             enc_refresh_callback=lambda: self.show_top_genre_albums_view(genre_name),
@@ -2875,7 +2875,7 @@ class ChartsUIManager:
 
         batch = (
             BATCH_SIZE_ALLTRACKS
-            if mw.artist_album_view_mode == ViewMode.ALL_TRACKS
+            if mw.charts_genre_album_view_mode == ViewMode.ALL_TRACKS
             else BATCH_SIZE
         )
         start = mw.charts_genre_albums_loaded_count
@@ -2886,7 +2886,7 @@ class ChartsUIManager:
         for i in range(start, end):
             album_key, data = mw.current_charts_genre_album_list[i]
 
-            if mw.artist_album_view_mode == ViewMode.ALL_TRACKS:
+            if mw.charts_genre_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
@@ -2898,7 +2898,7 @@ class ChartsUIManager:
                     target_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
-                    album_key, data, mw.artist_album_view_mode, show_artist=True
+                    album_key, data, mw.charts_genre_album_view_mode, show_artist=True
                 )
                 widget.activated.connect(
                     partial(
@@ -2982,12 +2982,12 @@ class ChartsUIManager:
                     (translate("Alphabetical (A-Z)"), sort_alpha_asc, SortMode.ALPHA_ASC),
                     (translate("Alphabetical (Z-A)"), sort_alpha_desc, SortMode.ALPHA_DESC),
                 ],
-                mw.composer_album_sort_mode,
+                mw.charts_composer_album_sort_mode,
             )
             sort_button.setFixedHeight(36)
             sort_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "composer_album_sort_mode", action.data()),
+                    setattr(mw, "charts_composer_album_sort_mode", action.data()),
                     self.show_top_composer_albums_view(composer_name),
                 )
             )
@@ -3035,12 +3035,12 @@ class ChartsUIManager:
                         ViewMode.ALL_TRACKS,
                     ),
                 ],
-                mw.composer_album_view_mode,
+                mw.charts_composer_album_view_mode,
             )
             view_button.setFixedHeight(36)
             view_button.menu().triggered.connect(
                 lambda action: (
-                    setattr(mw, "composer_album_view_mode", action.data()),
+                    setattr(mw, "charts_composer_album_view_mode", action.data()),
                     self.show_top_composer_albums_view(composer_name),
                 )
             )
@@ -3107,7 +3107,7 @@ class ChartsUIManager:
             if tuple(key) in mw.data_manager.albums_data
         ]
 
-        sort_mode = mw.composer_album_sort_mode
+        sort_mode = mw.charts_composer_album_sort_mode
         if sort_mode == SortMode.ALPHA_ASC:
             albums_of_composer.sort(key=lambda x: mw.data_manager.get_sort_key(x[0][1]))
         elif sort_mode == SortMode.ALPHA_DESC:
@@ -3141,7 +3141,7 @@ class ChartsUIManager:
 
         self._populate_charts_sub_view_lazy(
             mw.charts_sub_view_scroll_area,
-            "composer_album_view_mode",
+            "charts_composer_album_view_mode",
             enc_key=composer_name,
             enc_type="composer",
             enc_refresh_callback=lambda: self.show_top_composer_albums_view(
@@ -3190,7 +3190,7 @@ class ChartsUIManager:
         start = mw.charts_composer_albums_loaded_count
         batch_size = (
             BATCH_SIZE_ALLTRACKS
-            if mw.composer_album_view_mode == ViewMode.ALL_TRACKS
+            if mw.charts_composer_album_view_mode == ViewMode.ALL_TRACKS
             else BATCH_SIZE
         )
         end = min(start + batch_size, len(mw.current_charts_composer_album_list))
@@ -3199,7 +3199,7 @@ class ChartsUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_charts_composer_album_list[i]
-            if mw.composer_album_view_mode == ViewMode.ALL_TRACKS:
+            if mw.charts_composer_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
@@ -3211,7 +3211,7 @@ class ChartsUIManager:
                     target_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
-                    album_key, data, mw.composer_album_view_mode, show_artist=False
+                    album_key, data, mw.charts_composer_album_view_mode, show_artist=False
                 )
                 widget.activated.connect(
                     partial(
@@ -3334,7 +3334,7 @@ class ChartsUIManager:
 
                 widget = CardWidget(
                     data=hashable_data_key,
-                    view_mode=mw.favorite_view_mode,
+                    view_mode=mw.charts_view_mode,
                     pixmaps=[pixmap],
                     title=cat_title,
                     subtitle1=subtitle,
@@ -3541,7 +3541,7 @@ class ChartsUIManager:
                         widget = create_widget_func(
                             item_key,
                             item_data,
-                            mw.favorite_view_mode,
+                            mw.charts_view_mode,
                             subtitle_extra=subtitle_extra,
                         )
                         if activate_func:
@@ -3561,7 +3561,7 @@ class ChartsUIManager:
                         )
                         widget = CardWidget(
                             data=item_key,
-                            view_mode=mw.favorite_view_mode,
+                            view_mode=mw.charts_view_mode,
                             pixmaps=[self.components.get_pixmap(None, 128)],
                             title=f"[{translate('Not found')}] {title_text}",
                             subtitle_extra=subtitle_extra,

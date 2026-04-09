@@ -1,4 +1,4 @@
-; Скрипт адаптирован для автосборки через GitHub Actions
+; Script adapted for automated building via GitHub Actions
 
 #define MyAppName "Vinyller"
 #define MyAppPublisher "Maxim Moshkin"
@@ -6,12 +6,12 @@
 #define MyAppExeName "Vinyller.exe"
 
 [Setup]
-; ВАЖНО: Уникальный AppId для вашего проекта. Больше его не меняйте!
+; IMPORTANT: Unique AppId. Do not change it!
 AppId={{DBE5AA4E-1507-4518-820F-8EF4F5BBE623}
 AppName={#MyAppName}
 
-; Версия указана напрямую, чтобы скрипт update_version.py мог ее обновлять при релизе
-AppVersion=1.0.0
+; Version is specified directly so that the update_version.py script can update it during release
+AppVersion=1.1.0
 
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -20,13 +20,13 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 
-; Ограничения и оптимизация для 64-битных систем
+; Restrictions and optimization for 64-bit systems
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 PrivilegesRequiredOverridesAllowed=dialog
 
-; Настройки вывода (адаптировано под GitHub Actions)
+; Output settings (adapted for GitHub Actions)
 OutputDir=dist
 OutputBaseFilename=Vinyller_Windows_Setup
 SetupIconFile=assets\logo\app_icon_win.ico
@@ -51,7 +51,7 @@ Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Берем файлы из папки сборки dist\Vinyller (с учетом регистра из build.yml)
+; Taking files from the build folder dist\Vinyller (case-sensitive as per build.yml)
 Source: "dist\Vinyller\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\Vinyller\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 

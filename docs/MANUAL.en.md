@@ -160,18 +160,21 @@ Vinyller is an application focused on local operation that respects your privacy
 
 The application's network activity is strictly limited to metadata fetching functions and is initiated only when using the respective tools. Below is a detailed description of what data is sent and where:
 
-* **Apple Music (iTunes Search API)**
-  * **Where it's used:** In the built-in [Metadata Editor](#metadata-editor) to search for covers and tracklists.
-  * **What is sent:** When clicking the search button, the player sends only the text from the query string (e.g., *"Artist Name Album Title"*) to the public server `itunes.apple.com`. When loading a tracklist, only the digital album identifier (`collectionId`) is sent. No data about your local files is transmitted.
-* **LRCLIB (Lyrics)**
-  * **Where it's used:** In the [Metadata Editor](#metadata-editor) for downloading song lyrics.
-  * **What is sent:** The player queries the public `lrclib.net` API and transmits the following tags of the requested track: **Artist**, **Title**, **Album**, and **Duration** in seconds. This data is necessary for accurate lyrics retrieval.
-* **Wikipedia**
-  * **Where it's used:** In the [Music Encyclopedia](#encyclopedia) to automatically fill article descriptions and download the main article image.
-  * **What is sent:** When initiating a search, only the text search query (article title) and the selected language are sent to retrieve the introductory article text and the URL of the main image. The image is downloaded directly via a public link.
-* **Search Services**
-  * **Where it's used:** When selecting the "Search Online..." option in the [Context Menu](#context-menu-and-actions), or clicking the search button in the [Metadata Editor](#metadata-editor), and when editing an [Encyclopedia](#encyclopedia) article.
-  * **How it works:** Vinyller **does not** make network requests itself in this mode. The program merely constructs a text URL (for example, injecting the artist's name into a Spotify or Google URL) and passes a command to your operating system to open this link in your default browser.
+- **Apple Music (iTunes Search API)**
+  - **Where it's used:** In the built-in [Metadata Editor](#metadata-editor) to search for covers and tracklists.
+  - **What is sent:** When clicking the search button, the player sends only the text from the query string (e.g., *"Artist Name Album Title"*) to the public server `itunes.apple.com`. When loading a tracklist, only the digital album identifier (`collectionId`) is sent. No data about your local files is transmitted.
+- **LRCLIB (Lyrics)**
+  - **Where it's used:** In the [Metadata Editor](#metadata-editor) for downloading song lyrics.
+  - **What is sent:** The player queries the public `lrclib.net` API and transmits the following tags of the requested track: **Artist**, **Title**, **Album**, and **Duration** in seconds. This data is necessary for accurate lyrics retrieval.
+- **Wikipedia**
+  - **Where it's used:** In the [Music Encyclopedia](#encyclopedia) to automatically fill article descriptions and download the main article image.
+  - **What is sent:** When initiating a search, only the text search query (article title) and the selected language are sent to retrieve the introductory article text and the URL of the main image. The image is downloaded directly via a public link.
+- **Search Services**
+  - **Where it's used:** When selecting the "Search Online..." option in the [Context Menu](#context-menu-and-actions), or clicking the search button in the [Metadata Editor](#metadata-editor), and when editing an [Encyclopedia](#encyclopedia) article.
+  - **How it works:** Vinyller **does not** make network requests itself in this mode. The program merely constructs a text URL (for example, injecting the artist's name into a Spotify or Google URL) and passes a command to your operating system to open this link in your default browser.
+- **GitHub API (Application Update Check)**
+  - **Where it is used:** At player startup (if the corresponding option is enabled in the [settings](#general-settings)) to check for new versions of the program.
+  - **What is sent:** A standard anonymous GET request is made to the public GitHub API (`api.github.com/repos/maxcreations/vinyller/releases/latest`). The player receives only the latest version number and a link to the release. No data about your system, library, or settings is transmitted.
 
 **Cover Art Downloads:** All images (both for the encyclopedia and the library) are downloaded via direct URLs using standard HTTP requests and saved to your local directory.
 
@@ -739,6 +742,7 @@ This section dictates UI parameters, language choices, and session state persist
 - **Interface and windows:** Toggles to "Remember last viewed page" upon restart and "Remember window size" for both Main and Vinyl modes.
 - **Navigation separators:** Toggles to "Show navigation separators on the main pages of tabs" and inside favorites/popular sections.
 - **File export:** Toggles "Allow file export via drag-and-drop" from the playback queue directly to file system folders.
+- **Check for updates at startup:** Automatically checks for new versions of Viniller on GitHub when the program starts. If a new version is detected, a corresponding message will appear in the notification area of the main window.
 
 #### Changing the Color theme and Accent color
 | Light | Retro Light | Retro Dark | Graphite | Polar Night | Dark |                                                                                                                                     

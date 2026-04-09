@@ -1,5 +1,5 @@
 # ../translations/nb.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Bibliotekoppdatering nødvendig",
     "Update": "Oppdater",
     "Changes": "Endringer",
+    "Later": "Senere",
+    "Go to GitHub": "Gå til GitHub",
+    "Update library": "Oppdater bibliotek",
     "Sorting records...": "Sorterer plater...",
     "See all": "Se alle",
     "Have you heard this?!": "Har du hørt dette?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "Oppdaget {count} endringer i musikkmapper (filer lagt til, fjernet eller redigert eksternt). Oppdatering nødvendig.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Du har endret innstillinger eller filer er endret eksternt. Oppdater biblioteket for å bruke endringene.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "En ny versjon av Vinyller er ute nå! Sjekk {version}-utgivelsessiden på GitHub for full endringslogg, inkludert feilrettinger og nye funksjoner.",
+    "A new version is available": "En ny versjon er tilgjengelig",
     "Select music folder": "Velg musikkmappe",
     "The program needs to be restarted for the changes to take effect.": "Programmet må startes på nytt for at endringene skal tre i kraft.",
     "Please restart program.": "Vennligst start programmet på nytt.",
-    "Later": "Senere",
     "Restart Now": "Start på nytt nå",
     "Reset Playback Rating": "Tilbakestill spillingsrangering",
     "Reset playback rating warning text...": "Er du sikker på at du vil tilbakestille spillingsrangeringen?\n\nInformasjon om musikkpopularitet vil bli slettet. Denne handlingen kan ikke angres.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Bidragsytere",
     "Reset Settings": "Tilbakestill innstillinger",
     "Reset all settings and preferences": "Tilbakestill alle innstillinger og preferanser",
-    "Update library": "Oppdater bibliotek",
     "Launch full library rescan": "Start full bibliotekskanning",
     "General settings": "Generelle innstillinger",
     "General settings description text...": "Velg språk, utseende og oppførsel ved oppstart.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Sider for alle favoritt- og populære artister, album, sjangre osv. vil vise navigasjonsskillelinjer. Klikk på dem for å hoppe raskt til en annen seksjon på siden — for eksempel for å nå artister eller album som begynner med M.",
     "Allow file export via drag-and-drop": "Tillat fileksport via dra og slipp",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Tillater å dra og slippe spor direkte fra avspillingskøen til filbehandleren (f.eks. Utforsker eller Finder) for å kopiere dem.",
+    "Automatically check for Vinyller updates at startup": "Se etter Vinyller-oppdateringer automatisk ved oppstart",
+    "Check for Updates": "Se etter oppdateringer",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Se automatisk etter nye versjoner av Vinyller på GitHub når programmet starter.",
     "Language": "Språk",
     "Color theme": "Fargetema",
     "Accent color": "Aksentfarge",

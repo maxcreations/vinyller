@@ -1,6 +1,6 @@
 [project]
 name = "vinyller"
-version = "1.0.0"
+version = "1.1.0"
 description = "Vinyller is a music player with library, metatags and encyclopedia management"
 readme = "README.md"
 requires-python = ">=3.13"

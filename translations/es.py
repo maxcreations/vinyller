@@ -1,5 +1,5 @@
 # ../translations/es.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Se requiere actualizar la biblioteca musical",
     "Update": "Actualizar",
     "Changes": "Cambios",
+    "Later": "Más tarde",
+    "Go to GitHub": "Ir a GitHub",
+    "Update library": "Actualizar biblioteca musical",
     "Sorting records...": "Ordenando discos...",
     "See all": "Ver más",
     "Have you heard this?!": "¿Has escuchado esto?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "Se detectaron {count} cambios en tus carpetas de música (archivos agregados, eliminados o editados externamente). Se requiere actualización.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Has cambiado la configuración o los archivos se modificaron externamente. Actualiza la biblioteca para aplicar los cambios.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "¡Ya hay una nueva versión de Vinyller! Consulta la página de lanzamiento {version} en GitHub para ver el registro de cambios completo, incluidas las correcciones de errores y las nuevas funciones.",
+    "A new version is available": "Hay una nueva versión disponible",
     "Select music folder": "Selecciona una carpeta con música",
     "The program needs to be restarted for the changes to take effect.": "El programa debe reiniciarse para que los cambios surtan efecto.",
     "Please restart program.": "Por favor, reinicia el programa.",
-    "Later": "Más tarde",
     "Restart Now": "Reiniciar ahora",
     "Reset Playback Rating": "Restablecer calificación de reproducción",
     "Reset playback rating warning text...": "¿Realmente quieres restablecer la calificación de reproducción?\n\nSe eliminará la información de popularidad de la música. Esta acción no se puede deshacer.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Agradecimientos",
     "Reset Settings": "Restablecer Ajustes",
     "Reset all settings and preferences": "Restablecer todas las configuraciones y preferencias",
-    "Update library": "Actualizar biblioteca musical",
     "Launch full library rescan": "Iniciar resumen completo de la biblioteca",
     "General settings": "Ajustes generales",
     "General settings description text...": "Elige ajustes de idioma, apariencia del reproductor y su comportamiento al iniciar.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "En las páginas de artistas, álbumes, géneros, etc., favoritos y populares, se mostrarán separadores-enlace. Hacer clic en ellos te permitirá saltar rápidamente a cualquier otro separador en la página actual, por ejemplo, a artistas o álbumes que empiecen con M.",
     "Allow file export via drag-and-drop": "Permitir exportar música desde el reproductor mediante arrastrar y soltar",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Permite arrastrar y soltar pistas directamente desde la cola de reproducción del reproductor a tu gestor de archivos (p. ej., Explorador de archivos o Finder) para copiarlas.",
+    "Automatically check for Vinyller updates at startup": "Buscar actualizaciones de Vinyller automáticamente al inicio",
+    "Check for Updates": "Buscar actualizaciones",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Buscar automáticamente nuevas versiones de Vinyller en GitHub al iniciar el programa.",
     "Language": "Idioma",
     "Color theme": "Tema de color",
     "Accent color": "Color de acento",

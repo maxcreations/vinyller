@@ -1,5 +1,5 @@
 # ../translations/nl.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Bibliotheekupdate vereist",
     "Update": "Bijwerken",
     "Changes": "Wijzigingen",
+    "Later": "Later",
+    "Go to GitHub": "Ga naar GitHub",
+    "Update library": "Bibliotheek bijwerken",
     "Sorting records...": "Platen sorteren...",
     "See all": "Bekijk alle",
     "Have you heard this?!": "Heb je dit gehoord?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "{count} wijzigingen gedetecteerd in je muziekmappen (bestanden toegevoegd, verwijderd of extern bewerkt). Vernieuwing vereist.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Je hebt mogelijk instellingen gewijzigd of bestanden zijn extern gewijzigd. Vernieuw de bibliotheek om de wijzigingen toe te passen.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Er is een nieuwe Vinyller-versie uit! Bekijk de {version}-releasepagina op GitHub voor de volledige changelog, inclusief bugfixes en nieuwe functies.",
+    "A new version is available": "Een nieuwe versie is beschikbaar",
     "Select music folder": "Selecteer muziekmap",
     "The program needs to be restarted for the changes to take effect.": "Het programma moet opnieuw worden gestart om de wijzigingen door te voeren.",
     "Please restart program.": "Herstart het programma.",
-    "Later": "Later",
     "Restart Now": "Nu herstarten",
     "Reset Playback Rating": "Afspeelbeoordeling resetten",
     "Reset playback rating warning text...": "Weet je zeker dat je de afspeelbeoordeling wilt resetten?\n\nInformatie over muziekpopulariteit wordt verwijderd. Deze actie kan niet ongedaan worden gemaakt.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Met dank aan",
     "Reset Settings": "Instellingen resetten",
     "Reset all settings and preferences": "Reset alle instellingen en voorkeuren",
-    "Update library": "Bibliotheek bijwerken",
     "Launch full library rescan": "Start volledige bibliotheekherscan",
     "General settings": "Algemene instellingen",
     "General settings description text...": "Kies taalinstellingen, uiterlijk van de speler en gedrag bij opstarten.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Op de pagina's met alle favoriete en populaire artiesten, albums, genres, enz. worden navigatiescheidingstekens weergegeven. Door erop te klikken kun je snel naar een andere sectie op de pagina springen — bijvoorbeeld om artiesten of albums te bereiken die met M beginnen.",
     "Allow file export via drag-and-drop": "Bestandsexport via slepen en neerzetten toestaan",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Hiermee kun je nummers rechtstreeks vanuit de afspeelwachtrij naar je bestandsbeheer (bijv. Verkenner of Finder) slepen om ze te kopiëren.",
+    "Automatically check for Vinyller updates at startup": "Automatisch controleren op Vinyller-updates bij het opstarten",
+    "Check for Updates": "Controleren op updates",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Automatisch controleren op nieuwe versies van Vinyller op GitHub wanneer het programma start.",
     "Language": "Taal",
     "Color theme": "Kleurenthema",
     "Accent color": "Accentkleur",

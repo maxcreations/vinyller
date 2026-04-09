@@ -1,5 +1,5 @@
 # ../translations/ja.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -696,6 +696,9 @@ TRANSLATIONS = {
     "Library update required": "ライブラリの更新が必要です",
     "Update": "更新",
     "Changes": "変更",
+    "Later": "後で",
+    "Go to GitHub": "GitHubへ移動",
+    "Update library": "ライブラリを更新",
     "Sorting records...": "レコードを整理中...",
     "See all": "詳細を見る",
     "Have you heard this?!": "これを聴いたことがありますか？！",
@@ -752,10 +755,11 @@ TRANSLATIONS = {
         "音楽フォルダで {count} 件の変更が検出されました（ファイルの追加、削除、外部編集）。更新が必要です。",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "設定を変更したか、外部でファイルが変更されました。変更を適用するにはライブラリを更新してください。",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "新しいバージョンのVinyllerがリリースされました！ バグ修正や新機能を含む完全な変更履歴は、GitHubの{version}リリースページをご覧ください。",
+    "A new version is available": "新しいバージョンが利用可能です",
     "Select music folder": "音楽フォルダを選択",
     "The program needs to be restarted for the changes to take effect.": "変更を有効にするには、プログラムを再起動する必要があります。",
     "Please restart program.": "プログラムを再起動してください。",
-    "Later": "後で",
     "Restart Now": "今すぐ再起動",
     "Reset Playback Rating": "再生評価をリセット",
     "Reset playback rating warning text...": "再生評価をリセットしてもよろしいですか？\n\n音楽の人気度情報が削除されます。この操作は元に戻せません。",
@@ -800,7 +804,6 @@ TRANSLATIONS = {
     "Credits": "クレジット",
     "Reset Settings": "設定をリセット",
     "Reset all settings and preferences": "すべての設定と環境設定をリセット",
-    "Update library": "ライブラリを更新",
     "Launch full library rescan": "完全なライブラリスキャンを実行",
     "General settings": "一般設定",
     "General settings description text...": "言語、プレーヤーの外観、起動時の動作の設定を選択します。",
@@ -824,6 +827,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "お気に入りや人気のアーティスト、アルバム、ジャンルなどのページにセパレーターリンクが表示されます。クリックすると、現在のページの他のセパレーターに素早く移動できます。たとえば、Mで始まるアーティストやアルバムに移動できます。",
     "Allow file export via drag-and-drop": "ドラッグ＆ドロップによる音楽のエクスポートを許可",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "再生キューからトラックを直接ファイルマネージャー（エクスプローラーやFinderなど）にドラッグ＆ドロップしてコピーできます。",
+    "Automatically check for Vinyller updates at startup": "起動時にVinyllerのアップデートを自動的に確認する",
+    "Check for Updates": "アップデートを確認",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "プログラム起動時にGitHubでVinyllerの新バージョンを自動的に確認します。",
     "Language": "言語",
     "Color theme": "カラーテーマ",
     "Accent color": "アクセントカラー",

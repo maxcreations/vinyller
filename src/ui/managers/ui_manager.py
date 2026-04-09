@@ -733,7 +733,7 @@ class UIManager(QObject):
             mw.nav_more_button.setChecked(is_more_active)
 
             more_color = (
-                theme.COLORS["ACCENT"] if is_more_active else theme.COLORS["PRIMARY"]
+                nav_icon_active if is_more_active else theme.COLORS["PRIMARY"]
             )
             mw.nav_more_button.setIcon(
                 create_svg_icon(

@@ -1,5 +1,5 @@
 # ../translations/de.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "Bibliothek-Update erforderlich",
     "Update": "Aktualisieren",
     "Changes": "Änderungen",
+    "Later": "Später",
+    "Go to GitHub": "Zu GitHub gehen",
+    "Update library": "Bibliothek aktualisieren",
     "Sorting records...": "Platten werden sortiert...",
     "See all": "Alle ansehen",
     "Have you heard this?!": "Haben Sie das gehört?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "Es wurden {count} Änderungen in Ihren Musikordnern erkannt (Dateien wurden hinzugefügt, entfernt oder extern bearbeitet). Aktualisierung erforderlich.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Sie haben Einstellungen geändert oder Dateien wurden extern verändert. Aktualisieren Sie die Bibliothek, um die Änderungen zu übernehmen.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Eine neue Vinyller-Version ist jetzt verfügbar! Besuchen Sie die {version}-Release-Seite auf GitHub für das vollständige Änderungsprotokoll mit Fehlerbehebungen und neuen Funktionen.",
+    "A new version is available": "Eine neue Version ist verfügbar",
     "Select music folder": "Musikordner auswählen",
     "The program needs to be restarted for the changes to take effect.": "Das Programm muss neu gestartet werden, damit die Änderungen wirksam werden.",
     "Please restart program.": "Bitte starten Sie das Programm neu.",
-    "Later": "Später",
     "Restart Now": "Jetzt neu starten",
     "Reset Playback Rating": "Wiedergabe-Bewertung zurücksetzen",
     "Reset playback rating warning text...": "Möchten Sie die Wiedergabe-Bewertung wirklich zurücksetzen?\n\nInformationen zur Musikpopularität werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "Danksagungen",
     "Reset Settings": "Einstellungen Zurücksetzen",
     "Reset all settings and preferences": "Alle Einstellungen und Präferenzen zurücksetzen",
-    "Update library": "Bibliothek aktualisieren",
     "Launch full library rescan": "Vollständigen Bibliotheksscan starten",
     "General settings": "Allgemeine Einstellungen",
     "General settings description text...": "Wählen Sie Sprache, Erscheinungsbild des Players und das Startverhalten.",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Die Seiten für alle Favoriten und beliebtesten Künstler, Alben, Genres usw. zeigen Navigations-Trenner an. Ein Klick darauf ermöglicht einen schnellen Sprung zu einem anderen Abschnitt auf der Seite, z.B. zu Künstlern oder Alben, die mit M beginnen.",
     "Allow file export via drag-and-drop": "Dateiexport per Drag & Drop erlauben",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Ermöglicht, Titel direkt aus der Wiedergabewarteschlange in Ihren Dateimanager (z.B. Explorer oder Finder) zu ziehen, um sie zu kopieren.",
+    "Automatically check for Vinyller updates at startup": "Automatisch nach Vinyller-Updates beim Start suchen",
+    "Check for Updates": "Nach Updates suchen",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Automatisch beim Programmstart auf GitHub nach neuen Vinyller-Versionen suchen.",
     "Language": "Sprache",
     "Color theme": "Farbschema",
     "Accent color": "Akzentfarbe",

@@ -374,6 +374,7 @@ class SettingsWindow(StyledDialog):
         self.list_widget.currentRowChanged.connect(self.stacked_widget.setCurrentIndex)
         self.list_widget.setCurrentRow(start_tab_index)
 
+        self._setup_mappings()
         self.load_initial_settings()
 
         dialog_buttons_widget = QWidget()
@@ -630,6 +631,18 @@ class SettingsWindow(StyledDialog):
         )
         self.allow_drag_export_checkbox.setCursor(Qt.CursorShape.WhatsThisCursor)
 
+        self.check_updates_at_startup_checkbox = QCheckBox()
+        self.check_updates_at_startup_checkbox.setMinimumHeight(18)
+        self.check_updates_at_startup_checkbox.setText(
+            translate("Automatically check for Vinyller updates at startup")
+        )
+        set_custom_tooltip(
+            self.check_updates_at_startup_checkbox,
+            title = translate("Check for Updates"),
+            text = translate("Automatically check for new versions of Vinyller on GitHub when the program starts."),
+        )
+        self.check_updates_at_startup_checkbox.setCursor(Qt.CursorShape.WhatsThisCursor)
+
         grid_layout = QGridLayout()
         grid_layout.setContentsMargins(0, 0, 0, 0)
         grid_layout.setHorizontalSpacing(16)
@@ -661,6 +674,7 @@ class SettingsWindow(StyledDialog):
         checkboxes_layout.addWidget(self.show_separators_checkbox)
         checkboxes_layout.addWidget(self.show_favorites_separators_checkbox)
         checkboxes_layout.addWidget(self.allow_drag_export_checkbox)
+        checkboxes_layout.addWidget(self.check_updates_at_startup_checkbox)
 
         general_layout.addLayout(grid_layout)
         general_layout.addLayout(checkboxes_layout)
@@ -2260,16 +2274,69 @@ class SettingsWindow(StyledDialog):
         else:
             self.custom_color_btn.hide()
 
-    def load_initial_settings(self):
-        """Parses the injected settings dictionary and populates all tabs' controls accordingly."""
-        current_theme = self.settings.get("theme", "Light")
-        theme_index = self.theme_combo.findData(current_theme)
-        if theme_index != -1:
-            self.theme_combo.setCurrentIndex(theme_index)
+    def _setup_mappings(self):
+        """
+        Initializes declarative mappings linking core configuration keys directly
+        to their corresponding UI widgets.
 
+        This declarative approach prevents logic duplication during setting loads,
+        saves, and signal connection. Format: "setting_key": (widget_instance, default_value)
+        """
+        self.checkbox_mapping = {
+            "show_separators": (self.show_separators_checkbox, True),
+            "show_favorites_separators": (self.show_favorites_separators_checkbox, False),
+            "ignore_articles": (self.ignore_articles_checkbox, True),
+            "ignore_genre_case": (self.ignore_genre_case_checkbox, True),
+            "treat_folders_as_unique": (self.treat_folders_as_unique_checkbox, False),
+            "allow_drag_export": (self.allow_drag_export_checkbox, False),
+            "check_updates_at_startup": (self.check_updates_at_startup_checkbox, True),
+            "history_store_unique_only": (self.history_store_unique_checkbox, True),
+            "remember_last_view": (self.remember_last_view_checkbox, False),
+            "remember_window_size": (self.remember_window_size_checkbox, True),
+            "show_random_suggestions": (self.show_random_suggestions_checkbox, True),
+            "stylize_vinyl_covers": (self.stylize_vinyl_covers_checkbox, False),
+            "warm_sound": (self.warm_sound_checkbox, False),
+            "scratch_sound": (self.scratch_sound_checkbox, False),
+            "mini_opacity": (self.mini_opacity_checkbox, True),
+            "collect_statistics": (self.collect_statistics_checkbox, True),
+            "autoplay_on_queue": (self.autoplay_on_queue_checkbox, False),
+        }
+
+        self.combo_mapping = {
+            "remember_queue_mode": (self.remember_queue_combo, 3),
+            "playback_history_mode": (self.playback_history_combo, 2),
+            "artist_source_tag": (self.artist_source_combo, ArtistSource.ARTIST),
+            "language": (self.language_combo, "en"),
+            "favorite_icon_name": (self.favorite_icon_combo, "favorite_heart"),
+            "theme": (self.theme_combo, "Light"),
+        }
+
+    def load_initial_settings(self):
+        """
+        Parses the injected settings dictionary and populates all tabs' controls accordingly.
+
+        Leverages the declarative mappings for standard widgets to automatically assign
+        states. Also processes complex logic that requires manual initialization (like
+        color pickers and navigation order arrays).
+        """
+        # --- 1. Dynamic standard widgets load ---
+        for key, (checkbox, default) in self.checkbox_mapping.items():
+            value = self.settings.get(key, default)
+            # Linux specific override
+            if key == "mini_opacity" and IS_LINUX:
+                value = False
+            checkbox.setChecked(value)
+
+        for key, (combo, default) in self.combo_mapping.items():
+            value = self.settings.get(key, default)
+            index = combo.findData(value)
+            if index != -1:
+                combo.setCurrentIndex(index)
+
+        # --- 2. Custom logical elements ---
+        # Accent color custom logic
         current_accent = self.settings.get("accent_color", "Crimson")
         self.initial_accent = current_accent
-
         idx = self.accent_combo.findData(current_accent)
 
         if idx != -1:
@@ -2282,97 +2349,87 @@ class SettingsWindow(StyledDialog):
                 self._update_custom_color_btn(current_accent)
                 self.custom_color_btn.show()
 
+        # Nav tab order logic
         default_keys = ["artist", "album", "genre", "composer", "track", "playlist", "folder", "charts"]
-
         saved_order = self.settings.get("nav_tab_order", default_keys)
-
         self.nav_tab_order = []
-
         known_keys = set(default_keys)
 
         for key in saved_order:
             if key in known_keys:
                 self.nav_tab_order.append(key)
-
         for key in default_keys:
             if key not in self.nav_tab_order:
                 self.nav_tab_order.append(key)
 
-        self.show_separators_checkbox.setChecked(
-            self.settings.get("show_separators", True)
-        )
-        self.show_favorites_separators_checkbox.setChecked(
-            self.settings.get("show_favorites_separators", False)
-        )
-        self.ignore_articles_checkbox.setChecked(
-            self.settings.get("ignore_articles", True)
-        )
-        self.ignore_genre_case_checkbox.setChecked(
-            self.settings.get("ignore_genre_case", True)
-        )
-        self.treat_folders_as_unique_checkbox.setChecked(
-            self.settings.get("treat_folders_as_unique", False)
-        )
-        self.allow_drag_export_checkbox.setChecked(
-            self.settings.get("allow_drag_export", False)
-        )
-        self.remember_queue_combo.setCurrentIndex(
-            self.settings.get("remember_queue_mode", 2)
-        )
-        self.playback_history_combo.setCurrentIndex(
-            self.settings.get("playback_history_mode", 2)
-        )
+        # Triggers
         self._update_history_checkbox_state(self.playback_history_combo.currentIndex())
-        self.history_store_unique_checkbox.setChecked(
-            self.settings.get("history_store_unique_only", True)
-        )
-        self.remember_last_view_checkbox.setChecked(
-            self.settings.get("remember_last_view", False)
-        )
-        self.remember_window_size_checkbox.setChecked(
-            self.settings.get("remember_window_size", True)
-        )
-
-        self.show_random_suggestions_checkbox.setChecked(
-            self.settings.get("show_random_suggestions", True)
-        )
-        self.stylize_vinyl_covers_checkbox.setChecked(
-            self.settings.get("stylize_vinyl_covers", False)
-        )
-        self.warm_sound_checkbox.setChecked(self.settings.get("warm_sound", False))
-        self.scratch_sound_checkbox.setChecked(
-            self.settings.get("scratch_sound", False)
-        )
-        self.mini_opacity_checkbox.setChecked(
-            self.settings.get("mini_opacity", True)
-        )
-        if IS_LINUX:
-            self.mini_opacity_checkbox.setChecked(False)
-
-        self.artist_source_combo.setCurrentIndex(
-            self.artist_source_combo.findData(
-                self.settings.get("artist_source_tag", ArtistSource.ARTIST)
-            )
-        )
-
-        self.collect_statistics_checkbox.setChecked(
-            self.settings.get("collect_statistics", True)
-        )
         self.clear_stats_button.setEnabled(self.collect_statistics_checkbox.isChecked())
 
-        self.autoplay_on_queue_checkbox.setChecked(
-            self.settings.get("autoplay_on_queue", False)
-        )
+    def get_settings(self) -> dict:
+        """
+        Compiles and returns the dictionary of finalized UI settings.
 
-        current_lang = self.settings.get("language", "en")
-        index = self.language_combo.findData(current_lang)
-        if index != -1:
-            self.language_combo.setCurrentIndex(index)
+        Iterates over the mapped UI elements to extract their current values,
+        fetches library paths from the custom list widget, and assembles the
+        final state structure required by MainWindow.
 
-        current_icon_name = self.settings.get("favorite_icon_name", "favorite_heart")
-        icon_index = self.favorite_icon_combo.findData(current_icon_name)
-        if icon_index != -1:
-            self.favorite_icon_combo.setCurrentIndex(icon_index)
+        Returns:
+            dict: The settings payload ready to be processed and applied.
+        """
+        result = {}
+
+        # 1. Dynamic standard widget extraction
+        for key, (checkbox, _) in self.checkbox_mapping.items():
+            result[key] = checkbox.isChecked()
+
+        for key, (combo, _) in self.combo_mapping.items():
+            result[key] = combo.currentData()
+
+        # 2. Extract library paths
+        paths = []
+        for i in range(self.folder_list_widget.count()):
+            item = self.folder_list_widget.item(i)
+            widget = self.folder_list_widget.itemWidget(item)
+            if widget and hasattr(widget, "path"):
+                paths.append(widget.path)
+        result["musicLibraryPaths"] = paths
+
+        # 3. Handle custom fields
+        selected_accent_data = self.accent_combo.currentData()
+        final_accent = selected_accent_data
+
+        if selected_accent_data == "CUSTOM_USER_DEFINED":
+            custom_hex = self.custom_color_btn.text().strip()
+            if custom_hex and custom_hex.startswith("#"):
+                final_accent = custom_hex
+            else:
+                final_accent = self.initial_accent
+
+        result["accent_color"] = final_accent
+        result["nav_tab_order"] = self.nav_tab_order
+        result["view_modes"] = self.settings.get("view_modes", {})
+        result["sort_modes"] = self.settings.get("sort_modes", {})
+
+        return result
+
+    def _connect_signals(self):
+        """
+        Connects UI interaction events to the change-detection mechanism.
+
+        Dynamically binds all standard widgets defined in the mappings
+        so that modifying them enables the "Apply" button.
+        """
+        # Custom elements
+        self.accent_combo.currentIndexChanged.connect(self._check_for_changes)
+
+        # Auto-connect mapped elements
+        for checkbox, _ in self.checkbox_mapping.values():
+            checkbox.toggled.connect(self._check_for_changes)
+
+        for combo, _ in self.combo_mapping.values():
+            combo.currentIndexChanged.connect(self._check_for_changes)
+
 
     def optimize_paths(self):
         """Checks for and removes redundant subfolders nested inside other library paths."""
@@ -2449,67 +2506,9 @@ class SettingsWindow(StyledDialog):
                 self._add_path_item(directory)
         self._check_for_changes()
 
-    def get_settings(self):
-        """
-        Compiles and returns the dictionary of finalized UI settings.
-
-        Returns:
-            dict: The settings to be applied/saved by the main application.
-        """
-        paths = []
-        for i in range(self.folder_list_widget.count()):
-            item = self.folder_list_widget.item(i)
-            widget = self.folder_list_widget.itemWidget(item)
-            if widget and hasattr(widget, "path"):
-                paths.append(widget.path)
-
-        view_modes = self.settings.get("view_modes", {})
-        sort_modes = self.settings.get("sort_modes", {})
-
-        selected_accent_data = self.accent_combo.currentData()
-        final_accent = selected_accent_data
-
-        if selected_accent_data == "CUSTOM_USER_DEFINED":
-            custom_hex = self.custom_color_btn.text().strip()
-            if custom_hex and custom_hex.startswith("#"):
-                final_accent = custom_hex
-            else:
-                final_accent = self.initial_accent
-
-        nav_order = self.nav_tab_order
-
-        return {
-            "musicLibraryPaths": paths,
-            "nav_tab_order": nav_order,
-            "theme": self.theme_combo.currentData(),
-            "accent_color": final_accent,
-            "show_separators": self.show_separators_checkbox.isChecked(),
-            "show_favorites_separators": self.show_favorites_separators_checkbox.isChecked(),
-            "ignore_articles": self.ignore_articles_checkbox.isChecked(),
-            "ignore_genre_case": self.ignore_genre_case_checkbox.isChecked(),
-            "treat_folders_as_unique": self.treat_folders_as_unique_checkbox.isChecked(),
-            "allow_drag_export": self.allow_drag_export_checkbox.isChecked(),
-            "remember_queue_mode": self.remember_queue_combo.currentData(),
-            "playback_history_mode": self.playback_history_combo.currentData(),
-            "history_store_unique_only": self.history_store_unique_checkbox.isChecked(),
-            "remember_last_view": self.remember_last_view_checkbox.isChecked(),
-            "remember_window_size": self.remember_window_size_checkbox.isChecked(),
-            "show_random_suggestions": self.show_random_suggestions_checkbox.isChecked(),
-            "stylize_vinyl_covers": self.stylize_vinyl_covers_checkbox.isChecked(),
-            "warm_sound": self.warm_sound_checkbox.isChecked(),
-            "scratch_sound": self.scratch_sound_checkbox.isChecked(),
-            "mini_opacity": self.mini_opacity_checkbox.isChecked(),
-            "collect_statistics": self.collect_statistics_checkbox.isChecked(),
-            "autoplay_on_queue": self.autoplay_on_queue_checkbox.isChecked(),
-            "artist_source_tag": self.artist_source_combo.currentData(),
-            "language": self.language_combo.currentData(),
-            "favorite_icon_name": self.favorite_icon_combo.currentData(),
-            "view_modes": view_modes,
-            "sort_modes": sort_modes,
-        }
 
     def _check_for_changes(self, *args):
-        """Сравнивает текущие настройки в UI с исходными и переключает состояние кнопки 'Применить'."""
+        """Compares current UI settings with the original ones and toggles the 'Apply' button state."""
         current_settings = self.get_settings()
 
         has_changes = False
@@ -2521,28 +2520,3 @@ class SettingsWindow(StyledDialog):
 
         self.apply_button.setEnabled(has_changes)
 
-    def _connect_signals(self):
-        self.language_combo.currentIndexChanged.connect(self._check_for_changes)
-        self.theme_combo.currentIndexChanged.connect(self._check_for_changes)
-        self.accent_combo.currentIndexChanged.connect(self._check_for_changes)
-        self.remember_queue_combo.currentIndexChanged.connect(self._check_for_changes)
-        self.playback_history_combo.currentIndexChanged.connect(self._check_for_changes)
-        self.artist_source_combo.currentIndexChanged.connect(self._check_for_changes)
-        self.favorite_icon_combo.currentIndexChanged.connect(self._check_for_changes)
-
-        self.ignore_articles_checkbox.toggled.connect(self._check_for_changes)
-        self.ignore_genre_case_checkbox.toggled.connect(self._check_for_changes)
-        self.treat_folders_as_unique_checkbox.toggled.connect(self._check_for_changes)
-        self.show_random_suggestions_checkbox.toggled.connect(self._check_for_changes)
-        self.stylize_vinyl_covers_checkbox.toggled.connect(self._check_for_changes)
-        self.mini_opacity_checkbox.toggled.connect(self._check_for_changes)
-        self.warm_sound_checkbox.toggled.connect(self._check_for_changes)
-        self.scratch_sound_checkbox.toggled.connect(self._check_for_changes)
-        self.autoplay_on_queue_checkbox.toggled.connect(self._check_for_changes)
-        self.history_store_unique_checkbox.toggled.connect(self._check_for_changes)
-        self.remember_last_view_checkbox.toggled.connect(self._check_for_changes)
-        self.remember_window_size_checkbox.toggled.connect(self._check_for_changes)
-        self.show_separators_checkbox.toggled.connect(self._check_for_changes)
-        self.show_favorites_separators_checkbox.toggled.connect(self._check_for_changes)
-        self.allow_drag_export_checkbox.toggled.connect(self._check_for_changes)
-        self.collect_statistics_checkbox.toggled.connect(self._check_for_changes)

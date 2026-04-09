@@ -1,5 +1,5 @@
 # ../translations/tr.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -696,6 +696,9 @@ TRANSLATIONS = {
     "Library update required": "Kütüphane güncellemesi gerekli",
     "Update": "Güncelle",
     "Changes": "Değişiklikler",
+    "Later": "Sonra",
+    "Go to GitHub": "GitHub'a git",
+    "Update library": "Kütüphaneyi güncelle",
     "Sorting records...": "Plaklar sıralanıyor...",
     "See all": "Daha Fazla",
     "Have you heard this?!": "Bunu duydunuz mu?!",
@@ -752,10 +755,11 @@ TRANSLATIONS = {
         "Müzik klasörlerinizde {count} değişiklik algılandı (dosyalar eklendi, kaldırıldı veya harici olarak düzenlendi). Yenileme gerekli.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Ayarları değiştirdiniz veya dosyalar harici olarak değiştirildi. Değişiklikleri uygulamak için kitaplığı yenileyin.",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Yeni bir Vinyller sürümü çıktı! Hata düzeltmeleri ve yeni özellikler dahil olmak üzere tam değişiklik günlüğü için GitHub'daki {version} sürüm sayfasını inceleyin.",
+    "A new version is available": "Yeni bir sürüm mevcut",
     "Select music folder": "Müzik klasörü seçin",
     "The program needs to be restarted for the changes to take effect.": "Değişikliklerin geçerli olması için programın yeniden başlatılması gerekir.",
     "Please restart program.": "Lütfen programı yeniden başlatın.",
-    "Later": "Sonra",
     "Restart Now": "Şimdi Yeniden Başlat",
     "Reset Playback Rating": "Oynatma Puanını Sıfırla",
     "Reset playback rating warning text...": "Oynatma puanını sıfırlamak istediğinize emin misiniz?\n\nMüzik popülerliği bilgileri silinecektir. Bu işlem geri alınamaz.",
@@ -800,7 +804,6 @@ TRANSLATIONS = {
     "Credits": "Teşekkürler",
     "Reset Settings": "Ayarları sıfırla",
     "Reset all settings and preferences": "Tüm ayarları ve tercihleri sıfırla",
-    "Update library": "Kütüphaneyi güncelle",
     "Launch full library rescan": "Tam kitaplık taraması başlat",
     "General settings": "Ana Ayarlar",
     "General settings description text...": "Oynatıcının dil, görünüm ve başlangıç davranışı ayarlarını seçin.",
@@ -824,6 +827,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Favori ve popüler sanatçıların, albümlerin, türlerin vb. sayfalarında ayırıcı-bağlantılar gösterilecek, bunlara tıklamak mevcut sayfadaki herhangi başka bir ayırıcıya hızlıca atlamanızı sağlar, örneğin M harfiyle başlayan sanatçılar veya albümlere.",
     "Allow file export via drag-and-drop": "Oynatıcıdan müzik dışa aktarmaya sürükle bırak yoluyla izin ver",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Parçaları doğrudan oynatıcının oynatma sırasından dosya yöneticinize (ör. Dosya Gezgini veya Finder) sürükleyip bırakarak kopyalamanıza olanak tanır.",
+    "Automatically check for Vinyller updates at startup": "Başlangıçta Vinyller güncellemelerini otomatik olarak kontrol et",
+    "Check for Updates": "Güncellemeleri kontrol et",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Program başladığında GitHub'da Vinyller'in yeni sürümlerini otomatik olarak kontrol et.",
     "Language": "Dil",
     "Color theme": "Renk teması",
     "Accent color": "Vurgu rengi",

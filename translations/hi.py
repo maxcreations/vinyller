@@ -1,5 +1,5 @@
 # ../translations/hi.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -723,6 +723,9 @@ TRANSLATIONS = {
     "Library update required": "लाइब्रेरी अपडेट आवश्यक है",
     "Update": "अपडेट करें",
     "Changes": "परिवर्तन",
+    "Later": "बाद में",
+    "Go to GitHub": "GitHub पर जाएं",
+    "Update library": "लाइब्रेरी अपडेट करें",
     "Sorting records...": "रिकॉर्ड क्रमबद्ध किए जा रहे हैं...",
     "See all": "सभी देखें",
     "Have you heard this?!": "क्या आपने यह सुना?!",
@@ -783,10 +786,11 @@ TRANSLATIONS = {
         "आपके संगीत फ़ोल्डरों में {count} परिवर्तन का पता चला (फ़ाइलें बाहरी रूप से जोड़ी, हटाई या संपादित की गईं)। ताज़ा करना आवश्यक है।",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "आपने सेटिंग्स बदल दी हैं या फ़ाइलें बाहरी रूप से बदल गई हैं। परिवर्तन लागू करने के लिए लाइब्रेरी ताज़ा करें।",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Vinyller का एक नया संस्करण अब उपलब्ध है! बग फिक्स और नई सुविधाओं सहित पूर्ण परिवर्तन लॉग के लिए GitHub पर {version} रिलीज़ पेज देखें।",
+    "A new version is available": "एक नया संस्करण उपलब्ध है",
     "Select music folder": "संगीत फ़ोल्डर चुनें",
     "The program needs to be restarted for the changes to take effect.": "परिवर्तनों को प्रभावी करने के लिए प्रोग्राम को पुनरारंभ करने की आवश्यकता है।",
     "Please restart program.": "कृपया प्रोग्राम पुनरारंभ करें।",
-    "Later": "बाद में",
     "Restart Now": "अभी पुनरारंभ करें",
     "Reset Playback Rating": "प्लेबैक रेटिंग रीसेट करें",
     "Reset playback rating warning text...": "क्या आप वाकई प्लेबैक रेटिंग रीसेट करना चाहते हैं?\n\nसंगीत लोकप्रियता जानकारी हटा दी जाएगी। यह क्रिया पूर्ववत नहीं की जा सकती।",
@@ -833,7 +837,6 @@ TRANSLATIONS = {
     "Credits": "श्रेय",
     "Reset Settings": "सेटिंग्स रीसेट करें",
     "Reset all settings and preferences": "सभी सेटिंग्स और प्राथमिकताएँ रीसेट करें",
-    "Update library": "लाइब्रेरी अपडेट करें",
     "Launch full library rescan": "पूर्ण लाइब्रेरी पुन: स्कैन प्रारंभ करें",
     "General settings": "सामान्य सेटिंग्स",
     "General settings description text...": "भाषा, प्लेयर उपस्थिति और स्टार्टअप व्यवहार सेटिंग्स चुनें।",
@@ -857,6 +860,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "सभी पसंदीदा और लोकप्रिय कलाकारों, एल्बमों, शैलियों आदि के पृष्ठ नेविगेशन विभाजक प्रदर्शित करेंगे। उन पर क्लिक करने से आप पृष्ठ पर किसी भी अन्य अनुभाग पर तुरंत जा सकते हैं — उदाहरण के लिए, M से शुरू होने वाले कलाकारों या एल्बमों तक पहुंचने के लिए।",
     "Allow file export via drag-and-drop": "खींचें और छोड़ें के माध्यम से फ़ाइल निर्यात की अनुमति दें",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "आपको ट्रैक को सीधे प्लेबैक कतार से अपने फ़ाइल प्रबंधक (जैसे, फ़ाइल एक्सप्लोरर या फ़ाइंडर) में खींचकर छोड़ने और उन्हें कॉपी करने की अनुमति देता है।",
+    "Automatically check for Vinyller updates at startup": "स्टार्टअप पर स्वचालित रूप से Vinyller अपडेट की जाँच करें",
+    "Check for Updates": "अपडेट की जाँच करें",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "प्रोग्राम प्रारंभ होने पर GitHub पर Vinyller के नए संस्करणों की स्वचालित रूप से जाँच करें।",
     "Language": "भाषा",
     "Color theme": "रंग थीम",
     "Accent color": "एक्सेंट रंग",

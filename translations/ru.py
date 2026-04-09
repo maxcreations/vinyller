@@ -1,5 +1,5 @@
 # ../translations/ru.py
-# Updated by _update_translations.py at 2026-03-31 18:02:01
+# Updated by _update_translations.py at 2026-04-09 23:42:09
 
 TRANSLATIONS = {
 
@@ -750,6 +750,9 @@ TRANSLATIONS = {
     "Library update required": "Требуется обновление фонотеки",
     "Update": "Обновить",
     "Changes": "Изменения",
+    "Later": "Позже",
+    "Go to GitHub": "Перейти на GitHub",
+    "Update library": "Обновить фонотеку",
     "Sorting records...": "Сортируем пластинки...",
     "See all": "Подробнее",
     "Have you heard this?!": "Вы это слышали?!",
@@ -814,10 +817,11 @@ TRANSLATIONS = {
         "Обнаружено {count} изменений в файлах фонотеки (файлы были добавлены, удалены или изменены вне проигрывателя). Требуется обновление фонотеки.",
     ],
     "You have changed settings or files changed externally. Refresh the library to apply changes.": "Возможно, вы изменили настройки программы или файлы фонотеки вне программы. Обновите фонотеку, чтобы применить изменения",
+    "A new Vinyller version out now! Check the {version} release page on GitHub for the full changelog, including bug fixes and new features.": "Вышла новая версия Виниллера! Посетите страницу выпуска {version} на GitHub, чтобы узнать, какие ошибки были исправлены и какие новые функции были добавлены.",
+    "A new version is available": "Доступна новая версия",
     "Select music folder": "Выберите папку с музыкой",
     "The program needs to be restarted for the changes to take effect.": "Чтобы изменения вступили в силу, программу необходимо перезапустить.",
     "Please restart program.": "Пожалуйста, перезапустите программу.",
-    "Later": "Позже",
     "Restart Now": "Перезапустить сейчас",
     "Reset Playback Rating": "Сброс рейтинга воспроизведения",
     "Reset playback rating warning text...": "Вы действительно хотите сбросить рейтинг воспроизведения?\n\nИнформация о популярности музыки будет удалена. Это действие невозможно отменить.",
@@ -866,7 +870,6 @@ TRANSLATIONS = {
     "Credits": "Благодарности",
     "Reset Settings": "Сбросить настройки",
     "Reset all settings and preferences": "Сбросить все настройки и предпочтения",
-    "Update library": "Обновить фонотеку",
     "Launch full library rescan": "Запустить полное сканирование фонотеки",
     "General settings": "Основные настройки",
     "General settings description text...": "Выберите настройки языка, внешнего вида проигрывателя и его поведение при запуске.",
@@ -890,6 +893,9 @@ TRANSLATIONS = {
     "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "На страницах избранных и популярных исполнителей, альбомов, жанров и т.д. будут отображаться разделители-ссылки, клик по которым позволит быстро переместиться к любому из других разделителей на текущей странице, например, к исполнителям или альбомам на букву M.",
     "Allow file export via drag-and-drop": "Разрешить экспорт музыки из проигрывателя c помощью перетаскивания",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Позволяет перетаскивать композиции прямо из очереди воспроизведения проигрывателя в файловый менеджер (например, Проводник или Finder) чтобы скопировать их.",
+    "Automatically check for Vinyller updates at startup": "Проверять наличие новых версий Виниллера при запуске",
+    "Check for Updates": "Проверка обновлений",
+    "Automatically check for new versions of Vinyller on GitHub when the program starts.": "Автоматически проверять наличие новых выпусков Виниллера на GitHub при запуске программы.",
     "Language": "Язык",
     "Color theme": "Тема оформления",
     "Accent color": "Акцентный цвет",

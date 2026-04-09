@@ -19,7 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Base info
 VINYLLER_FOLDER = ".vinyller"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 
 class ArtistSource:
     ARTIST = "artist"
