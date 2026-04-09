@@ -125,22 +125,23 @@ class ChartsUIManager:
 
         print(f"Switching charts period to: {period}")
         mw.charts_period = period
+
         self.components.update_tool_button_icon(button, period)
+
+        if hasattr(self, "period_button") and self.period_button != button:
+            self.components.update_tool_button_icon(self.period_button, period)
+
         mw.save_current_settings()
 
-        # Recalculate entity ratings based on the new time period
         stats = mw.library_manager.load_play_stats()
 
         mw.data_manager.recalculate_ratings(period, stats)
 
-        # Refresh the current view to show updated data
-        current_idx = mw.charts_stack.currentIndex()
+        self.populate_charts_tab()
 
-        if current_idx == 0:
-            self.populate_charts_tab()
-        elif current_idx == 1:
+        current_idx = mw.charts_stack.currentIndex()
+        if current_idx == 1:
             context = mw.current_charts_context
-            # Route to the appropriate "See All" view based on context
             if context == "all_tracks":
                 self.show_all_top_tracks_view()
             elif context == "all_artists":

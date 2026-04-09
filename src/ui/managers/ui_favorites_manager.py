@@ -134,14 +134,31 @@ class FavoritesUIManager:
                 button_text=translate("All tracks"),
             )
 
-        if mw.collect_statistics and hasattr(
-            mw.library_manager, "get_top_tracks_of_month"
-        ):
-            top_month_all = mw.library_manager.get_top_tracks_of_month(
-                mw.data_manager.path_to_track_map,
-                limit=100,
-                sort_func=mw.data_manager.get_sort_key,
+        if mw.collect_statistics:
+            play_stats = mw.library_manager.load_play_stats()
+            stats_tracks = play_stats.get("tracks", {})
+
+            monthly_data = []
+            for path, t_stats in stats_tracks.items():
+                if isinstance(t_stats, dict):
+                    m_count = t_stats.get("monthly", 0)
+                    if m_count > 0 and path in mw.data_manager.path_to_track_map:
+                        track_obj = mw.data_manager.path_to_track_map[path]
+                        monthly_data.append((track_obj, m_count))
+
+            monthly_data.sort(
+                key = lambda x: (
+                    -x[1],
+                    mw.data_manager.get_sort_key(x[0].get("title", "")),
+                    mw.data_manager.get_sort_key(x[0].get("artist", "")),
+                )
             )
+
+            top_month_all = []
+            for track_obj, m_count in monthly_data[:100]:
+                track_copy = track_obj.copy()
+                track_copy["play_count"] = m_count
+                top_month_all.append(track_copy)
 
             top_month_display = top_month_all[:5]
 
@@ -149,6 +166,7 @@ class FavoritesUIManager:
                 try:
                     charts_idx = mw.nav_button_icon_names.index("charts")
                     mw.main_stack.setCurrentIndex(charts_idx)
+
                     if hasattr(mw, "nav_buttons") and len(mw.nav_buttons) > charts_idx:
                         for btn in mw.nav_buttons:
                             btn.setChecked(False)
@@ -160,6 +178,14 @@ class FavoritesUIManager:
                         mw.save_current_settings()
                         stats = mw.library_manager.load_play_stats()
                         mw.data_manager.recalculate_ratings(ChartsPeriod.MONTHLY, stats)
+
+                        mw.ui_manager.charts_ui_manager.populate_charts_tab()
+
+                        if hasattr(mw.ui_manager.charts_ui_manager, "period_button"):
+                            mw.ui_manager.components.update_tool_button_icon(
+                                mw.ui_manager.charts_ui_manager.period_button,
+                                ChartsPeriod.MONTHLY
+                            )
 
                     mw.ui_manager.charts_ui_manager.show_all_top_tracks_view()
                 except ValueError:
