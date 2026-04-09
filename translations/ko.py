@@ -1,5 +1,5 @@
 # ../translations/ko.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -915,7 +915,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Qt용 Python 바인딩",
     "audio metadata handling": "오디오 메타데이터 처리",
     "Python Imaging Library": "Python 이미징 라이브러리",
-    "lyrics and article descriptions download handling": "가사 및 기사 설명 다운로드 처리",
+    "app update checks, lyrics and article descriptions download handling": "프로그램 업데이트 확인, 노래 가사 및 백과사전 설명 다운로드 처리용",
     "a package that sends files to the Trash instead of permanent deletion": "파일을 영구 삭제 대신 휴지통으로 보내는 패키지",
     "to handle external links and wikipedia data": "외부 링크 및 위키백과 데이터 처리를 위한",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "macOS 기본 미디어 버튼 및 MPRemoteCommandCenter와 통합하기 위해",

@@ -1,5 +1,5 @@
 # ../translations/da.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -948,7 +948,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Python-bindinger til Qt",
     "audio metadata handling": "håndtering af audiometadata",
     "Python Imaging Library": "Python Imaging Library",
-    "lyrics and article descriptions download handling": "håndtering af sangtekst- og artikelbeskrivelsesdownload",
+    "app update checks, lyrics and article descriptions download handling": "til kontrol af programopdateringer, download af sangtekster og beskrivelser til encyklopædien",
     "a package that sends files to the Trash instead of permanent deletion": "en pakke, der sender filer til Papirkurven i stedet for at slette dem permanent",
     "to handle external links and wikipedia data": "til håndtering af eksterne links og Wikipedia-data",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "til integration med native macOS-medieknapper og MPRemoteCommandCenter",

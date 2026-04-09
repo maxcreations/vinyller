@@ -1996,7 +1996,7 @@ class SettingsWindow(StyledDialog):
             ("PyQt6", "https://pypi.org/project/PyQt6", translate("Python Bindings for Qt"), "GPL-3.0-only"),
             ("Mutagen", "https://github.com/quodlibet/mutagen", translate("audio metadata handling"), "GPLv2 or later"),
             ("Pillow", "https://github.com/python-pillow/Pillow", translate("Python Imaging Library"), "MIT-CMU"),
-            ("Requests", "https://github.com/psf/requests", translate("lyrics and article descriptions download handling"), "Apache 2.0"),
+            ("Requests", "https://github.com/psf/requests", translate("app update checks, lyrics and article descriptions download handling"), "Apache 2.0"),
             ("Send2Trash", "https://github.com/arsenetar/send2trash", translate("a package that sends files to the Trash instead of permanent deletion"), "BSD License"),
             ("urllib3", "https://github.com/urllib3/urllib3", translate("to handle external links and wikipedia data"), "MIT License"),
             ("PyObjC", "https://pyobjc.readthedocs.io/", translate("for integration with native macOS media buttons and MPRemoteCommandCenter"),

@@ -175,7 +175,7 @@ pyinstaller --noconfirm --name Vinyller --onedir --noconsole --add-data "assets:
 - [PyQt6](https://pypi.org/project/PyQt6) — Python Bindings для Qt;
 - [Mutagen](https://github.com/quodlibet/mutagen) — для работы с метаданными аудио;
 - [Pillow](https://github.com/python-pillow/Pillow) — библиотека для работы с изображениями;
-- [Requests](https://github.com/psf/requests) — для загрузки текстов песен и описаний для статей энциклопедии;
+- [Requests](https://github.com/psf/requests) — для проверки обновлений программы, загрузки текстов песен и описаний для статей энциклопедии;
 - [Send2Trash](https://github.com/arsenetar/send2trash) — для отправки файлов в корзину, вместо моментального удаления;
 - [urllib3](https://github.com/urllib3/urllib3) — для обработки внешних ссылок и данных Википедии;
 - [PyObjC](https://pyobjc.readthedocs.io/) — для интеграции с нативными медиа-кнопками на macOS и MPRemoteCommandCenter.

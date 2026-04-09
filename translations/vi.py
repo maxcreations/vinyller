@@ -1,5 +1,5 @@
 # ../translations/vi.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -915,7 +915,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Liên kết Python cho Qt",
     "audio metadata handling": "xử lý siêu dữ liệu âm thanh",
     "Python Imaging Library": "Thư viện hình ảnh Python",
-    "lyrics and article descriptions download handling": "xử lý tải xuống lời bài hát và mô tả bài viết",
+    "app update checks, lyrics and article descriptions download handling": "để kiểm tra cập nhật chương trình, tải lời bài hát và mô tả cho bách khoa toàn thư",
     "a package that sends files to the Trash instead of permanent deletion": "một gói gửi tệp vào Thùng rác thay vì xóa vĩnh viễn",
     "to handle external links and wikipedia data": "để xử lý các liên kết bên ngoài và dữ liệu wikipedia",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "để tích hợp với các nút phương tiện gốc của macOS và MPRemoteCommandCenter",

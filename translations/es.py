@@ -1,5 +1,5 @@
 # ../translations/es.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -948,7 +948,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Enlaces de Python para Qt",
     "audio metadata handling": "manejo de metadatos de audio",
     "Python Imaging Library": "Biblioteca de imágenes de Python",
-    "lyrics and article descriptions download handling": "descarga de letras y descripciones de artículos",
+    "app update checks, lyrics and article descriptions download handling": "para comprobar actualizaciones del programa, descargar letras de canciones y descripciones para la enciclopedia",
     "a package that sends files to the Trash instead of permanent deletion": "un paquete que envía archivos a la Papelera en lugar de eliminarlos permanentemente",
     "to handle external links and wikipedia data": "para manejar enlaces externos y datos de Wikipedia",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "para integrar con los botones multimedia nativos de macOS y MPRemoteCommandCenter",

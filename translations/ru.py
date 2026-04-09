@@ -1,5 +1,5 @@
 # ../translations/ru.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -981,7 +981,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Python Bindings для Qt",
     "audio metadata handling": "работа с метаданными аудио",
     "Python Imaging Library": "библиотека для работы с изображениями",
-    "lyrics and article descriptions download handling": "загрузка текстов песен и описаний энциклопедии",
+    "app update checks, lyrics and article descriptions download handling": "для проверки обновлений программы, загрузки текстов песен и описаний для энциклопедии",
     "a package that sends files to the Trash instead of permanent deletion": "для отправки файлов в корзину вместо моментального удаления",
     "to handle external links and wikipedia data": "для обработки внешних ссылок и данных Википедии",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "для работы медиа-кнопок на macOS и интеграции с MPRemoteCommandCenter",

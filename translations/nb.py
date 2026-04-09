@@ -1,5 +1,5 @@
 # ../translations/nb.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -948,7 +948,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Python Bindings for Qt",
     "audio metadata handling": "håndtering av lydmetadata",
     "Python Imaging Library": "Python Imaging Library",
-    "lyrics and article descriptions download handling": "håndtering av nedlasting av sangtekster og artikkelbeskrivelser",
+    "app update checks, lyrics and article descriptions download handling": "for kontroll av programoppdateringer, nedlasting av sangtekster og beskrivelser for leksikonet",
     "a package that sends files to the Trash instead of permanent deletion": "en pakke som sender filer til papirkurven i stedet for permanent sletting",
     "to handle external links and wikipedia data": "for å håndtere eksterne lenker og Wikipedia-data",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "for integrasjon med native macOS-medieknapper og MPRemoteCommandCenter",

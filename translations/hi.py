@@ -1,5 +1,5 @@
 # ../translations/hi.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -948,7 +948,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Qt के लिए Python बाइंडिंग",
     "audio metadata handling": "ऑडियो मेटाडेटा हैंडलिंग",
     "Python Imaging Library": "Python इमेजिंग लाइब्रेरी",
-    "lyrics and article descriptions download handling": "गीत और लेख विवरण डाउनलोड हैंडलिंग",
+    "app update checks, lyrics and article descriptions download handling": "प्रोग्राम अपडेट की जाँच करने, गीत और विश्वकोश के लिए विवरण डाउनलोड करने के लिए",
     "a package that sends files to the Trash instead of permanent deletion": "एक पैकेज जो फ़ाइलों को स्थायी विलोपन के बजाय कचरे में भेजता है",
     "to handle external links and wikipedia data": "बाहरी लिंक और विकिपीडिया डेटा को संभालने के लिए",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "macOS के मूल मीडिया बटन और MPRemoteCommandCenter के साथ एकीकरण के लिए",

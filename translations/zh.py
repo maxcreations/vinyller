@@ -1,5 +1,5 @@
 # ../translations/zh.py
-# Updated by _update_translations.py at 2026-04-09 23:42:09
+# Updated by _update_translations.py at 2026-04-10 01:39:33
 
 TRANSLATIONS = {
 
@@ -915,7 +915,7 @@ TRANSLATIONS = {
     "Python Bindings for Qt": "Qt的Python绑定",
     "audio metadata handling": "音频元数据处理",
     "Python Imaging Library": "Python图像库",
-    "lyrics and article descriptions download handling": "歌词和文章描述下载处理",
+    "app update checks, lyrics and article descriptions download handling": "用于检查程序更新、下载歌词和百科描述",
     "a package that sends files to the Trash instead of permanent deletion": "将文件发送到回收站而非永久删除的包",
     "to handle external links and wikipedia data": "用于处理外部链接和维基百科数据",
     "for integration with native macOS media buttons and MPRemoteCommandCenter": "用于与原生 macOS 媒体按钮及 MPRemoteCommandCenter 集成",
