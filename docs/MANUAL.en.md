@@ -742,7 +742,7 @@ This section dictates UI parameters, language choices, and session state persist
 - **Interface and windows:** Toggles to "Remember last viewed page" upon restart and "Remember window size" for both Main and Vinyl modes.
 - **Navigation separators:** Toggles to "Show navigation separators on the main pages of tabs" and inside favorites/popular sections.
 - **File export:** Toggles "Allow file export via drag-and-drop" from the playback queue directly to file system folders.
-- **Check for updates at startup:** Automatically checks for new versions of Viniller on GitHub when the program starts. If a new version is detected, a corresponding message will appear in the notification area of the main window.
+- **Check for updates at startup:** Automatically checks for new versions of Vinyller on GitHub when the program starts. If a new version is detected, a corresponding message will appear in the notification area of the main window.
 
 #### Changing the Color theme and Accent color
 | Light | Retro Light | Retro Dark | Graphite | Polar Night | Dark |                                                                                                                                     
