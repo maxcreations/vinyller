@@ -1,5 +1,5 @@
 # ../translations/vi.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -822,9 +822,9 @@ TRANSLATIONS = {
     "Remember window size": "Ghi nhớ kích thước cửa sổ",
     "Remember the size of the window for all window modes": "Ghi nhớ kích thước và vị trí cửa sổ cho tất cả các chế độ cửa sổ",
     "Show navigation separators on the main pages of tabs": "Hiển thị dấu phân cách điều hướng trên các trang chính của tab",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "Trên các trang chính của mỗi tab sẽ hiển thị các dấu phân cách điều hướng. Nhấp vào chúng cho phép bạn nhanh chóng nhảy đến bất kỳ dấu phân cách nào khác trên trang hiện tại — ví dụ: để đến các nghệ sĩ hoặc album bắt đầu bằng chữ M.",
+    "The main pages of each tab will display navigation separators...": "Các trang chính của mỗi tab sẽ hiển thị các dấu phân cách điều hướng. Nhấp vào chúng cho phép bạn nhanh chóng chuyển đến bất kỳ dấu phân cách nào khác trên trang hiện tại — ví dụ: để đến các nghệ sĩ hoặc album bắt đầu bằng chữ M. Các dấu phân cách cũng sẽ hiển thị trên các trang nghệ sĩ, nhà soạn nhạc và thể loại nếu chúng chứa hơn 20 album.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "Hiển thị dấu phân cách điều hướng trên các trang 'Tất cả yêu thích...' và 'Tất cả phổ biến...'",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Trên các trang tất cả nghệ sĩ, album, thể loại yêu thích và phổ biến sẽ hiển thị các dấu phân cách điều hướng. Nhấp vào chúng cho phép bạn nhanh chóng bỏ qua đến bất kỳ phần nào khác trên trang — ví dụ: để đến các nghệ sĩ hoặc album bắt đầu bằng chữ M.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "Các trang của tất cả nghệ sĩ yêu thích và phổ biến, album, thể loại, v.v. sẽ hiển thị các dấu phân cách điều hướng. Nhấp vào chúng cho phép bạn nhanh chóng chuyển đến bất kỳ dấu phân cách nào khác trên trang hiện tại — ví dụ: để đến các nghệ sĩ hoặc album bắt đầu bằng chữ M. Các dấu phân cách cũng sẽ hiển thị trên các trang nghệ sĩ, nhà soạn nhạc và thể loại nếu chúng chứa hơn 20 album.",
     "Allow file export via drag-and-drop": "Cho phép xuất tệp bằng cách kéo thả",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Cho phép bạn kéo và thả các bài hát trực tiếp từ hàng đợi phát vào trình quản lý tệp của bạn (ví dụ: File Explorer hoặc Finder) để sao chép chúng.",
     "Automatically check for Vinyller updates at startup": "Tự động kiểm tra cập nhật Vinyller khi khởi động",

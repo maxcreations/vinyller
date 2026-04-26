@@ -390,7 +390,13 @@ class Player(QObject):
         """
         Resumes playback of the main media player and the background crackle sound if enabled.
         """
+
+        # fix sleep mode resume
+        current_pos = self.player.position()
+        self.player.setPosition(current_pos)
+
         self.player.play()
+
         if self._warm_sound_enabled:
             self.crackle_player.play()
 

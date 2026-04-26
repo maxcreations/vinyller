@@ -75,7 +75,6 @@ class ChartsUIManager:
         """
         mw = self.main_window
 
-        # Load icons for different time periods
         icon_month = create_svg_icon(
             "assets/control/sort_date_month.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
         )
@@ -98,7 +97,6 @@ class ChartsUIManager:
             title = translate("Time Period"),
         )
 
-        # Ensure we don't have duplicate connections if reused
         try:
             button.menu().triggered.disconnect()
         except Exception:
@@ -180,7 +178,6 @@ class ChartsUIManager:
         layout.setSpacing(16)
         mw.charts_scroll.setWidget(container)
 
-        # Handle loading or empty library states
         if getattr(mw, "is_processing_library", False) and mw.data_manager.is_empty():
             mw.chart_view_button.hide()
             self.ui_manager.set_header_visibility(mw.charts_header, False)
@@ -193,7 +190,6 @@ class ChartsUIManager:
             self.ui_manager.set_header_visibility(mw.charts_header, False)
             return
 
-        # Check if there are any play statistics to show
         play_stats = mw.library_manager.load_play_stats()
         has_stats = (
             play_stats.get("artists")
@@ -203,7 +199,6 @@ class ChartsUIManager:
             or play_stats.get("folders")
         )
         if not has_stats:
-            # Show "No rating yet" placeholder if playback history is empty
             self.ui_manager.set_header_visibility(mw.charts_header, False)
             title = QLabel(translate("No rating yet"))
             title.setProperty("class", "textHeaderSecondary textColorPrimary")
@@ -226,7 +221,6 @@ class ChartsUIManager:
             mw.chart_view_button.show()
             self.ui_manager.set_header_visibility(mw.charts_header, True)
 
-            # Dynamically inject the period selector into the main header if not present
             if not getattr(mw, "charts_period_button_added", False):
                 self.period_button = self.create_period_selector()
                 header_widget = mw.charts_header["header"]
@@ -237,7 +231,6 @@ class ChartsUIManager:
                     if actions_item.layout():
                         actions_layout = actions_item.layout()
                         found_container = False
-                        # Find a suitable container within the actions layout
                         for i in range(actions_layout.count()):
                             item = actions_layout.itemAt(i)
                             w = item.widget()
@@ -256,7 +249,6 @@ class ChartsUIManager:
         mw.charts_header["details"].setText(suffix)
         mw.charts_header["details"].show()
 
-        # Prepare sorted lists for overview sections
         top_tracks_all = mw.data_manager.sorted_tracks_by_play_count
         top_tracks = [t for t in top_tracks_all if t.get("play_count", 0) > 0]
 
@@ -2287,26 +2279,15 @@ class ChartsUIManager:
         )
 
         content_container = QWidget()
-        content_container.setContentsMargins(0, 0, 0, 0)
-
-        current_view_mode = getattr(mw, view_mode_setting_attr, ViewMode.GRID)
-
-        target_layout = None
-        if current_view_mode == ViewMode.ALL_TRACKS:
-            layout = QVBoxLayout(content_container)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(24)
-            target_layout = layout
-        else:
-            layout = FlowLayout(content_container, stretch_items=True)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(16)
-            target_layout = layout
+        content_layout = QVBoxLayout(content_container)
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(16)
 
         root_layout.addWidget(content_container)
         root_layout.addStretch(1)
 
-        mw.active_charts_layout_target = target_layout
+        mw.active_charts_layout_target = content_layout
+        mw.current_charts_sub_flow_layout = None
 
         scroll_area.setWidget(root_container)
 
@@ -2331,6 +2312,7 @@ class ChartsUIManager:
             mw.current_charts_context = "artist"
             self.ui_manager.clear_layout(mw.chart_detail_header_layout)
             self.ui_manager.clear_layout(mw.chart_detail_layout)
+            mw.chart_detail_separator_widgets.clear()
 
             sort_alpha_desc = create_svg_icon(
                 "assets/control/sort_alpha_desc.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
@@ -2506,6 +2488,26 @@ class ChartsUIManager:
 
         mw.current_charts_artist_album_list = albums_of_artist
         mw.charts_artist_albums_loaded_count = 0
+        mw.is_loading_charts_artist_albums = False
+        mw.last_charts_artist_album_group = None
+        mw.current_charts_sub_flow_layout = None
+
+        if len(albums_of_artist) > 20:
+            mw.show_charts_artist_album_separators = True
+            mw.charts_artist_album_groups = set()
+            for album_key, data in albums_of_artist:
+                current_group = None
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+                if current_group:
+                    mw.charts_artist_album_groups.add(current_group)
+        else:
+            mw.show_charts_artist_album_separators = False
 
         if not is_refresh:
             mw.charts_sub_view_scroll_area = StyledScrollArea()
@@ -2570,16 +2572,50 @@ class ChartsUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_charts_artist_album_list[i]
+
+            current_group = None
+            if getattr(mw, "show_charts_artist_album_separators", False):
+                sort_mode = mw.charts_artist_album_sort_mode
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+
+            if (
+                getattr(mw, "show_charts_artist_album_separators", False)
+                and current_group
+                and current_group != getattr(mw, "last_charts_artist_album_group", None)
+            ):
+                separator_widget = self.components._create_separator_widget(
+                    current_group, "charts_artist_albums", mw.charts_artist_album_groups
+                )
+                target_layout.addWidget(separator_widget)
+                mw.chart_detail_separator_widgets[current_group] = separator_widget
+                mw.last_charts_artist_album_group = current_group
+                mw.current_charts_sub_flow_layout = None
+
+            dest_layout = target_layout
+            if mw.charts_artist_album_view_mode in [ViewMode.GRID, ViewMode.TILE_BIG, ViewMode.TILE_SMALL]:
+                if not hasattr(mw, "current_charts_sub_flow_layout") or mw.current_charts_sub_flow_layout is None:
+                    flow_container = QWidget()
+                    mw.current_charts_sub_flow_layout = FlowLayout(flow_container, stretch_items=True)
+                    mw.current_charts_sub_flow_layout.setSpacing(16)
+                    target_layout.addWidget(flow_container)
+                dest_layout = mw.current_charts_sub_flow_layout
+
             if mw.charts_artist_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
-                target_layout.addWidget(widget)
+                dest_layout.addWidget(widget)
                 if i < len(mw.current_charts_artist_album_list) - 1:
                     separator = QWidget()
                     separator.setFixedHeight(1)
                     separator.setProperty("class", "separator")
-                    target_layout.addWidget(separator)
+                    dest_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
                     album_key, data, mw.charts_artist_album_view_mode, show_artist=False
@@ -2596,7 +2632,7 @@ class ChartsUIManager:
                     )
                 )
                 widget.playClicked.connect(mw.player_controller.play_data)
-                target_layout.addWidget(widget)
+                dest_layout.addWidget(widget)
 
         mw.charts_artist_albums_loaded_count = end
         mw.is_loading_charts_artist_albums = False
@@ -2642,6 +2678,7 @@ class ChartsUIManager:
             mw.current_charts_context = "genre"
             self.ui_manager.clear_layout(mw.chart_detail_header_layout)
             self.ui_manager.clear_layout(mw.chart_detail_layout)
+            mw.chart_detail_separator_widgets.clear()
 
             sort_alpha_desc = create_svg_icon(
                 "assets/control/sort_alpha_desc.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
@@ -2821,6 +2858,25 @@ class ChartsUIManager:
         mw.current_charts_genre_album_list = albums_of_genre
         mw.charts_genre_albums_loaded_count = 0
         mw.is_loading_charts_genre_albums = False
+        mw.last_charts_genre_album_group = None
+        mw.current_charts_sub_flow_layout = None
+
+        if len(albums_of_genre) > 20:
+            mw.show_charts_genre_album_separators = True
+            mw.charts_genre_album_groups = set()
+            for album_key, data in albums_of_genre:
+                current_group = None
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+                if current_group:
+                    mw.charts_genre_album_groups.add(current_group)
+        else:
+            mw.show_charts_genre_album_separators = False
 
         if not is_refresh:
             mw.charts_sub_view_scroll_area = StyledScrollArea()
@@ -2886,16 +2942,49 @@ class ChartsUIManager:
         for i in range(start, end):
             album_key, data = mw.current_charts_genre_album_list[i]
 
+            current_group = None
+            if getattr(mw, "show_charts_genre_album_separators", False):
+                sort_mode = mw.charts_genre_album_sort_mode
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+
+            if (
+                getattr(mw, "show_charts_genre_album_separators", False)
+                and current_group
+                and current_group != getattr(mw, "last_charts_genre_album_group", None)
+            ):
+                separator_widget = self.components._create_separator_widget(
+                    current_group, "charts_genre_albums", mw.charts_genre_album_groups
+                )
+                target_layout.addWidget(separator_widget)
+                mw.chart_detail_separator_widgets[current_group] = separator_widget
+                mw.last_charts_genre_album_group = current_group
+                mw.current_charts_sub_flow_layout = None
+
+            dest_layout = target_layout
+            if mw.charts_genre_album_view_mode in [ViewMode.GRID, ViewMode.TILE_BIG, ViewMode.TILE_SMALL]:
+                if not hasattr(mw, "current_charts_sub_flow_layout") or mw.current_charts_sub_flow_layout is None:
+                    flow_container = QWidget()
+                    mw.current_charts_sub_flow_layout = FlowLayout(flow_container, stretch_items=True)
+                    mw.current_charts_sub_flow_layout.setSpacing(16)
+                    target_layout.addWidget(flow_container)
+                dest_layout = mw.current_charts_sub_flow_layout
+
             if mw.charts_genre_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
-                target_layout.addWidget(widget)
+                dest_layout.addWidget(widget)
                 if i < len(mw.current_charts_genre_album_list) - 1:
                     separator = QWidget()
                     separator.setFixedHeight(1)
                     separator.setProperty("class", "separator")
-                    target_layout.addWidget(separator)
+                    dest_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
                     album_key, data, mw.charts_genre_album_view_mode, show_artist=True
@@ -2912,7 +3001,7 @@ class ChartsUIManager:
                     )
                 )
                 widget.playClicked.connect(mw.player_controller.play_data)
-                target_layout.addWidget(widget)
+                dest_layout.addWidget(widget)
 
         mw.charts_genre_albums_loaded_count = end
         mw.is_loading_charts_genre_albums = False
@@ -2957,6 +3046,7 @@ class ChartsUIManager:
             mw.current_charts_context = "composer"
             self.ui_manager.clear_layout(mw.chart_detail_header_layout)
             self.ui_manager.clear_layout(mw.chart_detail_layout)
+            mw.chart_detail_separator_widgets.clear()
 
             sort_alpha_desc = create_svg_icon(
                 "assets/control/sort_alpha_desc.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
@@ -3133,6 +3223,25 @@ class ChartsUIManager:
         mw.current_charts_composer_album_list = albums_of_composer
         mw.charts_composer_albums_loaded_count = 0
         mw.is_loading_charts_composer_albums = False
+        mw.last_charts_composer_album_group = None
+        mw.current_charts_sub_flow_layout = None
+
+        if len(albums_of_composer) > 20:
+            mw.show_charts_composer_album_separators = True
+            mw.charts_composer_album_groups = set()
+            for album_key, data in albums_of_composer:
+                current_group = None
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+                if current_group:
+                    mw.charts_composer_album_groups.add(current_group)
+        else:
+            mw.show_charts_composer_album_separators = False
 
         if not is_refresh:
             mw.charts_sub_view_scroll_area = StyledScrollArea()
@@ -3199,16 +3308,50 @@ class ChartsUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_charts_composer_album_list[i]
+
+            current_group = None
+            if getattr(mw, "show_charts_composer_album_separators", False):
+                sort_mode = mw.charts_composer_album_sort_mode
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+
+            if (
+                getattr(mw, "show_charts_composer_album_separators", False)
+                and current_group
+                and current_group != getattr(mw, "last_charts_composer_album_group", None)
+            ):
+                separator_widget = self.components._create_separator_widget(
+                    current_group, "charts_composer_albums", mw.charts_composer_album_groups
+                )
+                target_layout.addWidget(separator_widget)
+                mw.chart_detail_separator_widgets[current_group] = separator_widget
+                mw.last_charts_composer_album_group = current_group
+                mw.current_charts_sub_flow_layout = None
+
+            dest_layout = target_layout
+            if mw.charts_composer_album_view_mode in [ViewMode.GRID, ViewMode.TILE_BIG, ViewMode.TILE_SMALL]:
+                if not hasattr(mw, "current_charts_sub_flow_layout") or mw.current_charts_sub_flow_layout is None:
+                    flow_container = QWidget()
+                    mw.current_charts_sub_flow_layout = FlowLayout(flow_container, stretch_items=True)
+                    mw.current_charts_sub_flow_layout.setSpacing(16)
+                    target_layout.addWidget(flow_container)
+                dest_layout = mw.current_charts_sub_flow_layout
+
             if mw.charts_composer_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
-                target_layout.addWidget(widget)
+                dest_layout.addWidget(widget)
                 if i < len(mw.current_charts_composer_album_list) - 1:
                     separator = QWidget()
                     separator.setFixedHeight(1)
                     separator.setProperty("class", "separator")
-                    target_layout.addWidget(separator)
+                    dest_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
                     album_key, data, mw.charts_composer_album_view_mode, show_artist=False
@@ -3225,7 +3368,7 @@ class ChartsUIManager:
                     )
                 )
                 widget.playClicked.connect(mw.player_controller.play_data)
-                target_layout.addWidget(widget)
+                dest_layout.addWidget(widget)
 
         mw.charts_composer_albums_loaded_count = end
         mw.is_loading_charts_composer_albums = False
@@ -3582,4 +3725,3 @@ class ChartsUIManager:
             context_data={"context": f"archive_detail_{chart_type}", "data": month_key},
         )
         self.ui_manager.update_all_track_widgets()
-

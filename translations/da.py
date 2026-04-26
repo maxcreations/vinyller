@@ -1,5 +1,5 @@
 # ../translations/da.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -855,9 +855,9 @@ TRANSLATIONS = {
     "Remember window size": "Husk vinduesstørrelse",
     "Remember the size of the window for all window modes": "Husk vinduets størrelse og placering for alle vinduestilstande",
     "Show navigation separators on the main pages of tabs": "Vis navigationsadskillere på hovedsiderne i faner",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "Hovedsiderne på hver fane viser navigationsadskillere. Ved at klikke på dem kan du hurtigt springe til en anden adskiller på den aktuelle side — f.eks. for at nå kunstnere eller album, der starter med M.",
+    "The main pages of each tab will display navigation separators...": "På hovedsiderne på hver fane vises navigationsseparatorer. Ved at klikke på dem kan du hurtigt springe til en hvilken som helst anden separator på den aktuelle side – f.eks. til kunstnere eller album, der begynder med M. Separatorer vises også på sider for kunstnere, komponister og genrer, hvis de indeholder mere end 20 album.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "Vis navigationsadskillere på siderne \"Alle favoritter...\" og \"Alle populære...\"",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Siderne for alle favorit- og populære kunstnere, album, genrer osv. viser navigationsadskillere. Ved at klikke på dem kan du hurtigt hoppe til en anden sektion på siden — f.eks. for at nå kunstnere eller album, der starter med M.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "På siderne for alle yndlings- og populære kunstnere, album, genrer osv. vises navigationsseparatorer. Ved at klikke på dem kan du hurtigt springe til en hvilken som helst anden separator på den aktuelle side – f.eks. til kunstnere eller album, der begynder med M. Separatorer vises også på sider for kunstnere, komponister og genrer, hvis de indeholder mere end 20 album.",
     "Allow file export via drag-and-drop": "Tillad fileksport via træk og slip",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Tillader dig at trække numre direkte fra afspilningskøen ind i din filhåndtering (f.eks. Stifinder eller Finder) for at kopiere dem.",
     "Automatically check for Vinyller updates at startup": "Tjek automatisk efter Vinyller-opdateringer ved start",

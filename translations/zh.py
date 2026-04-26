@@ -1,5 +1,5 @@
 # ../translations/zh.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -822,9 +822,9 @@ TRANSLATIONS = {
     "Remember window size": "记忆窗口大小",
     "Remember the size of the window for all window modes": "记住所有窗口模式的窗口大小和位置",
     "Show navigation separators on the main pages of tabs": "在标签页的主页面上显示导航分隔符",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "标签页的主页面上将显示分隔符链接，点击它们可以快速跳转到当前页面上的任何其他分隔符，例如，跳到以字母 M 开头的艺人或专辑。",
+    "The main pages of each tab will display navigation separators...": "每个选项卡的主页面将显示导航分隔符。点击它们可以快速跳转到当前页面上的任何其他分隔符——例如，到达以 M 开头的艺术家或专辑。如果艺术家、作曲家或流派页面包含超过 20 张专辑，也会显示分隔符。",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "在“所有收藏...”和“所有热门...”页面上显示导航分隔符",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "收藏和热门艺人、专辑、流派等的页面上将显示分隔符链接，点击它们可以快速跳转到当前页面上的任何其他分隔符，例如，跳到以字母 M 开头的艺人或专辑。",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "所有收藏和热门艺术家、专辑、流派等页面将显示导航分隔符。点击它们可以快速跳转到当前页面上的任何其他分隔符——例如，到达以 M 开头的艺术家或专辑。如果艺术家、作曲家或流派页面包含超过 20 张专辑，也会显示分隔符。",
     "Allow file export via drag-and-drop": "允许通过拖放从播放器导出音乐",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "允许您将曲目直接从播放器的播放队列拖放到文件管理器（例如，文件资源管理器或访达）以进行复制。",
     "Automatically check for Vinyller updates at startup": "启动时自动检查 Vinyller 更新",

@@ -599,8 +599,7 @@ class SettingsWindow(StyledDialog):
             self.show_separators_checkbox,
             title = translate("Show navigation separators on the main pages of tabs"),
             text = translate(
-                "The main pages of each tab will display navigation separators. Clicking them allows you to quickly "
-                "jump to any other separator on the current page — for example, to reach artists or albums starting with M."),
+                "The main pages of each tab will display navigation separators..."),
         )
         self.show_separators_checkbox.setCursor(Qt.CursorShape.WhatsThisCursor)
 
@@ -613,8 +612,7 @@ class SettingsWindow(StyledDialog):
             self.show_favorites_separators_checkbox,
             title = translate('Show navigation separators on "All Favorites..." and "All Popular..." pages'),
             text = translate(
-                "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. "
-                "Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M."),
+                "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators..."),
         )
         self.show_favorites_separators_checkbox.setCursor(Qt.CursorShape.WhatsThisCursor)
 

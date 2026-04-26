@@ -1,5 +1,5 @@
 # ../translations/tr.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -822,9 +822,9 @@ TRANSLATIONS = {
     "Remember window size": "Pencere boyutunu hatırla",
     "Remember the size of the window for all window modes": "Tüm pencere modları için pencere boyutunu ve konumunu hatırla",
     "Show navigation separators on the main pages of tabs": "Sekmelerin ana sayfalarında gezinme ayırıcılarını göster",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "Sekmelerin ana sayfalarında ayırıcı-bağlantılar gösterilecek, bunlara tıklamak mevcut sayfadaki herhangi başka bir ayırıcıya hızlıca atlamanızı sağlar, örneğin M harfiyle başlayan sanatçılar veya albümlere.",
+    "The main pages of each tab will display navigation separators...": "Her sekmenin ana sayfalarında gezinme ayırıcıları görüntülenecektir. Bunlara tıklayarak geçerli sayfadaki diğer herhangi bir ayırıcıya hızla atlayabilirsiniz – örneğin, M harfiyle başlayan sanatçılara veya albümlere ulaşmak için. Sanatçı, besteci ve tür sayfalarında 20'den fazla albüm varsa ayırıcılar da görüntülenecektir.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "«Tüm Favoriler...» ve «Tüm Popülerler...» sayfalarında gezinme ayırıcılarını göster",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Favori ve popüler sanatçıların, albümlerin, türlerin vb. sayfalarında ayırıcı-bağlantılar gösterilecek, bunlara tıklamak mevcut sayfadaki herhangi başka bir ayırıcıya hızlıca atlamanızı sağlar, örneğin M harfiyle başlayan sanatçılar veya albümlere.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "Tüm favori ve popüler sanatçılar, albümler, türler vb. sayfalarında gezinme ayırıcıları görüntülenecektir. Bunlara tıklayarak geçerli sayfadaki diğer herhangi bir ayırıcıya hızla atlayabilirsiniz – örneğin, M harfiyle başlayan sanatçılara veya albümlere ulaşmak için. Sanatçı, besteci ve tür sayfalarında 20'den fazla albüm varsa ayırıcılar da görüntülenecektir.",
     "Allow file export via drag-and-drop": "Oynatıcıdan müzik dışa aktarmaya sürükle bırak yoluyla izin ver",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Parçaları doğrudan oynatıcının oynatma sırasından dosya yöneticinize (ör. Dosya Gezgini veya Finder) sürükleyip bırakarak kopyalamanıza olanak tanır.",
     "Automatically check for Vinyller updates at startup": "Başlangıçta Vinyller güncellemelerini otomatik olarak kontrol et",

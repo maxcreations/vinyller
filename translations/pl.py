@@ -1,5 +1,5 @@
 # ../translations/pl.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -888,9 +888,9 @@ TRANSLATIONS = {
     "Remember window size": "Zapamiętuj rozmiar okna",
     "Remember the size of the window for all window modes": "Zapamiętaj rozmiar i położenie okna dla wszystkich trybów okna",
     "Show navigation separators on the main pages of tabs": "Wyświetlaj separatorzy nawigacyjne na głównych stronach zakładek",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "Na głównych stronach zakładek będą wyświetlane separatorzy-linki, kliknięcie których pozwoli szybko przejść do dowolnego innego separatora na bieżącej stronie, np. do wykonawców lub albumów na literę M.",
+    "The main pages of each tab will display navigation separators...": "Na głównych stronach każdej zakładki będą wyświetlane separatory nawigacyjne. Kliknięcie ich pozwala szybko przeskoczyć do dowolnego innego separatora na bieżącej stronie – na przykład do wykonawców lub albumów zaczynających się na literę M. Separatory będą również wyświetlane na stronach wykonawców, kompozytorów i gatunków, jeśli zawierają one więcej niż 20 albumów.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "Wyświetlaj separatorzy nawigacyjne na stronach „Wszyscy ulubieni...” i „Wszystkie popularne...”",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Na stronach ulubionych i popularnych wykonawców, albumów, gatunków itd. będą wyświetlane separatorzy-linki, kliknięcie których pozwoli szybko przejść do dowolnego innego separatora na bieżącej stronie, np. do wykonawców lub albumów na literę M.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "Na stronach wszystkich ulubionych i popularnych wykonawców, albumów, gatunków itp. będą wyświetlane separatory nawigacyjne. Kliknięcie ich pozwala szybko przeskoczyć do dowolnego innego separatora na bieżącej stronie – na przykład do wykonawców lub albumów zaczynających się na literę M. Separatory będą również wyświetlane na stronach wykonawców, kompozytorów i gatunków, jeśli zawierają one więcej niż 20 albumów.",
     "Allow file export via drag-and-drop": "Zezwalaj na eksport muzyki z odtwarzacza za pomocą przeciągania i upuszczania",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Pozwala przeciągać utwory bezpośrednio z kolejki odtwarzania odtwarzacza do menedżera plików (np. Eksploratora plików lub Findera), aby je skopiować.",
     "Automatically check for Vinyller updates at startup": "Automatycznie sprawdzaj aktualizacje Vinyllera przy starcie",

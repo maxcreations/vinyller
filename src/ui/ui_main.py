@@ -174,9 +174,11 @@ class MainWindow(StyledMainWindow):
 
         self.current_search_results = []
         self.current_artists_display_list = []
+        self.current_artist_albums_list = []
         self.current_albums_display_list = []
         self.current_songs_display_list = []
         self.current_genres_display_list = []
+        self.current_genre_albums_list = []
         self.search_mode = SearchMode.EVERYWHERE
         self.search_view_mode = ViewMode.ALL_TRACKS
         self.current_artist_view = None
@@ -219,7 +221,9 @@ class MainWindow(StyledMainWindow):
             self.songs_loaded_count,
             self.search_loaded_count,
             self.genres_loaded_count,
-        ) = (0, 0, 0, 0, 0)
+            self.genre_albums_loaded_count,
+            self.artist_albums_loaded_count,
+        ) = (0, 0, 0, 0, 0, 0, 0)
 
         self.charts_loaded_count = 0
         self.is_loading_charts = False
@@ -300,11 +304,14 @@ class MainWindow(StyledMainWindow):
         self.is_initial_cache_load = False
         self.rescan_initiated_from_dialog = False
         self.last_artist_letter, self.last_album_group = None, None
+        self.last_genre_album_group = None
         (
             self.current_artist_flow_layout,
             self.current_album_flow_layout,
             self.current_genre_flow_layout,
-        ) = (None, None, None)
+            self.current_genre_album_flow_layout,
+        ) = (None, None, None, None)
+        self.active_genre_albums_layout_target = None
         self.main_view_track_widgets = defaultdict(list)
         self.main_view_track_lists = []
         self.main_view_cover_widgets = defaultdict(list)
@@ -1844,6 +1851,9 @@ class MainWindow(StyledMainWindow):
         self.artist_source_tag = settings.get("artist_source_tag", ArtistSource.ARTIST)
         self.show_separators = settings.get("show_separators", True)
         self.show_favorites_separators = settings.get("show_favorites_separators", False)
+        self.show_charts_artist_album_separators = False
+        self.show_charts_composer_album_separators = False
+        self.show_charts_genre_album_separators = False
         self.ignore_articles = settings.get("ignore_articles", True)
         self.data_manager.ignore_articles = self.ignore_articles
         self.ignore_genre_case = settings.get("ignore_genre_case", True)
@@ -3493,6 +3503,7 @@ class MainWindow(StyledMainWindow):
         recalculation, and then performs scrolling.
         """
         view_config = {
+            # Main Views
             "artists": (
                 self.artists_scroll,
                 self.ui_manager.artists_ui_manager.artist_separator_widgets,
@@ -3521,26 +3532,143 @@ class MainWindow(StyledMainWindow):
                 lambda: self.composers_loaded_count,
                 lambda: self.current_composers_display_list
             ),
+
+            # Standard Sub-views
+            "genre_albums": (
+                getattr(self, "genre_albums_scroll", None),
+                self.ui_manager.genres_ui_manager.genre_album_separator_widgets,
+                self.ui_manager.genres_ui_manager.load_more_genre_albums,
+                lambda: getattr(self, "genre_albums_loaded_count", 0),
+                lambda: getattr(self, "current_genre_albums_list", [])
+            ),
+            "artist_albums": (
+                getattr(self, "artist_albums_scroll", None),
+                self.ui_manager.artists_ui_manager.artist_album_separator_widgets,
+                self.ui_manager.artists_ui_manager.load_more_artist_albums,
+                lambda: getattr(self, "artist_albums_loaded_count", 0),
+                lambda: getattr(self, "current_artist_albums_list", [])
+            ),
+            "composer_albums": (
+                getattr(self, "composer_albums_scroll", None),
+                self.ui_manager.composers_ui_manager.composer_album_separator_widgets,
+                self.ui_manager.composers_ui_manager.load_more_composer_albums,
+                lambda: getattr(self, "composer_albums_loaded_count", 0),
+                lambda: getattr(self, "current_composer_albums_list", [])
+            ),
+
+            # Favorites
+            "favorite_artists": (
+                self.favorite_detail_scroll_area,
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_favorite_artists,
+                lambda: self.fav_all_artists_loaded_count,
+                lambda: self.current_fav_all_artists_list
+            ),
+            "favorite_albums": (
+                self.favorite_detail_scroll_area,
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_favorite_albums,
+                lambda: self.fav_all_albums_loaded_count,
+                lambda: self.current_fav_all_albums_list
+            ),
+            "favorite_genres": (
+                self.favorite_detail_scroll_area,
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_favorite_genres,
+                lambda: self.fav_all_genres_loaded_count,
+                lambda: self.current_fav_all_genres_list
+            ),
+            "favorite_composers": (
+                self.favorite_detail_scroll_area,
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_favorite_composers,
+                lambda: self.fav_all_composers_loaded_count,
+                lambda: self.current_fav_all_composers_list
+            ),
+            "favorite_folders": (
+                self.favorite_detail_scroll_area,
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_favorite_folders,
+                lambda: self.fav_all_folders_loaded_count,
+                lambda: self.current_fav_all_folders_list
+            ),
+
+            # Favorite Sub-views
+            "favorite_artist_albums": (
+                getattr(self, "fav_sub_view_scroll_area", None),
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_fav_artist_albums,
+                lambda: self.fav_artist_albums_loaded_count,
+                lambda: self.current_fav_artist_album_list
+            ),
+            "favorite_genre_albums": (
+                getattr(self, "fav_sub_view_scroll_area", None),
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_fav_genre_albums,
+                lambda: self.fav_genre_albums_loaded_count,
+                lambda: self.current_fav_genre_album_list
+            ),
+            "favorite_composer_albums": (
+                getattr(self, "fav_sub_view_scroll_area", None),
+                self.favorite_detail_separator_widgets,
+                self.ui_manager.favorites_ui_manager.load_more_fav_composer_albums,
+                lambda: self.fav_composer_albums_loaded_count,
+                lambda: self.current_fav_composer_album_list
+            ),
+
+            # Charts
+            "charts_artists": (
+                self.chart_detail_scroll_area,
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_all_artists,
+                lambda: self.charts_all_artists_loaded_count,
+                lambda: self.current_charts_all_artists_list
+            ),
+            "charts_albums": (
+                self.chart_detail_scroll_area,
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_all_albums,
+                lambda: self.charts_all_albums_loaded_count,
+                lambda: self.current_charts_all_albums_list
+            ),
+            "charts_genres": (
+                self.chart_detail_scroll_area,
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_all_genres,
+                lambda: self.charts_all_genres_loaded_count,
+                lambda: self.current_charts_all_genres_list
+            ),
+            "charts_composers": (
+                self.chart_detail_scroll_area,
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_all_composers,
+                lambda: self.charts_all_composers_loaded_count,
+                lambda: self.current_charts_all_composers_list
+            ),
+
+            # Chart Sub-views
+            "charts_artist_albums": (
+                getattr(self, "charts_sub_view_scroll_area", None),
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_artist_albums,
+                lambda: self.charts_artist_albums_loaded_count,
+                lambda: self.current_charts_artist_album_list
+            ),
+            "charts_genre_albums": (
+                getattr(self, "charts_sub_view_scroll_area", None),
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_genre_albums,
+                lambda: self.charts_genre_albums_loaded_count,
+                lambda: self.current_charts_genre_album_list
+            ),
+            "charts_composer_albums": (
+                getattr(self, "charts_sub_view_scroll_area", None),
+                self.chart_detail_separator_widgets,
+                self.ui_manager.charts_ui_manager.load_more_charts_composer_albums,
+                lambda: self.charts_composer_albums_loaded_count,
+                lambda: self.current_charts_composer_album_list
+            ),
         }
-
-        if source_view in [
-            "favorite_artists", "favorite_albums", "favorite_genres",
-            "charts_artists", "charts_albums", "charts_genres", "charts_composers"
-        ]:
-            if source_view.startswith("favorite_"):
-                target_scroll = self.favorite_detail_scroll_area
-                target_separators = self.favorite_detail_separator_widgets
-            else:
-                target_scroll = self.chart_detail_scroll_area
-                target_separators = self.chart_detail_separator_widgets
-
-            view_config[source_view] = (
-                target_scroll,
-                target_separators,
-                None,
-                lambda: 1,
-                lambda: 1
-            )
 
         config = view_config.get(source_view)
         if not config:
@@ -3548,6 +3676,9 @@ class MainWindow(StyledMainWindow):
             return
 
         scroll_area, separators, load_func, get_loaded, get_total = config
+
+        if scroll_area is None:
+            return
 
         if hasattr(self, 'toast'):
             self.toast.show_message(f"{translate('Searching for:')} {letter}...", duration = 1000)
@@ -3583,7 +3714,9 @@ class MainWindow(StyledMainWindow):
                     scroll_area.widget().layout().activate()
                     QApplication.processEvents()
 
-                val = target_widget.y()
+                mapped_pos = target_widget.mapTo(scroll_area.widget(), QPoint(0, 0))
+                val = mapped_pos.y()
+
                 scrollbar = scroll_area.verticalScrollBar()
 
                 if scrollbar.maximum() < val and attempts > 0:

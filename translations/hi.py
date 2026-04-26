@@ -1,5 +1,5 @@
 # ../translations/hi.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -855,9 +855,9 @@ TRANSLATIONS = {
     "Remember window size": "विंडो का आकार याद रखें",
     "Remember the size of the window for all window modes": "सभी विंडो मोड के लिए विंडो का आकार और स्थिति याद रखें",
     "Show navigation separators on the main pages of tabs": "टैब के मुख्य पृष्ठों पर नेविगेशन विभाजक दिखाएँ",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "प्रत्येक टैब के मुख्य पृष्ठ नेविगेशन विभाजक प्रदर्शित करेंगे। उन पर क्लिक करने से आप वर्तमान पृष्ठ पर किसी भी अन्य विभाजक पर तुरंत जा सकते हैं — उदाहरण के लिए, M से शुरू होने वाले कलाकारों या एल्बमों तक पहुंचने के लिए।",
+    "The main pages of each tab will display navigation separators...": "प्रत्येक टैब के मुख्य पृष्ठ नेविगेशन विभाजक प्रदर्शित करेंगे। उन पर क्लिक करके आप वर्तमान पृष्ठ पर किसी भी अन्य विभाजक पर तुरंत जा सकते हैं — उदाहरण के लिए, M अक्षर से शुरू होने वाले कलाकारों या एल्बमों तक पहुँचने के लिए। कलाकारों, संगीतकारों और शैलियों के पृष्ठों पर भी विभाजक प्रदर्शित होंगे, यदि उनमें 20 से अधिक एल्बम हों।",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "\"सभी पसंदीदा...\" और \"सभी लोकप्रिय...\" पृष्ठों पर नेविगेशन विभाजक दिखाएँ",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "सभी पसंदीदा और लोकप्रिय कलाकारों, एल्बमों, शैलियों आदि के पृष्ठ नेविगेशन विभाजक प्रदर्शित करेंगे। उन पर क्लिक करने से आप पृष्ठ पर किसी भी अन्य अनुभाग पर तुरंत जा सकते हैं — उदाहरण के लिए, M से शुरू होने वाले कलाकारों या एल्बमों तक पहुंचने के लिए।",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "सभी पसंदीदा और लोकप्रिय कलाकारों, एल्बमों, शैलियों आदि के पृष्ठों पर नेविगेशन विभाजक प्रदर्शित होंगे। उन पर क्लिक करके आप वर्तमान पृष्ठ पर किसी भी अन्य विभाजक पर तुरंत जा सकते हैं — उदाहरण के लिए, M अक्षर से शुरू होने वाले कलाकारों या एल्बमों तक पहुँचने के लिए। कलाकारों, संगीतकारों और शैलियों के पृष्ठों पर भी विभाजक प्रदर्शित होंगे, यदि उनमें 20 से अधिक एल्बम हों।",
     "Allow file export via drag-and-drop": "खींचें और छोड़ें के माध्यम से फ़ाइल निर्यात की अनुमति दें",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "आपको ट्रैक को सीधे प्लेबैक कतार से अपने फ़ाइल प्रबंधक (जैसे, फ़ाइल एक्सप्लोरर या फ़ाइंडर) में खींचकर छोड़ने और उन्हें कॉपी करने की अनुमति देता है।",
     "Automatically check for Vinyller updates at startup": "स्टार्टअप पर स्वचालित रूप से Vinyller अपडेट की जाँच करें",

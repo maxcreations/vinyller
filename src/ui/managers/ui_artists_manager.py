@@ -44,6 +44,7 @@ class ArtistsUIManager:
         self.main_window = main_window
         self.ui_manager = ui_manager
         self.artist_separator_widgets = {}
+        self.artist_album_separator_widgets = {}
 
     def populate_artists_tab(self, initial_load_count=None):
         """
@@ -63,7 +64,6 @@ class ArtistsUIManager:
 
         source_list = mw.data_manager.sorted_artists
 
-        # Display random artist suggestions if the library is large enough
         if mw.show_random_suggestions and len(source_list) >= 20:
             suggestion_block = self.ui_manager.components.create_suggestion_block(
                 "artist", self.populate_artists_tab
@@ -71,7 +71,6 @@ class ArtistsUIManager:
             if suggestion_block:
                 layout.addWidget(suggestion_block)
 
-        # Handle loading state
         if getattr(mw, "is_processing_library", False) and mw.data_manager.is_empty():
             mw.artist_sort_button.hide()
             mw.artist_view_button.hide()
@@ -79,7 +78,6 @@ class ArtistsUIManager:
             self.ui_manager.components._show_loading_library_message(layout)
             return
 
-        # Handle empty library state
         if mw.data_manager.is_empty():
             mw.artist_sort_button.hide()
             mw.artist_view_button.hide()
@@ -99,7 +97,6 @@ class ArtistsUIManager:
         mw.current_artists_display_list = source_list
         mw.artist_letters = set()
 
-        # Generate group separators based on current sorting rules
         if mw.show_separators:
             if mw.artist_sort_mode in [
                 SortMode.DATE_ADDED_ASC,
@@ -115,7 +112,6 @@ class ArtistsUIManager:
                     current_letter = first_char.upper() if first_char.isalpha() else "*"
                     mw.artist_letters.add(current_letter)
 
-        # Apply the selected sorting mode
         sort_mode = mw.artist_sort_mode
         if sort_mode == SortMode.ALPHA_ASC:
             mw.current_artists_display_list.sort(
@@ -168,7 +164,6 @@ class ArtistsUIManager:
             artist, data = artist_list[i]
             current_group = None
 
-            # Add separators for the current batch if enabled
             if mw.show_separators:
                 if mw.artist_sort_mode in [
                     SortMode.DATE_ADDED_ASC,
@@ -190,7 +185,6 @@ class ArtistsUIManager:
                     mw.last_artist_letter = current_group
                     mw.current_artist_flow_layout = None
 
-            # Setup layout depending on the view mode
             target_layout = main_layout
             if mw.artist_view_mode in [
                 ViewMode.GRID,
@@ -256,7 +250,6 @@ class ArtistsUIManager:
         self.ui_manager.clear_layout(mw.artist_albums_header_layout)
         self.ui_manager.clear_layout(mw.artist_albums_layout)
 
-        # Setup sorting options UI
         sort_year_desc = create_svg_icon(
             "assets/control/sort_date_desc.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
         )
@@ -288,7 +281,6 @@ class ArtistsUIManager:
             title = translate("Sort Options"),
         )
 
-        # Setup view mode options UI
         view_grid = create_svg_icon(
             "assets/control/view_grid.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
         )
@@ -322,7 +314,6 @@ class ArtistsUIManager:
 
         fav_button = self.ui_manager.components._create_favorite_button(artist_name, "artist")
 
-        # Gather artist's albums and calculate totals
         artist_data = mw.data_manager.artists_data.get(artist_name, {})
         album_keys_for_artist = artist_data.get("albums", [])
         albums_of_artist = [
@@ -339,7 +330,6 @@ class ArtistsUIManager:
         tracks_text = translate("{count} track(s)", count=track_count)
         details_text = f"{albums_text}, {tracks_text}"
 
-        # Build and populate header
         header_parts = self.ui_manager.components.create_page_header(
             title=artist_name,
             details_text=details_text,
@@ -372,7 +362,6 @@ class ArtistsUIManager:
         )
         mw.artist_albums_header_layout.addWidget(header_parts["header"])
 
-        # Apply sorting to the artist's albums list
         sort_mode = mw.artist_album_sort_mode
         if sort_mode == SortMode.ALPHA_ASC:
             albums_of_artist.sort(key=lambda x: mw.data_manager.get_sort_key(x[0][1]))
@@ -402,7 +391,6 @@ class ArtistsUIManager:
 
         scroll_bar = mw.artist_albums_scroll.verticalScrollBar()
 
-        # Render specific view mode
         if mw.artist_album_view_mode == ViewMode.ALL_TRACKS:
             self._populate_artist_all_tracks_view(
                 mw.artist_albums_scroll, albums_of_artist
@@ -425,7 +413,6 @@ class ArtistsUIManager:
         mw.artist_albums_layout.addWidget(mw.artist_albums_scroll)
         mw.artists_stack.setCurrentIndex(1)
 
-        # Update global UI context state
         context = {"artist_name": artist_name}
         mw.update_current_view_state(
             main_tab_index=mw.nav_button_icon_names.index("artist"),
@@ -442,7 +429,10 @@ class ArtistsUIManager:
         mw.artist_albums_loaded_count = 0
         mw.is_loading_artist_albums = False
 
-        # Build layout structure
+        mw.last_artist_album_group = None
+        mw.current_artist_album_flow_layout = None
+        self.artist_album_separator_widgets.clear()
+
         root_container = QWidget()
         root_container.setContentsMargins(24, 24, 24, 24)
         root_container.setProperty("class", "backgroundPrimary")
@@ -459,27 +449,33 @@ class ArtistsUIManager:
 
         albums_container = QWidget()
         albums_container.setContentsMargins(0, 0, 0, 0)
-        target_layout = None
 
-        # Configure layout based on view mode
-        if mw.artist_album_view_mode in [
-            ViewMode.GRID,
-            ViewMode.TILE_BIG,
-            ViewMode.TILE_SMALL,
-        ]:
-            layout = FlowLayout(albums_container, stretch_items=True)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(16)
-            target_layout = layout
-        else:
-            layout = QVBoxLayout(albums_container)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(16)
-            target_layout = layout
+        albums_layout = QVBoxLayout(albums_container)
+        albums_layout.setContentsMargins(0, 0, 0, 0)
+        albums_layout.setSpacing(16)
 
         root_layout.addWidget(albums_container)
         root_layout.addStretch(1)
-        mw.active_artist_albums_layout_target = target_layout
+        mw.active_artist_albums_layout_target = albums_layout
+
+        mw.artist_album_groups = set()
+        if mw.show_separators and len(mw.current_artist_albums_list) > 20:
+            for album_key, data in mw.current_artist_albums_list:
+                current_group = None
+                if mw.artist_album_sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    album_title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = album_title[0] if album_title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif mw.artist_album_sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    album_year = data.get("year")
+                    if album_year is None or album_year == 0:
+                        current_group = "#"
+                    else:
+                        current_group = str(album_year)
+
+                if current_group:
+                    mw.artist_album_groups.add(current_group)
+
         scroll_area.setWidget(root_container)
         self.load_more_artist_albums()
 
@@ -510,26 +506,64 @@ class ArtistsUIManager:
         start = mw.artist_albums_loaded_count
         end = min(start + BATCH_SIZE, len(mw.current_artist_albums_list))
 
-        layout = mw.active_artist_albums_layout_target
+        main_layout = mw.active_artist_albums_layout_target
 
         for i in range(start, end):
             album_key, data = mw.current_artist_albums_list[i]
+            current_group = None
+
+            if mw.show_separators and len(mw.current_artist_albums_list) > 20:
+                if mw.artist_album_sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    album_title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = album_title[0] if album_title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif mw.artist_album_sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    album_year = data.get("year")
+                    if album_year is None or album_year == 0:
+                        current_group = "#"
+                    else:
+                        current_group = str(album_year)
+
+                if current_group and current_group != mw.last_artist_album_group:
+                    separator_widget = self.ui_manager.components._create_separator_widget(
+                        current_group, "artist_albums", mw.artist_album_groups
+                    )
+                    main_layout.addWidget(separator_widget)
+                    self.artist_album_separator_widgets[current_group] = separator_widget
+                    mw.last_artist_album_group = current_group
+                    mw.current_artist_album_flow_layout = None
+
+            target_layout = main_layout
+            if mw.artist_album_view_mode in [
+                ViewMode.GRID,
+                ViewMode.TILE_BIG,
+                ViewMode.TILE_SMALL,
+            ]:
+                if getattr(mw, "current_artist_album_flow_layout", None) is None:
+                    flow_container = QWidget()
+                    mw.current_artist_album_flow_layout = FlowLayout(
+                        flow_container, stretch_items = True
+                    )
+                    mw.current_artist_album_flow_layout.setSpacing(16)
+                    main_layout.addWidget(flow_container)
+                target_layout = mw.current_artist_album_flow_layout
+
             widget = self.ui_manager.components.create_album_widget(
-                album_key, data, mw.artist_album_view_mode, show_artist=False
+                album_key, data, mw.artist_album_view_mode, show_artist = False
             )
 
             widget.activated.connect(
-                partial(self.ui_manager.show_album_tracks, source_stack=mw.artists_stack)
+                partial(self.ui_manager.show_album_tracks, source_stack = mw.artists_stack)
             )
             widget.contextMenuRequested.connect(
                 lambda data, pos: mw.action_handler.show_context_menu(
-                    data, pos, context={"forced_type": "album"}
+                    data, pos, context = {"forced_type": "album"}
                 )
             )
             widget.playClicked.connect(mw.player_controller.smart_play)
 
             try:
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
             except RuntimeError:
                 mw.is_loading_artist_albums = False
                 return
@@ -620,7 +654,6 @@ class ArtistsUIManager:
             )
             main_layout.addWidget(album_widget)
 
-            # Add horizontal separator between albums in the list
             if i < len(mw.current_artist_all_tracks_list) - 1:
                 separator = QWidget()
                 separator.setFixedHeight(1)

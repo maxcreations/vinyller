@@ -1,5 +1,5 @@
 # ../translations/ko.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -822,9 +822,9 @@ TRANSLATIONS = {
     "Remember window size": "창 크기 기억",
     "Remember the size of the window for all window modes": "모든 창 모드에서 창 크기와 위치 기억",
     "Show navigation separators on the main pages of tabs": "탭의 메인 페이지에 탐색 구분 기호 표시",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "각 탭의 메인 페이지에 구분 기호 링크가 표시됩니다. 클릭하면 현재 페이지의 다른 구분 기호로 빠르게 이동할 수 있습니다. 예를 들어 M으로 시작하는 아티스트나 앨범으로 이동할 수 있습니다.",
+    "The main pages of each tab will display navigation separators...": "각 탭의 기본 페이지에는 탐색 구분 기호가 표시됩니다. 클릭하면 현재 페이지의 다른 구분 기호로 빠르게 이동할 수 있습니다. 예를 들어 M으로 시작하는 아티스트나 앨범으로 이동할 수 있습니다. 아티스트, 작곡가 및 장르 페이지에 20개 이상의 앨범이 포함된 경우에도 구분 기호가 표시됩니다.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "«모든 즐겨찾기...» 및 «모든 인기...» 페이지에 탐색 구분 기호 표시",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "즐겨찾기 및 인기 아티스트, 앨범, 장르 등의 페이지에 구분 기호 링크가 표시됩니다. 클릭하면 현재 페이지의 다른 구분 기호로 빠르게 이동할 수 있습니다. 예를 들어 M으로 시작하는 아티스트나 앨범으로 이동할 수 있습니다.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "모든 즐겨찾기 및 인기 아티스트, 앨범, 장르 등의 페이지에는 탐색 구분 기호가 표시됩니다. 클릭하면 현재 페이지의 다른 구분 기호로 빠르게 이동할 수 있습니다. 예를 들어 M으로 시작하는 아티스트나 앨범으로 이동할 수 있습니다. 아티스트, 작곡가 및 장르 페이지에 20개 이상의 앨범이 포함된 경우에도 구분 기호가 표시됩니다.",
     "Allow file export via drag-and-drop": "드래그 앤 드롭을 통한 음악 내보내기 허용",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "재생 대기열에서 트랙을 직접 파일 관리자 (예: 파일 탐색기 또는 Finder)로 드래그 앤 드롭하여 복사할 수 있습니다.",
     "Automatically check for Vinyller updates at startup": "시작 시 Vinyller 업데이트 자동 확인",

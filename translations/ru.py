@@ -1,5 +1,5 @@
 # ../translations/ru.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -888,9 +888,9 @@ TRANSLATIONS = {
     "Remember window size": "Запоминать размер окна",
     "Remember the size of the window for all window modes": "Запоминать размер и положение окон всех режимов",
     "Show navigation separators on the main pages of tabs": "Отображать навигационные разделители на главных страницах вкладок",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "На основных страницах вкладок будут отображаться разделители-ссылки, клик по которым позволит быстро переместиться к любому из других разделителей на текущей странице, например, к исполнителям или альбомам на букву M.",
+    "The main pages of each tab will display navigation separators...": "На основных страницах вкладок будут отображаться разделители-ссылки, клик по которым позволит быстро переместиться к любому из других разделителей на текущей странице, например, к исполнителям или альбомам на букву M. Также разделители будут отображаться на страницах исполнителей, композиторов и жанров, если те содержат более 20 альбомов.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "Отображать навигационные разделители на страницах «Все избранные...» и «Все популярные...»",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "На страницах избранных и популярных исполнителей, альбомов, жанров и т.д. будут отображаться разделители-ссылки, клик по которым позволит быстро переместиться к любому из других разделителей на текущей странице, например, к исполнителям или альбомам на букву M.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "На страницах избранных и популярных исполнителей, альбомов, жанров и т.д. будут отображаться разделители-ссылки, клик по которым позволит быстро переместиться к любому из других разделителей на текущей странице, например, к исполнителям или альбомам на букву M. Также разделители будут отображаться на страницах исполнителей, композиторов и жанров, если те содержат более 20 альбомов.",
     "Allow file export via drag-and-drop": "Разрешить экспорт музыки из проигрывателя c помощью перетаскивания",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Позволяет перетаскивать композиции прямо из очереди воспроизведения проигрывателя в файловый менеджер (например, Проводник или Finder) чтобы скопировать их.",
     "Automatically check for Vinyller updates at startup": "Проверять наличие новых версий Виниллера при запуске",

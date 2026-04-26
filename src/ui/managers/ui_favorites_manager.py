@@ -2070,6 +2070,7 @@ class FavoritesUIManager:
         mw.current_favorites_context = "composer"
         self.ui_manager.clear_layout(mw.favorite_detail_header_layout)
         self.ui_manager.clear_layout(mw.favorite_detail_layout)
+        mw.favorite_detail_separator_widgets.clear()
 
         sort_alpha_asc = create_svg_icon(
             "assets/control/sort_alpha_asc.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
@@ -2237,6 +2238,25 @@ class FavoritesUIManager:
         mw.current_fav_composer_album_list = albums_of_composer
         mw.fav_composer_albums_loaded_count = 0
         mw.is_loading_fav_composer_albums = False
+        mw.last_fav_composer_album_group = None
+        mw.current_fav_sub_flow_layout = None
+
+        if len(albums_of_composer) > 20:
+            mw.show_fav_composer_album_separators = True
+            mw.fav_composer_album_groups = set()
+            for album_key, data in albums_of_composer:
+                current_group = None
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+                if current_group:
+                    mw.fav_composer_album_groups.add(current_group)
+        else:
+            mw.show_fav_composer_album_separators = False
 
         scroll_area = StyledScrollArea()
         scroll_area.setProperty("class", "backgroundPrimary")
@@ -2299,16 +2319,50 @@ class FavoritesUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_fav_composer_album_list[i]
+
+            current_group = None
+            if getattr(mw, "show_fav_composer_album_separators", False):
+                sort_mode = mw.favorite_composer_album_sort_mode
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+
+            if (
+                getattr(mw, "show_fav_composer_album_separators", False)
+                and current_group
+                and current_group != getattr(mw, "last_fav_composer_album_group", None)
+            ):
+                separator_widget = self.components._create_separator_widget(
+                    current_group, "favorite_composer_albums", mw.fav_composer_album_groups
+                )
+                layout.addWidget(separator_widget)
+                mw.favorite_detail_separator_widgets[current_group] = separator_widget
+                mw.last_fav_composer_album_group = current_group
+                mw.current_fav_sub_flow_layout = None
+
+            target_layout = layout
+            if mw.favorite_composer_album_view_mode in [ViewMode.GRID, ViewMode.TILE_BIG, ViewMode.TILE_SMALL]:
+                if not hasattr(mw, "current_fav_sub_flow_layout") or mw.current_fav_sub_flow_layout is None:
+                    flow_container = QWidget()
+                    mw.current_fav_sub_flow_layout = FlowLayout(flow_container, stretch_items=True)
+                    mw.current_fav_sub_flow_layout.setSpacing(16)
+                    layout.addWidget(flow_container)
+                target_layout = mw.current_fav_sub_flow_layout
+
             if mw.favorite_composer_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
                 if i < len(mw.current_fav_composer_album_list) - 1:
                     separator = QWidget()
                     separator.setFixedHeight(1)
                     separator.setProperty("class", "separator")
-                    layout.addWidget(separator)
+                    target_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
                     album_key, data, mw.favorite_composer_album_view_mode, show_artist=True
@@ -2322,7 +2376,7 @@ class FavoritesUIManager:
                     )
                 )
                 widget.playClicked.connect(mw.player_controller.play_data)
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
 
         mw.fav_composer_albums_loaded_count = end
         mw.is_loading_fav_composer_albums = False
@@ -3426,6 +3480,7 @@ class FavoritesUIManager:
         mw.current_favorites_context = "artist"
         self.ui_manager.clear_layout(mw.favorite_detail_header_layout)
         self.ui_manager.clear_layout(mw.favorite_detail_layout)
+        mw.favorite_detail_separator_widgets.clear()
 
         sort_alpha_asc = create_svg_icon(
             "assets/control/sort_alpha_asc.svg", theme.COLORS["PRIMARY"], QSize(24, 24)
@@ -3594,6 +3649,25 @@ class FavoritesUIManager:
         mw.current_fav_artist_album_list = albums_of_artist
         mw.fav_artist_albums_loaded_count = 0
         mw.is_loading_fav_artist_albums = False
+        mw.last_fav_artist_album_group = None
+        mw.current_fav_sub_flow_layout = None
+
+        if len(albums_of_artist) > 20:
+            mw.show_fav_artist_album_separators = True
+            mw.fav_artist_album_groups = set()
+            for album_key, data in albums_of_artist:
+                current_group = None
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+                if current_group:
+                    mw.fav_artist_album_groups.add(current_group)
+        else:
+            mw.show_fav_artist_album_separators = False
 
         scroll_area = StyledScrollArea()
         scroll_area.setProperty("class", "backgroundPrimary")
@@ -3661,26 +3735,15 @@ class FavoritesUIManager:
         )
 
         content_container = QWidget()
-        content_container.setContentsMargins(0, 0, 0, 0)
-
-        current_view_mode = getattr(mw, view_mode_setting_attr, ViewMode.GRID)
-
-        target_layout = None
-        if current_view_mode == ViewMode.ALL_TRACKS:
-            layout = QVBoxLayout(content_container)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(24)
-            target_layout = layout
-        else:
-            layout = FlowLayout(content_container, stretch_items=True)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(16)
-            target_layout = layout
+        content_layout = QVBoxLayout(content_container)
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(16)
 
         root_layout.addWidget(content_container)
         root_layout.addStretch(1)
 
-        mw.active_fav_layout_target = target_layout
+        mw.active_fav_layout_target = content_layout
+        mw.current_fav_sub_flow_layout = None
 
         scroll_area.setWidget(root_container)
 
@@ -3712,16 +3775,50 @@ class FavoritesUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_fav_artist_album_list[i]
+
+            current_group = None
+            if getattr(mw, "show_fav_artist_album_separators", False):
+                sort_mode = mw.favorite_artist_album_sort_mode
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+
+            if (
+                getattr(mw, "show_fav_artist_album_separators", False)
+                and current_group
+                and current_group != getattr(mw, "last_fav_artist_album_group", None)
+            ):
+                separator_widget = self.components._create_separator_widget(
+                    current_group, "favorite_artist_albums", mw.fav_artist_album_groups
+                )
+                layout.addWidget(separator_widget)
+                mw.favorite_detail_separator_widgets[current_group] = separator_widget
+                mw.last_fav_artist_album_group = current_group
+                mw.current_fav_sub_flow_layout = None
+
+            target_layout = layout
+            if mw.favorite_artist_album_view_mode in [ViewMode.GRID, ViewMode.TILE_BIG, ViewMode.TILE_SMALL]:
+                if not hasattr(mw, "current_fav_sub_flow_layout") or mw.current_fav_sub_flow_layout is None:
+                    flow_container = QWidget()
+                    mw.current_fav_sub_flow_layout = FlowLayout(flow_container, stretch_items=True)
+                    mw.current_fav_sub_flow_layout.setSpacing(16)
+                    layout.addWidget(flow_container)
+                target_layout = mw.current_fav_sub_flow_layout
+
             if mw.favorite_artist_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
                 if i < len(mw.current_fav_artist_album_list) - 1:
                     separator = QWidget()
                     separator.setFixedHeight(1)
                     separator.setProperty("class", "separator")
-                    layout.addWidget(separator)
+                    target_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
                     album_key, data, mw.favorite_artist_album_view_mode, show_artist=False
@@ -3735,7 +3832,7 @@ class FavoritesUIManager:
                     )
                 )
                 widget.playClicked.connect(mw.player_controller.play_data)
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
 
         mw.fav_artist_albums_loaded_count = end
         mw.is_loading_fav_artist_albums = False
@@ -3776,6 +3873,7 @@ class FavoritesUIManager:
         mw.current_favorites_context = "genre"
         self.ui_manager.clear_layout(mw.favorite_detail_header_layout)
         self.ui_manager.clear_layout(mw.favorite_detail_layout)
+        mw.favorite_detail_separator_widgets.clear()
 
         sort_button = self.components.create_tool_button_with_menu(
             [
@@ -3953,6 +4051,25 @@ class FavoritesUIManager:
         mw.current_fav_genre_album_list = albums_of_genre
         mw.fav_genre_albums_loaded_count = 0
         mw.is_loading_fav_genre_albums = False
+        mw.last_fav_genre_album_group = None
+        mw.current_fav_sub_flow_layout = None
+
+        if len(albums_of_genre) > 20:
+            mw.show_fav_genre_album_separators = True
+            mw.fav_genre_album_groups = set()
+            for album_key, data in albums_of_genre:
+                current_group = None
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+                if current_group:
+                    mw.fav_genre_album_groups.add(current_group)
+        else:
+            mw.show_fav_genre_album_separators = False
 
         scroll_area = StyledScrollArea()
         scroll_area.setWidgetResizable(True)
@@ -4013,16 +4130,50 @@ class FavoritesUIManager:
 
         for i in range(start, end):
             album_key, data = mw.current_fav_genre_album_list[i]
+
+            current_group = None
+            if getattr(mw, "show_fav_genre_album_separators", False):
+                sort_mode = mw.favorite_genre_album_sort_mode
+                if sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = title[0] if title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    year = data.get("year")
+                    current_group = str(year) if (year is not None and year > 0) else "#"
+
+            if (
+                getattr(mw, "show_fav_genre_album_separators", False)
+                and current_group
+                and current_group != getattr(mw, "last_fav_genre_album_group", None)
+            ):
+                separator_widget = self.components._create_separator_widget(
+                    current_group, "favorite_genre_albums", mw.fav_genre_album_groups
+                )
+                layout.addWidget(separator_widget)
+                mw.favorite_detail_separator_widgets[current_group] = separator_widget
+                mw.last_fav_genre_album_group = current_group
+                mw.current_fav_sub_flow_layout = None
+
+            target_layout = layout
+            if mw.favorite_genre_album_view_mode in [ViewMode.GRID, ViewMode.TILE_BIG, ViewMode.TILE_SMALL]:
+                if not hasattr(mw, "current_fav_sub_flow_layout") or mw.current_fav_sub_flow_layout is None:
+                    flow_container = QWidget()
+                    mw.current_fav_sub_flow_layout = FlowLayout(flow_container, stretch_items=True)
+                    mw.current_fav_sub_flow_layout.setSpacing(16)
+                    layout.addWidget(flow_container)
+                target_layout = mw.current_fav_sub_flow_layout
+
             if mw.favorite_genre_album_view_mode == ViewMode.ALL_TRACKS:
                 widget = self.components._create_detailed_album_widget(
                     album_key, data, tracks_to_show=None
                 )
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
                 if i < len(mw.current_fav_genre_album_list) - 1:
                     separator = QWidget()
                     separator.setFixedHeight(1)
                     separator.setProperty("class", "separator")
-                    layout.addWidget(separator)
+                    target_layout.addWidget(separator)
             else:
                 widget = self.components.create_album_widget(
                     album_key, data, mw.favorite_genre_album_view_mode, show_artist=True
@@ -4036,7 +4187,7 @@ class FavoritesUIManager:
                     )
                 )
                 widget.playClicked.connect(mw.player_controller.play_data)
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
 
         mw.fav_genre_albums_loaded_count = end
         mw.is_loading_fav_genre_albums = False

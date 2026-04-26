@@ -44,6 +44,7 @@ class ComposersUIManager:
         self.main_window = main_window
         self.ui_manager = ui_manager
         self.composer_separator_widgets = {}
+        self.composer_album_separator_widgets = {}
 
     def populate_composers_tab(self, initial_load_count=None):
         """
@@ -432,6 +433,11 @@ class ComposersUIManager:
         mw.current_composer_albums_list = albums_of_composer
         mw.composer_albums_loaded_count = 0
         mw.is_loading_composer_albums = False
+
+        mw.last_composer_album_group = None
+        mw.current_composer_album_flow_layout = None
+        self.composer_album_separator_widgets.clear()
+
         root_container = QWidget()
         root_container.setContentsMargins(24, 24, 24, 24)
         root_container.setProperty("class", "backgroundPrimary")
@@ -448,24 +454,33 @@ class ComposersUIManager:
 
         albums_container = QWidget()
         albums_container.setContentsMargins(0, 0, 0, 0)
-        target_layout = None
-        if mw.composer_album_view_mode in [
-            ViewMode.GRID,
-            ViewMode.TILE_BIG,
-            ViewMode.TILE_SMALL,
-        ]:
-            layout = FlowLayout(albums_container, stretch_items=True)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(16)
-            target_layout = layout
-        else:
-            layout = QVBoxLayout(albums_container)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(16)
-            target_layout = layout
+
+        albums_layout = QVBoxLayout(albums_container)
+        albums_layout.setContentsMargins(0, 0, 0, 0)
+        albums_layout.setSpacing(16)
+
         root_layout.addWidget(albums_container)
         root_layout.addStretch(1)
-        mw.active_composer_albums_layout_target = target_layout
+        mw.active_composer_albums_layout_target = albums_layout
+
+        mw.composer_album_groups = set()
+        if mw.show_separators and len(mw.current_composer_albums_list) > 20:
+            for album_key, data in mw.current_composer_albums_list:
+                current_group = None
+                if mw.composer_album_sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    album_title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = album_title[0] if album_title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif mw.composer_album_sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    album_year = data.get("year")
+                    if album_year is None or album_year == 0:
+                        current_group = "#"
+                    else:
+                        current_group = str(album_year)
+
+                if current_group:
+                    mw.composer_album_groups.add(current_group)
+
         scroll_area.setWidget(root_container)
         self.load_more_composer_albums()
 
@@ -475,45 +490,88 @@ class ComposersUIManager:
         """
         mw = self.main_window
         if (
-            not hasattr(mw, "active_composer_albums_layout_target")
-            or mw.active_composer_albums_layout_target is None
+                not hasattr(mw, "active_composer_albums_layout_target")
+                or mw.active_composer_albums_layout_target is None
         ):
             return
         if (
-            not hasattr(mw, "composer_albums_scroll")
-            or not mw.composer_albums_scroll
-            or not mw.composer_albums_scroll.widget()
+                not hasattr(mw, "composer_albums_scroll")
+                or not mw.composer_albums_scroll
+                or not mw.composer_albums_scroll.widget()
         ):
             return
         if getattr(mw, "is_loading_composer_albums", False):
             return
         if not hasattr(
-            mw, "current_composer_albums_list"
+                mw, "current_composer_albums_list"
         ) or mw.composer_albums_loaded_count >= len(mw.current_composer_albums_list):
             return
+
         mw.is_loading_composer_albums = True
         start = mw.composer_albums_loaded_count
         end = min(start + BATCH_SIZE, len(mw.current_composer_albums_list))
-        layout = mw.active_composer_albums_layout_target
+
+        main_layout = mw.active_composer_albums_layout_target
+
         for i in range(start, end):
             album_key, data = mw.current_composer_albums_list[i]
+            current_group = None
+
+            if mw.show_separators and len(mw.current_composer_albums_list) > 20:
+                if mw.composer_album_sort_mode in [SortMode.ALPHA_ASC, SortMode.ALPHA_DESC]:
+                    album_title = mw.data_manager.get_sort_key(album_key[1])
+                    first_char = album_title[0] if album_title else "#"
+                    current_group = first_char.upper() if first_char.isalpha() else "*"
+                elif mw.composer_album_sort_mode in [SortMode.YEAR_ASC, SortMode.YEAR_DESC]:
+                    album_year = data.get("year")
+                    if album_year is None or album_year == 0:
+                        current_group = "#"
+                    else:
+                        current_group = str(album_year)
+
+                if current_group and current_group != mw.last_composer_album_group:
+                    separator_widget = self.ui_manager.components._create_separator_widget(
+                        current_group, "composer_albums", mw.composer_album_groups
+                    )
+                    main_layout.addWidget(separator_widget)
+                    self.composer_album_separator_widgets[current_group] = separator_widget
+                    mw.last_composer_album_group = current_group
+                    mw.current_composer_album_flow_layout = None
+
+            target_layout = main_layout
+            if mw.composer_album_view_mode in [
+                ViewMode.GRID,
+                ViewMode.TILE_BIG,
+                ViewMode.TILE_SMALL,
+            ]:
+                if getattr(mw, "current_composer_album_flow_layout", None) is None:
+                    flow_container = QWidget()
+                    mw.current_composer_album_flow_layout = FlowLayout(
+                        flow_container, stretch_items = True
+                    )
+                    mw.current_composer_album_flow_layout.setSpacing(16)
+                    main_layout.addWidget(flow_container)
+                target_layout = mw.current_composer_album_flow_layout
+
             widget = self.ui_manager.components.create_album_widget(
-                album_key, data, mw.composer_album_view_mode, show_artist=True
+                album_key, data, mw.composer_album_view_mode, show_artist = True
             )
             widget.activated.connect(
-                partial(self.ui_manager.show_album_tracks, source_stack=mw.composers_stack)
+                partial(self.ui_manager.show_album_tracks, source_stack = mw.composers_stack)
             )
             widget.contextMenuRequested.connect(
                 lambda data, pos: mw.action_handler.show_context_menu(
-                    data, pos, context={"forced_type": "album"}
+                    data, pos, context = {"forced_type": "album"}
                 )
             )
             widget.playClicked.connect(mw.player_controller.smart_play)
+
             try:
-                layout.addWidget(widget)
+                target_layout.addWidget(widget)
             except RuntimeError:
                 mw.is_loading_composer_albums = False
                 return
+
         mw.composer_albums_loaded_count = end
         mw.is_loading_composer_albums = False
         QTimer.singleShot(100, self._check_for_more_composer_albums)

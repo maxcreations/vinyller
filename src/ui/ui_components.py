@@ -22,7 +22,7 @@ import random
 from functools import partial
 
 from PyQt6.QtCore import (
-    QEvent, QEasingCurve, QObject, QPoint, QPropertyAnimation, QSize, Qt, QTimer
+    QEvent, QEasingCurve, QObject, QPoint, QPropertyAnimation, QSize, Qt, QTimer, QEventLoop
 )
 from PyQt6.QtGui import (
     QAction, QPalette, QPixmap
@@ -30,7 +30,7 @@ from PyQt6.QtGui import (
 from PyQt6.QtMultimedia import QMediaPlayer
 from PyQt6.QtWidgets import (
     QButtonGroup, QFrame, QGraphicsOpacityEffect, QHBoxLayout, QLabel, QPushButton,
-    QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget, QSizePolicy, QLayout
+    QSplitter, QStackedWidget, QToolButton, QVBoxLayout, QWidget, QSizePolicy, QLayout, QApplication
 )
 
 from src.core.hotkey_manager import HotkeyManager
@@ -342,6 +342,9 @@ class ToastNotification(ShadowPopup):
 
         self.show()
         self.raise_()
+
+        self.repaint()
+        QApplication.processEvents(QEventLoop.ProcessEventsFlag.ExcludeUserInputEvents)
 
         if duration:
             QTimer.singleShot(duration, self._on_timeout)

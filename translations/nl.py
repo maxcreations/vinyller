@@ -1,5 +1,5 @@
 # ../translations/nl.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -855,9 +855,9 @@ TRANSLATIONS = {
     "Remember window size": "Venstergrootte onthouden",
     "Remember the size of the window for all window modes": "Onthoud de grootte en positie van het venster voor alle venstermodi",
     "Show navigation separators on the main pages of tabs": "Toon navigatiescheidingstekens op hoofdpagina's van tabbladen",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "Op de hoofdpagina's van elk tabblad worden navigatiescheidingstekens weergegeven. Door erop te klikken kun je snel naar een ander scheidingsteken op de huidige pagina springen — bijvoorbeeld om artiesten of albums te bereiken die met M beginnen.",
+    "The main pages of each tab will display navigation separators...": "Op de hoofdpagina's van elk tabblad worden navigatiescheidingstekens weergegeven. Door erop te klikken kunt u snel naar een ander scheidingsteken op de huidige pagina springen – bijvoorbeeld naar artiesten of albums die met M beginnen. Scheidingstekens worden ook weergegeven op pagina's van artiesten, componisten en genres als deze meer dan 20 albums bevatten.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "Toon navigatiescheidingstekens op pagina's 'Alle favorieten...' en 'Alle populaire...'",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "Op de pagina's met alle favoriete en populaire artiesten, albums, genres, enz. worden navigatiescheidingstekens weergegeven. Door erop te klikken kun je snel naar een andere sectie op de pagina springen — bijvoorbeeld om artiesten of albums te bereiken die met M beginnen.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "Op de pagina's voor alle favoriete en populaire artiesten, albums, genres, enz. worden navigatiescheidingstekens weergegeven. Door erop te klikken kunt u snel naar een ander scheidingsteken op de huidige pagina springen – bijvoorbeeld naar artiesten of albums die met M beginnen. Scheidingstekens worden ook weergegeven op pagina's van artiesten, componisten en genres als deze meer dan 20 albums bevatten.",
     "Allow file export via drag-and-drop": "Bestandsexport via slepen en neerzetten toestaan",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Hiermee kun je nummers rechtstreeks vanuit de afspeelwachtrij naar je bestandsbeheer (bijv. Verkenner of Finder) slepen om ze te kopiëren.",
     "Automatically check for Vinyller updates at startup": "Automatisch controleren op Vinyller-updates bij het opstarten",

@@ -1,5 +1,5 @@
 # ../translations/sv.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -855,9 +855,9 @@ TRANSLATIONS = {
     "Remember window size": "Kom ihåg fönsterstorlek",
     "Remember the size of the window for all window modes": "Kom ihåg fönstrets storlek och position för alla fönsterlägen",
     "Show navigation separators on the main pages of tabs": "Visa navigeringsseparatorer på flikarnas huvudsidor",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "På flikarnas huvudsidor visas navigeringsseparatorer. Klick på dem gör att du snabbt kan hoppa till vilken annan separator som helst på den aktuella sidan — till exempel för att nå artister eller album som börjar på M.",
+    "The main pages of each tab will display navigation separators...": "På huvudsidorna för varje flik visas navigeringsseparatorer. Genom att klicka på dem kan du snabbt hoppa till valfri annan separator på den aktuella sidan – till exempel för att nå artister eller album som börjar med M. Separatorer visas också på sidor för artister, kompositörer och genrer om de innehåller fler än 20 album.",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "Visa navigeringsseparatorer på sidorna 'Alla favoriter...' och 'Alla populära...'",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "På sidor med alla favoriter och populära artister, album, genrer etc. kommer navigeringsseparatorer att visas. Klick på dem gör att du snabbt kan hoppa till vilken annan sektion som helst på sidan — till exempel för att nå artister eller album som börjar på M.",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "På sidorna för alla favorit- och populära artister, album, genrer osv. visas navigeringsseparatorer. Genom att klicka på dem kan du snabbt hoppa till valfri annan separator på den aktuella sidan – till exempel för att nå artister eller album som börjar med M. Separatorer visas också på sidor för artister, kompositörer och genrer om de innehåller fler än 20 album.",
     "Allow file export via drag-and-drop": "Tillåt filexport via dra-och-släpp",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "Tillåter dig att dra och släppa låtar direkt från spelkön till din filhanterare (t.ex. Utforskaren eller Finder) för att kopiera dem.",
     "Automatically check for Vinyller updates at startup": "Kontrollera automatiskt efter Vinyller-uppdateringar vid start",

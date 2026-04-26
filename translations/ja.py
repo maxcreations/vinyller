@@ -1,5 +1,5 @@
 # ../translations/ja.py
-# Updated by _update_translations.py at 2026-04-10 01:39:33
+# Updated by _update_translations.py at 2026-04-26 21:41:47
 
 TRANSLATIONS = {
 
@@ -822,9 +822,9 @@ TRANSLATIONS = {
     "Remember window size": "ウィンドウサイズを記憶",
     "Remember the size of the window for all window modes": "すべてのウィンドウモードでウィンドウのサイズと位置を記憶する",
     "Show navigation separators on the main pages of tabs": "タブのメインページにナビゲーションセパレーターを表示",
-    "The main pages of each tab will display navigation separators. Clicking them allows you to quickly jump to any other separator on the current page — for example, to reach artists or albums starting with M.": "各タブのメインページにセパレーターリンクが表示されます。クリックすると、現在のページの他のセパレーターに素早く移動できます。たとえば、Mで始まるアーティストやアルバムに移動できます。",
+    "The main pages of each tab will display navigation separators...": "各タブのメインページにはナビゲーション区切り文字が表示されます。クリックすると、現在のページ上の他の任意の区切り文字にすばやくジャンプできます。たとえば、M で始まるアーティストやアルバムに移動できます。アーティスト、作曲家、ジャンルのページに 20 を超えるアルバムが含まれる場合も、区切り文字が表示されます。",
     "Show navigation separators on \"All Favorites...\" and \"All Popular...\" pages": "「すべてのお気に入り...」と「すべての人気...」ページにナビゲーションセパレーターを表示",
-    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators. Clicking them allows you to quickly skip to any other section on the page — for example, to reach artists or albums starting with M.": "お気に入りや人気のアーティスト、アルバム、ジャンルなどのページにセパレーターリンクが表示されます。クリックすると、現在のページの他のセパレーターに素早く移動できます。たとえば、Mで始まるアーティストやアルバムに移動できます。",
+    "The pages for all favorite and popular artists, albums, genres, etc., will display navigation separators...": "お気に入りや人気のアーティスト、アルバム、ジャンルなどのページにはナビゲーション区切り文字が表示されます。クリックすると、現在のページ上の他の任意の区切り文字にすばやくジャンプできます。たとえば、M で始まるアーティストやアルバムに移動できます。アーティスト、作曲家、ジャンルのページに 20 を超えるアルバムが含まれる場合も、区切り文字が表示されます。",
     "Allow file export via drag-and-drop": "ドラッグ＆ドロップによる音楽のエクスポートを許可",
     "Allows you to drag and drop tracks directly from the playback queue into your file manager (e.g., File Explorer or Finder) to copy them.": "再生キューからトラックを直接ファイルマネージャー（エクスプローラーやFinderなど）にドラッグ＆ドロップしてコピーできます。",
     "Automatically check for Vinyller updates at startup": "起動時にVinyllerのアップデートを自動的に確認する",
