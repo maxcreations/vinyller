@@ -643,6 +643,10 @@ QComboBox QAbstractItemView::item:hover, QStyledItemDelegate:hover {
     font-size: 10px;
 }
 
+.hotkeyContainer{
+    background-color: $WIDGET_BG_SECONDARY;
+}
+
 .btnLink{
     margin: 0;
     padding: 0px;

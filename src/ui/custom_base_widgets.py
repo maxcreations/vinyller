@@ -540,7 +540,6 @@ class CustomTooltip(ShadowPopup):
     def _setup_ui(self, title, text, hotkey, activity_type):
         """Constructs the internal layout and labels based on the provided tooltip data."""
         container = QWidget(self)
-        container.setStyleSheet("background: transparent;")
 
         layout = QVBoxLayout(container)
         layout.setContentsMargins(8, 8, 8, 8)
@@ -548,7 +547,7 @@ class CustomTooltip(ShadowPopup):
 
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
-        header_layout.setSpacing(6)
+        header_layout.setSpacing(8)
 
         has_header = False
 
@@ -558,8 +557,6 @@ class CustomTooltip(ShadowPopup):
             self._title_label.style().unpolish(self._title_label)
             self._title_label.style().polish(self._title_label)
 
-            self._title_label.setStyleSheet("font-weight: bold;")
-
             header_layout.addWidget(self._title_label)
             has_header = True
 
@@ -568,14 +565,19 @@ class CustomTooltip(ShadowPopup):
                 header_layout.addStretch()
 
             if hotkey:
-                self._hotkey_label = QLabel(hotkey, container)
-                self._hotkey_label.setProperty("class", "textSecondary textColorTertiary")
+                hotkey_container = QWidget(container)
+                hotkey_container.setProperty("class", "hotkeyContainer borderRadius4")
+                hotkey_container.setFixedHeight(20)
+                hotkey_layout = QHBoxLayout(hotkey_container)
+                hotkey_layout.setContentsMargins(4, 2, 4, 2)
+
+                self._hotkey_label = QLabel(hotkey)
+                self._hotkey_label.setProperty("class", "textPrimary textColorTertiary")
                 self._hotkey_label.style().unpolish(self._hotkey_label)
                 self._hotkey_label.style().polish(self._hotkey_label)
 
-                self._hotkey_label.setStyleSheet("font-weight: normal;")
-
-                header_layout.addWidget(self._hotkey_label)
+                hotkey_layout.addWidget(self._hotkey_label)
+                header_layout.addWidget(hotkey_container)
 
             if activity_type:
                 icon_map = {
