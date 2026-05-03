@@ -611,8 +611,6 @@ class CustomTooltip(ShadowPopup):
             self._text_label.style().polish(self._text_label)
             self._text_label.setWordWrap(True)
 
-            self._text_label.setStyleSheet("font-weight: normal;")
-
             layout.addWidget(self._text_label)
 
         self.layout.addWidget(container)
@@ -648,6 +646,10 @@ class CustomTooltip(ShadowPopup):
 
             if container and container.layout():
                 container.layout().invalidate()
+
+            if self._hotkey_label and self._hotkey_label.parentWidget() and self._hotkey_label.parentWidget().layout():
+                self._hotkey_label.parentWidget().layout().invalidate()
+
             self.layout.invalidate()
 
             for widget in [self._title_label, self._text_label, self._hotkey_label, self._icon_label]:
