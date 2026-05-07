@@ -922,6 +922,10 @@ class TranslucentCombo(QComboBox):
         self._popup = None
         self._popup_closed_time = 0
 
+    def wheelEvent(self, event):
+        """Disable mouse wheel scroll on hover."""
+        event.ignore()
+
     def mousePressEvent(self, event):
         """Prevents reopening the popup immediately after it was closed."""
         if time.time() - self._popup_closed_time < 0.2:
