@@ -508,7 +508,7 @@ class CustomTooltip(ShadowPopup):
         self._tracked_window = None
 
         if self.target_widget:
-            self.target_widget.destroyed.connect(self.deleteLater)
+            self.target_widget.destroyed.connect(self._on_target_destroyed)
 
         if isinstance(self.target_widget, QWidget):
             self.target_widget.installEventFilter(self)
@@ -727,7 +727,10 @@ class CustomTooltip(ShadowPopup):
     def _show_tooltip(self):
         """Displays the tooltip at the current cursor position."""
         if CustomTooltip._active_tooltip and CustomTooltip._active_tooltip is not self:
-            CustomTooltip._active_tooltip.hide()
+            try:
+                CustomTooltip._active_tooltip.hide()
+            except RuntimeError:
+                pass
 
         CustomTooltip._active_tooltip = self
 
@@ -749,6 +752,13 @@ class CustomTooltip(ShadowPopup):
             CustomTooltip._active_tooltip = None
 
         super().hideEvent(event)
+
+    def _on_target_destroyed(self):
+        """Ensures safe cleanup when the target widget is destroyed."""
+        self._timer.stop()
+        if CustomTooltip._active_tooltip is self:
+            CustomTooltip._active_tooltip = None
+        self.deleteLater()
 
 
 def set_custom_tooltip(target, title=None, text=None, hotkey=None, activity_type=None):
