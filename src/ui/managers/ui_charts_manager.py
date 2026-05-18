@@ -744,6 +744,12 @@ class ChartsUIManager:
             and mw.chart_detail_layout.count() > 0
         )
 
+        if is_refresh and hasattr(self, "charts_tracks_details_label"):
+            try:
+                self.charts_tracks_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_charts_context = "all_tracks"
             self.ui_manager.clear_layout(mw.chart_detail_header_layout)
@@ -850,6 +856,12 @@ class ChartsUIManager:
             and mw.charts_stack.currentIndex() == 1
             and mw.chart_detail_layout.count() > 0
         )
+
+        if is_refresh and hasattr(self, "charts_albums_details_label"):
+            try:
+                self.charts_albums_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_charts_context = "all_albums"
@@ -1240,6 +1252,12 @@ class ChartsUIManager:
             and mw.chart_detail_layout.count() > 0
         )
 
+        if is_refresh and hasattr(self, "charts_artists_details_label"):
+            try:
+                self.charts_artists_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_charts_context = "all_artists"
             mw.chart_detail_separator_widgets.clear()
@@ -1581,6 +1599,12 @@ class ChartsUIManager:
             and mw.chart_detail_layout.count() > 0
         )
 
+        if is_refresh and hasattr(self, "charts_genres_details_label"):
+            try:
+                self.charts_genres_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_charts_context = "all_genres"
             mw.chart_detail_separator_widgets.clear()
@@ -1917,6 +1941,12 @@ class ChartsUIManager:
             and mw.charts_stack.currentIndex() == 1
             and mw.chart_detail_layout.count() > 0
         )
+
+        if is_refresh and hasattr(self, "charts_composers_details_label"):
+            try:
+                self.charts_composers_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_charts_context = "all_composers"
@@ -2307,6 +2337,12 @@ class ChartsUIManager:
             and mw.chart_detail_layout.count() > 0
         )
 
+        if is_refresh and hasattr(mw, "charts_sub_view_scroll_area"):
+            try:
+                mw.charts_sub_view_scroll_area.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_artist_view = artist_name
             mw.current_charts_context = "artist"
@@ -2492,7 +2528,7 @@ class ChartsUIManager:
         mw.last_charts_artist_album_group = None
         mw.current_charts_sub_flow_layout = None
 
-        if len(albums_of_artist) > 20:
+        if len(albums_of_artist) > 20 and mw.show_favorites_separators:
             mw.show_charts_artist_album_separators = True
             mw.charts_artist_album_groups = set()
             for album_key, data in albums_of_artist:
@@ -2672,6 +2708,12 @@ class ChartsUIManager:
             and mw.charts_stack.currentIndex() == 1
             and mw.chart_detail_layout.count() > 0
         )
+
+        if is_refresh and hasattr(mw, "charts_sub_view_scroll_area"):
+            try:
+                mw.charts_sub_view_scroll_area.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_genre_view = genre_name
@@ -2861,7 +2903,7 @@ class ChartsUIManager:
         mw.last_charts_genre_album_group = None
         mw.current_charts_sub_flow_layout = None
 
-        if len(albums_of_genre) > 20:
+        if len(albums_of_genre) > 20 and mw.show_favorites_separators:
             mw.show_charts_genre_album_separators = True
             mw.charts_genre_album_groups = set()
             for album_key, data in albums_of_genre:
@@ -3040,6 +3082,12 @@ class ChartsUIManager:
             and mw.charts_stack.currentIndex() == 1
             and mw.chart_detail_layout.count() > 0
         )
+
+        if is_refresh and hasattr(mw, "charts_sub_view_scroll_area"):
+            try:
+                mw.charts_sub_view_scroll_area.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_composer_view = composer_name
@@ -3226,7 +3274,7 @@ class ChartsUIManager:
         mw.last_charts_composer_album_group = None
         mw.current_charts_sub_flow_layout = None
 
-        if len(albums_of_composer) > 20:
+        if len(albums_of_composer) > 20 and mw.show_favorites_separators:
             mw.show_charts_composer_album_separators = True
             mw.charts_composer_album_groups = set()
             for album_key, data in albums_of_composer:

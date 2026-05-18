@@ -1096,28 +1096,64 @@ class UIManager(QObject):
             tab_name = state.get("main_tab_name")
             ctx = state.get("context_data", {})
 
-            if tab_name == "artist" and not ctx:
-                scroll_attr_name = "artists_scroll"
-            elif tab_name == "album" and not ctx:
-                scroll_attr_name = "albums_scroll"
-            elif tab_name == "genre" and not ctx:
-                scroll_attr_name = "genres_scroll"
-            elif tab_name == "composer" and not ctx:
-                scroll_attr_name = "composers_scroll"
+            if tab_name == "artist":
+                if not ctx:
+                    scroll_attr_name = "artists_scroll"
+                elif "artist_name" in ctx and "album_key" not in ctx:
+                    scroll_attr_name = "artist_albums_scroll"
+
+            elif tab_name == "album":
+                if not ctx:
+                    scroll_attr_name = "albums_scroll"
+
+            elif tab_name == "genre":
+                if not ctx:
+                    scroll_attr_name = "genres_scroll"
+                elif "genre_name" in ctx and "album_key" not in ctx:
+                    scroll_attr_name = "genre_albums_scroll"
+
+            elif tab_name == "composer":
+                if not ctx:
+                    scroll_attr_name = "composers_scroll"
+                elif "composer_name" in ctx and "album_key" not in ctx:
+                    scroll_attr_name = "composer_albums_scroll"
+
             elif tab_name == "track":
                 scroll_attr_name = "songs_scroll"
-            elif tab_name == "playlist" and not ctx:
-                scroll_attr_name = "playlists_scroll"
-            elif tab_name == "folder" and not ctx:
-                scroll_attr_name = "catalog_scroll"
-            elif tab_name == "favorite" and not ctx:
-                scroll_attr_name = "favorites_scroll"
-            elif tab_name == "charts" and not ctx:
-                scroll_attr_name = "charts_scroll"
+
+            elif tab_name == "playlist":
+                if not ctx:
+                    scroll_attr_name = "playlists_scroll"
+
+            elif tab_name == "folder":
+                if not ctx:
+                    scroll_attr_name = "catalog_scroll"
+
+            elif tab_name == "favorite":
+                if not ctx:
+                    scroll_attr_name = "favorites_scroll"
+                elif ctx.get("context") in ["artist", "genre", "composer"] and ctx.get(
+                        "data") and "album_key" not in ctx:
+                    scroll_attr_name = "fav_sub_view_scroll_area"
+                elif ctx.get("context") in ["all_artists", "all_albums", "all_genres", "all_composers", "all_folders",
+                                            "all_playlists"]:
+                    scroll_attr_name = "favorite_detail_scroll_area"
+
+            elif tab_name == "charts":
+                if not ctx:
+                    scroll_attr_name = "charts_scroll"
+                elif ctx.get("context") in ["artist", "genre", "composer"] and ctx.get(
+                        "data") and "album_key" not in ctx:
+                    scroll_attr_name = "charts_sub_view_scroll_area"
+                elif ctx.get("context") in ["all_artists", "all_albums", "all_genres", "all_composers"]:
+                    scroll_attr_name = "chart_detail_scroll_area"
+
             elif tab_name == "history":
                 scroll_attr_name = "history_scroll"
-            elif tab_name == "search" and not ctx:
-                scroll_attr_name = "search_scroll"
+
+            elif tab_name == "search":
+                if not ctx:
+                    scroll_attr_name = "search_scroll"
 
             if scroll_attr_name:
                 widget = getattr(mw, scroll_attr_name, None)
@@ -1161,6 +1197,59 @@ class UIManager(QObject):
 
         load_func = load_funcs.get(attr_name)
 
+        if not load_func:
+            if attr_name == "favorite_detail_scroll_area":
+                ctx = getattr(mw, "current_favorites_context", None)
+                fav = self.favorites_ui_manager
+                if ctx == "all_artists":
+                    load_func = fav.load_more_favorite_artists
+                elif ctx == "all_albums":
+                    load_func = fav.load_more_favorite_albums
+                elif ctx == "all_genres":
+                    load_func = fav.load_more_favorite_genres
+                elif ctx == "all_composers":
+                    load_func = fav.load_more_favorite_composers
+                elif ctx == "all_folders":
+                    load_func = fav.load_more_favorite_folders
+                elif ctx == "all_playlists":
+                    load_func = fav.load_more_favorite_playlists
+
+            elif attr_name == "fav_sub_view_scroll_area":
+                ctx = getattr(mw, "current_favorites_context", None)
+                fav = self.favorites_ui_manager
+                if ctx == "artist":
+                    load_func = fav.load_more_fav_artist_albums
+                elif ctx == "composer":
+                    load_func = fav.load_more_fav_composer_albums
+                elif ctx == "genre":
+                    load_func = fav.load_more_fav_genre_albums
+
+            elif attr_name == "chart_detail_scroll_area":
+                ctx = getattr(mw, "current_charts_context", None)
+                charts = getattr(self, "charts_ui_manager", None)
+                if charts:
+                    if ctx in ["all_artists", "artist", "artists"]:
+                        load_func = getattr(charts, "load_more_charts_all_artists", None)
+                    elif ctx in ["all_albums", "album", "albums"]:
+                        load_func = getattr(charts, "load_more_charts_all_albums", None)
+                    elif ctx in ["all_genres", "genre", "genres"]:
+                        load_func = getattr(charts, "load_more_charts_all_genres", None)
+                    elif ctx in ["all_composers", "composer", "composers"]:
+                        load_func = getattr(charts, "load_more_charts_all_composers", None)
+
+            elif attr_name == "charts_sub_view_scroll_area":
+                ctx = getattr(mw, "current_charts_context", None)
+                charts = getattr(self, "charts_ui_manager", None)
+                if charts:
+                    if ctx == "artist":
+                        load_func = getattr(charts, "load_more_charts_artist_albums", None)
+                    elif ctx == "composer":
+                        load_func = getattr(charts, "load_more_charts_composer_albums", None)
+                    elif ctx == "genre":
+                        load_func = getattr(charts, "load_more_charts_genre_albums", None)
+
+        state = {'last_max': -1, 'finished': False}
+
         state = {'last_max': -1, 'finished': False}
 
         timeout_timer = QTimer()
@@ -1188,7 +1277,7 @@ class UIManager(QObject):
                 state['last_max'] = current_max
                 if load_func and callable(load_func):
                     load_func()
-            else:
+            elif current_max < state['last_max']:
                 scrollbar.setValue(current_max)
                 cleanup()
 

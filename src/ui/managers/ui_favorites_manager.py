@@ -670,6 +670,12 @@ class FavoritesUIManager:
             and mw.favorites_stack.currentIndex() == 1
         )
 
+        if is_refresh and hasattr(self, "fav_playlists_details_label"):
+            try:
+                self.fav_playlists_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_favorites_context = "all_playlists"
             mw.favorite_detail_separator_widgets.clear()
@@ -1024,6 +1030,12 @@ class FavoritesUIManager:
             and mw.favorite_detail_layout.count() > 0
             and mw.favorites_stack.currentIndex() == 1
         )
+
+        if is_refresh and hasattr(self, "fav_albums_details_label"):
+            try:
+                self.fav_albums_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_favorites_context = "all_albums"
@@ -1421,6 +1433,12 @@ class FavoritesUIManager:
             and mw.favorites_stack.currentIndex() == 1
         )
 
+        if is_refresh and hasattr(self, "fav_artists_details_label"):
+            try:
+                self.fav_artists_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_favorites_context = "all_artists"
             self.ui_manager.clear_layout(mw.favorite_detail_header_layout)
@@ -1744,6 +1762,12 @@ class FavoritesUIManager:
             and mw.favorite_detail_layout.count() > 0
             and mw.favorites_stack.currentIndex() == 1
         )
+
+        if is_refresh and hasattr(self, "fav_composers_details_label"):
+            try:
+                self.fav_composers_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_favorites_context = "all_composers"
@@ -2241,7 +2265,7 @@ class FavoritesUIManager:
         mw.last_fav_composer_album_group = None
         mw.current_fav_sub_flow_layout = None
 
-        if len(albums_of_composer) > 20:
+        if len(albums_of_composer) > 20 and mw.show_favorites_separators:
             mw.show_fav_composer_album_separators = True
             mw.fav_composer_album_groups = set()
             for album_key, data in albums_of_composer:
@@ -2415,6 +2439,12 @@ class FavoritesUIManager:
             and mw.favorite_detail_layout.count() > 0
             and mw.favorites_stack.currentIndex() == 1
         )
+
+        if is_refresh and hasattr(self, "fav_genres_details_label"):
+            try:
+                self.fav_genres_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_favorites_context = "all_genres"
@@ -2739,6 +2769,12 @@ class FavoritesUIManager:
             and mw.favorites_stack.currentIndex() == 1
         )
 
+        if is_refresh and hasattr(self, "fav_folders_details_label"):
+            try:
+                self.fav_folders_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
+
         if not is_refresh:
             mw.current_favorites_context = "all_folders"
             self.ui_manager.clear_layout(mw.favorite_detail_header_layout)
@@ -3058,6 +3094,12 @@ class FavoritesUIManager:
             and mw.favorite_detail_layout.count() > 0
             and mw.favorites_stack.currentIndex() == 1
         )
+
+        if is_refresh and hasattr(self, "fav_tracks_details_label"):
+            try:
+                self.fav_tracks_details_label.objectName()
+            except RuntimeError:
+                is_refresh = False
 
         if not is_refresh:
             mw.current_favorites_context = "tracks"
@@ -3652,7 +3694,7 @@ class FavoritesUIManager:
         mw.last_fav_artist_album_group = None
         mw.current_fav_sub_flow_layout = None
 
-        if len(albums_of_artist) > 20:
+        if len(albums_of_artist) > 20 and mw.show_favorites_separators:
             mw.show_fav_artist_album_separators = True
             mw.fav_artist_album_groups = set()
             for album_key, data in albums_of_artist:
@@ -4054,7 +4096,7 @@ class FavoritesUIManager:
         mw.last_fav_genre_album_group = None
         mw.current_fav_sub_flow_layout = None
 
-        if len(albums_of_genre) > 20:
+        if len(albums_of_genre) > 20 and mw.show_favorites_separators:
             mw.show_fav_genre_album_separators = True
             mw.fav_genre_album_groups = set()
             for album_key, data in albums_of_genre:
