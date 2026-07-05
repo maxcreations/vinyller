@@ -293,7 +293,7 @@ class ContextMenuHandler:
                     action.setEnabled(False)
                 sub_menu.addAction(action)
 
-    def show_context_menu(self, data, global_pos, is_queue_item=False, context=None):
+    def show_context_menu(self, data, global_pos, is_queue_item = False, context = None):
         """
         Constructs and displays a dynamic, universal context menu based on the selected item's data and type.
         """
@@ -458,12 +458,15 @@ class ContextMenuHandler:
 
         forced_type = context.get("forced_type") if context else None
 
+        # Get dynamic sorting modes
+        album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
+
         if isinstance(data, list):
             tracks_list = mw.data_manager.get_tracks_from_data(
                 data,
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             if tracks_list:
@@ -510,8 +513,8 @@ class ContextMenuHandler:
             tracks_list = mw.data_manager.get_tracks_from_data(
                 data,
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             common_album_key = data
@@ -526,8 +529,8 @@ class ContextMenuHandler:
                 tracks_list = mw.data_manager.get_tracks_from_data(
                     {"type": "composer", "data": data},
                     mw.library_manager,
-                    mw.artist_album_sort_mode,
-                    mw.favorite_tracks_sort_mode,
+                    album_sort_mode,
+                    track_sort_mode,
                     mw.favorites,
                 )
 
@@ -537,8 +540,8 @@ class ContextMenuHandler:
                 tracks_list = mw.data_manager.get_tracks_from_data(
                     {"type": "genre", "data": data},
                     mw.library_manager,
-                    mw.artist_album_sort_mode,
-                    mw.favorite_tracks_sort_mode,
+                    album_sort_mode,
+                    track_sort_mode,
                     mw.favorites,
                 )
 
@@ -548,8 +551,8 @@ class ContextMenuHandler:
                 tracks_list = mw.data_manager.get_tracks_from_data(
                     {"type": "artist", "data": data},
                     mw.library_manager,
-                    mw.artist_album_sort_mode,
-                    mw.favorite_tracks_sort_mode,
+                    album_sort_mode,
+                    track_sort_mode,
                     mw.favorites,
                 )
 
@@ -559,8 +562,8 @@ class ContextMenuHandler:
                     tracks_list = mw.data_manager.get_tracks_from_data(
                         data,
                         mw.library_manager,
-                        mw.artist_album_sort_mode,
-                        mw.favorite_tracks_sort_mode,
+                        album_sort_mode,
+                        track_sort_mode,
                         mw.favorites,
                     )
                     common_artists = [data]
@@ -569,8 +572,8 @@ class ContextMenuHandler:
                     tracks_list = mw.data_manager.get_tracks_from_data(
                         data,
                         mw.library_manager,
-                        mw.artist_album_sort_mode,
-                        mw.favorite_tracks_sort_mode,
+                        album_sort_mode,
+                        track_sort_mode,
                         mw.favorites,
                     )
                     common_genres = [data]
@@ -579,8 +582,8 @@ class ContextMenuHandler:
                     tracks_list = mw.data_manager.get_tracks_from_data(
                         data,
                         mw.library_manager,
-                        mw.artist_album_sort_mode,
-                        mw.favorite_tracks_sort_mode,
+                        album_sort_mode,
+                        track_sort_mode,
                         mw.favorites,
                     )
                     common_composers = [data]
@@ -589,8 +592,8 @@ class ContextMenuHandler:
                     tracks_list = mw.data_manager.get_tracks_from_data(
                         data,
                         mw.library_manager,
-                        mw.artist_album_sort_mode,
-                        mw.favorite_tracks_sort_mode,
+                        album_sort_mode,
+                        track_sort_mode,
                         mw.favorites,
                     )
                 elif os.path.isfile(data) and data.lower().endswith((".m3u", ".m3u8")):
@@ -610,8 +613,8 @@ class ContextMenuHandler:
                     tracks_list = mw.data_manager.get_tracks_from_data(
                         data,
                         mw.library_manager,
-                        mw.artist_album_sort_mode,
-                        mw.favorite_tracks_sort_mode,
+                        album_sort_mode,
+                        track_sort_mode,
                         mw.favorites,
                     )
 

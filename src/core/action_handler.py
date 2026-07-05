@@ -548,17 +548,18 @@ class ActionHandler:
 
         mw.refresh_current_view()
 
-
     def play_next(self, data):
         """
         Inserts tracks from data immediately after the currently playing track in the queue.
         """
         mw = self.main_window
+        album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
+
         tracks = mw.data_manager.get_tracks_from_data(
             data,
             mw.library_manager,
-            mw.artist_album_sort_mode,
-            mw.favorite_tracks_sort_mode,
+            album_sort_mode,
+            track_sort_mode,
             mw.favorites,
         )
 
@@ -644,6 +645,8 @@ class ActionHandler:
         tracks = []
         items_to_check_fav = []
 
+        album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
+
         if item_type == "track":
             if isinstance(data, list):
                 if not data:
@@ -658,8 +661,8 @@ class ActionHandler:
             tracks = mw.data_manager.get_tracks_from_data(
                 data,
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             items_to_check_fav.append((data, "album"))
@@ -671,8 +674,8 @@ class ActionHandler:
             tracks = mw.data_manager.get_tracks_from_data(
                 {"type": "artist", "data": data},
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             items_to_check_fav.append((data, "artist"))
@@ -687,8 +690,8 @@ class ActionHandler:
             tracks = mw.data_manager.get_tracks_from_data(
                 data,
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             items_to_check_fav.append((data, "folder"))
@@ -700,8 +703,8 @@ class ActionHandler:
             tracks = mw.data_manager.get_tracks_from_data(
                 {"type": "composer", "data": data},
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             items_to_check_fav.append((data, "composer"))
@@ -1162,11 +1165,13 @@ class ActionHandler:
         mw = self.main_window
         is_queue_empty = len(mw.player.get_current_queue()) == 0
 
+        album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
+
         tracks = mw.data_manager.get_tracks_from_data(
             data,
             mw.library_manager,
-            mw.artist_album_sort_mode,
-            mw.favorite_tracks_sort_mode,
+            album_sort_mode,
+            track_sort_mode,
             mw.favorites,
         )
 
@@ -1224,22 +1229,24 @@ class ActionHandler:
             elif "::" in data:
                 path = data.split("::")[0]
             else:
+                album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
                 tracks = mw.data_manager.get_tracks_from_data(
                     data,
                     mw.library_manager,
-                    mw.artist_album_sort_mode,
-                    mw.favorite_tracks_sort_mode,
+                    album_sort_mode,
+                    track_sort_mode,
                     mw.favorites,
                 )
                 if tracks:
                     path = tracks[0].get("real_path", tracks[0].get("path"))
 
         elif isinstance(data, tuple):
+            album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
             tracks = mw.data_manager.get_tracks_from_data(
                 data,
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
             if tracks:
@@ -1327,11 +1334,13 @@ class ActionHandler:
                             print(f"Error decoding album drop data: {e}")
                             continue
 
+                    album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(context_data)
+
                     tracks_to_add = mw.data_manager.get_tracks_from_data(
                         context_data,
                         mw.library_manager,
-                        mw.artist_album_sort_mode,
-                        mw.favorite_tracks_sort_mode,
+                        album_sort_mode,
+                        track_sort_mode,
                         mw.favorites,
                     )
 
@@ -1375,12 +1384,13 @@ class ActionHandler:
         Launches the universal metadata editor dialog for the provided entity data.
         """
         mw = self.main_window
+        album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
 
         tracks_to_edit = mw.data_manager.get_tracks_from_data(
             data,
             mw.library_manager,
-            mw.artist_album_sort_mode,
-            mw.favorite_tracks_sort_mode,
+            album_sort_mode,
+            track_sort_mode,
             mw.favorites,
         )
 
@@ -1630,11 +1640,13 @@ class ActionHandler:
         Creates a new mixtape (copies files into a target directory) based on the supplied data.
         """
         mw = self.main_window
+        album_sort_mode, track_sort_mode = mw.player_controller.get_current_sort_modes(data)
+
         tracks = mw.data_manager.get_tracks_from_data(
             data,
             mw.library_manager,
-            mw.artist_album_sort_mode,
-            mw.favorite_tracks_sort_mode,
+            album_sort_mode,
+            track_sort_mode,
             mw.favorites,
         )
         if not tracks:

@@ -533,6 +533,97 @@ class PlayerController:
             mw.vinyl_widget.stop_rotation()
         mw.ui_manager.update_all_track_widgets()
 
+    def get_current_sort_modes(self, data = None):
+        """
+        Determines the appropriate sorting modes for albums and tracks dynamically,
+        based on the currently active tab, view context, or provided data type.
+        This prevents applying global sorting to specific contexts like Favorites or Charts.
+
+        Args:
+            data: Optional data payload to override view-based sorting (e.g., explicit composer dict).
+
+        Returns:
+            tuple: (album_sort_mode, track_sort_mode)
+        """
+        mw = self.main_window
+        current_tab_idx = mw.main_stack.currentIndex()
+
+        # Fallback to global defaults if no specific context is matched
+        album_sort = getattr(mw, "artist_album_sort_mode", 0)
+        track_sort = getattr(mw, "favorite_tracks_sort_mode", 0)
+
+        # Determine the current active tab name
+        tab_name = None
+        if hasattr(mw, "nav_button_icon_names") and 0 <= current_tab_idx < len(mw.nav_button_icon_names):
+            tab_name = mw.nav_button_icon_names[current_tab_idx]
+        elif getattr(mw, "search_tab_index", -1) == current_tab_idx:
+            tab_name = "search"
+        elif getattr(mw, "charts_tab_index", -1) == current_tab_idx:
+            tab_name = "charts"
+
+        # Determine data type if data was provided (to cover drag-and-drop, context menus)
+        data_type = None
+        if isinstance(data, dict):
+            data_type = data.get("type")
+        elif isinstance(data, tuple) and len(data) >= 2:
+            data_type = "album"
+        elif isinstance(data, str):
+            if data in ["favorite_tracks", "all_tracks"]:
+                data_type = "tracks"
+            elif data == "all_favorite_albums":
+                data_type = "all_albums"
+            elif data == "all_favorite_artists":
+                data_type = "artist"
+            elif data == "all_favorite_genres":
+                data_type = "genre"
+            elif data == "all_favorite_composers":
+                data_type = "composer"
+            elif hasattr(mw, "data_manager"):
+                if data in getattr(mw.data_manager, "artists_data", {}):
+                    data_type = "artist"
+                elif data in getattr(mw.data_manager, "genres_data", {}):
+                    data_type = "genre"
+                elif data in getattr(mw.data_manager, "composers_data", {}):
+                    data_type = "composer"
+                elif os.path.isdir(data):
+                    data_type = "folder"
+
+        # Apply context-specific sorting modes based on the active UI view and data type
+        if tab_name == "favorite":
+            context = getattr(mw, "current_favorites_context", None)
+
+            # Use specific sort modes based on either explicit data_type or the UI context
+            if data_type == "artist" or context in ["artist", "all_artists"]:
+                album_sort = getattr(mw, "favorite_artist_album_sort_mode", album_sort)
+            elif data_type == "composer" or context in ["composer", "all_composers"]:
+                album_sort = getattr(mw, "favorite_composer_album_sort_mode", album_sort)
+            elif data_type == "genre" or context in ["genre", "all_genres"]:
+                album_sort = getattr(mw, "favorite_genre_album_sort_mode", album_sort)
+            elif data_type == "folder" or context in ["folder", "all_folders"]:
+                album_sort = getattr(mw, "favorite_folders_sort_mode", album_sort)
+            elif data_type == "tracks" or context in ["tracks", "all_tracks"]:
+                track_sort = getattr(mw, "favorite_tracks_sort_mode", track_sort)
+            elif data_type == "all_albums" or context == "all_albums":
+                album_sort = getattr(mw, "favorite_albums_sort_mode", album_sort)
+            elif context == "all_playlists":
+                album_sort = getattr(mw, "favorite_playlists_sort_mode", album_sort)
+
+        elif tab_name == "charts":
+            context = getattr(mw, "current_charts_context", None)
+            if data_type == "artist" or context in ["artist", "all_artists"]:
+                album_sort = getattr(mw, "charts_artist_album_sort_mode", album_sort)
+            elif data_type == "composer" or context in ["composer", "all_composers"]:
+                album_sort = getattr(mw, "charts_composer_album_sort_mode", album_sort)
+            elif data_type == "genre" or context in ["genre", "all_genres"]:
+                album_sort = getattr(mw, "charts_genre_album_sort_mode", album_sort)
+            elif data_type == "all_albums" or context == "all_albums":
+                album_sort = getattr(mw, "charts_album_sort_mode", album_sort)
+
+        elif tab_name == "composer" or data_type == "composer":
+            album_sort = getattr(mw, "composer_album_sort_mode", album_sort)
+
+        return album_sort, track_sort
+
     def play_data_shuffled(self, data):
         """
         Starts playback after shuffling the track list.
@@ -551,16 +642,8 @@ class PlayerController:
         entity_type = None
         item_name_for_queue = translate("Playback Queue")
 
-        current_sort_mode = mw.artist_album_sort_mode
-
-        if isinstance(data, dict) and data.get("type") == "composer":
-            current_sort_mode = getattr(
-                mw, "composer_album_sort_mode", mw.artist_album_sort_mode
-            )
-        elif isinstance(data, str) and data in mw.data_manager.composers_data:
-            current_sort_mode = getattr(
-                mw, "composer_album_sort_mode", mw.artist_album_sort_mode
-            )
+        # Get dynamic sorting modes based on the current context
+        album_sort_mode, track_sort_mode = self.get_current_sort_modes(data)
 
         if isinstance(data, dict) and data.get("type") == "search_results":
             mw.current_queue_name = translate("Search Results")
@@ -589,8 +672,8 @@ class PlayerController:
                         mw.data_manager.get_tracks_from_data(
                             fetch_data,
                             mw.library_manager,
-                            current_sort_mode,
-                            mw.favorite_tracks_sort_mode,
+                            album_sort_mode,
+                            track_sort_mode,
                             mw.favorites,
                         )
                     )
@@ -722,8 +805,8 @@ class PlayerController:
         tracks = mw.data_manager.get_tracks_from_data(
             data,
             mw.library_manager,
-            current_sort_mode,
-            mw.favorite_tracks_sort_mode,
+            album_sort_mode,
+            track_sort_mode,
             mw.favorites,
         )
 
@@ -1088,11 +1171,13 @@ class PlayerController:
                     key = lambda t: (t.get("discnumber", 0), t.get("tracknumber", 0))))
 
         if not queue and context_data_for_dm:
+            # Fetch dynamic sort modes to preserve the view's specific layout
+            album_sort_mode, track_sort_mode = self.get_current_sort_modes(context_data_for_dm)
             queue = mw.data_manager.get_tracks_from_data(
                 context_data_for_dm,
                 mw.library_manager,
-                mw.artist_album_sort_mode,
-                mw.favorite_tracks_sort_mode,
+                album_sort_mode,
+                track_sort_mode,
                 mw.favorites,
             )
 
