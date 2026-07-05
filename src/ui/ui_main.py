@@ -2994,44 +2994,56 @@ class MainWindow(StyledMainWindow):
         if getattr(self, "is_restoring_state", False):
             return
 
-        if hasattr(self, 'current_view_state') and self.current_view_state:
-            prev_tab_name = self.current_view_state.get("main_tab_name")
-            if prev_tab_name:
-                if prev_tab_name not in self.tab_history:
-                    self.tab_history[prev_tab_name] = []
+        if not hasattr(self, 'tab_current_states'):
+            self.tab_current_states = {}
 
-                if not self.tab_history[prev_tab_name] or self.tab_history[prev_tab_name][
-                    -1] != self.current_view_state:
-                    state_to_save = self.current_view_state.copy()
-
-                    if hasattr(self, "ui_manager"):
-                        attr_name, val = self.ui_manager._capture_current_scroll()
-                        if attr_name:
-                            state_to_save["scroll_positions"] = {attr_name: val}
-
-                    self.tab_history[prev_tab_name].append(state_to_save)
-
-                    if len(self.tab_history[prev_tab_name]) > 50:
-                        self.tab_history[prev_tab_name] = self.tab_history[prev_tab_name][-50:]
-
+        target_tab_name = None
         if isinstance(main_tab_index, str):
-            self.current_view_state = {
-                "main_tab_name": main_tab_index,
-                "context_data": context_data or {},
-            }
+            target_tab_name = main_tab_index
+        elif 0 <= main_tab_index < len(self.nav_button_icon_names):
+            target_tab_name = self.nav_button_icon_names[main_tab_index]
+        elif hasattr(self, "global_search_page_index") and main_tab_index == self.global_search_page_index:
+            target_tab_name = "search"
+
+        if not target_tab_name:
             return
 
-        if 0 <= main_tab_index < len(self.nav_button_icon_names):
-            icon_name = self.nav_button_icon_names[main_tab_index]
-            self.current_view_state = {
-                "main_tab_name": icon_name,
-                "context_data": context_data or {},
-            }
-        elif hasattr(self, "global_search_page_index") and main_tab_index == self.global_search_page_index:
-            self.current_view_state = {
-                "main_tab_name": "search",
-                "context_data": context_data or {},
-            }
+        new_state = {
+            "main_tab_name": target_tab_name,
+            "context_data": context_data or {}
+        }
+
+        prev_state = getattr(self, "current_view_state", None)
+
+        if prev_state:
+            prev_tab_name = prev_state.get("main_tab_name")
+
+            if prev_tab_name == target_tab_name:
+                def normalize_val(v):
+                    if isinstance(v, list): return tuple(v)
+                    if isinstance(v, dict): return tuple(sorted((k, normalize_val(val)) for k, val in v.items()))
+                    return v
+
+                if normalize_val(prev_state.get("context_data")) == normalize_val(context_data or {}):
+                    self.current_view_state = new_state
+                    self.tab_current_states[target_tab_name] = new_state
+                    return
+
+                if target_tab_name not in self.tab_history:
+                    self.tab_history[target_tab_name] = []
+
+                state_to_save = prev_state.copy()
+                if hasattr(self, "ui_manager"):
+                    attr_name, val = self.ui_manager._capture_current_scroll()
+                    if attr_name:
+                        state_to_save["scroll_positions"] = {attr_name: val}
+
+                self.tab_history[target_tab_name].append(state_to_save)
+                if len(self.tab_history[target_tab_name]) > 50:
+                    self.tab_history[target_tab_name] = self.tab_history[target_tab_name][-50:]
+
+        self.current_view_state = new_state
+        self.tab_current_states[target_tab_name] = new_state
 
     def save_current_view_state(self):
         """Saves current UI state to the state dictionary."""

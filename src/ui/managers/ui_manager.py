@@ -934,28 +934,22 @@ class UIManager(QObject):
                 self.populate_history_tab()
 
         if not mw.is_restoring_state:
-            context_data = None
+            if not hasattr(mw, 'tab_current_states'):
+                mw.tab_current_states = {}
+
             if icon_name in ["track", "history"]:
                 context_data = {"context": "main"}
+                mw.update_current_view_state(main_tab_index=index, context_data=context_data)
             elif icon_name in [
-                "artist",
-                "album",
-                "genre",
-                "folder",
-                "playlist",
-                "favorite",
-                "charts",
-                "composer",
+                "artist", "album", "genre", "folder",
+                "playlist", "favorite", "charts", "composer",
             ]:
-                current_sub_stack = mw.main_stack.widget(index).findChild(
-                    QFrame
-                )
-                context_data = {}
-
-            if context_data is not None:
-                mw.update_current_view_state(
-                    main_tab_index=index, context_data=context_data
-                )
+                # If the tab already has a tracked deep/active state, simply restore it smoothly
+                if icon_name in mw.tab_current_states:
+                    mw.current_view_state = mw.tab_current_states[icon_name]
+                else:
+                    # First launch initialization for this specific tab context
+                    mw.update_current_view_state(main_tab_index=index, context_data={})
 
     def _on_separator_clicked(self, source_view, letters, anchor_widget):
         """Emits a signal requesting the AlphaJumpPopup to appear."""
@@ -1349,6 +1343,10 @@ class UIManager(QObject):
             mw.is_restoring_state = True
             try:
                 mw.current_view_state = previous_state
+                if not hasattr(mw, 'tab_current_states'):
+                    mw.tab_current_states = {}
+                # Synchronize the cached current tab state to the rolled-back entry
+                mw.tab_current_states[current_tab_name] = previous_state
 
                 context_data = previous_state.get("context_data", {})
                 ctx = context_data.get("context")
@@ -1493,5 +1491,8 @@ class UIManager(QObject):
                     "main_tab_name": current_tab_name,
                     "context_data": {}
                 }
+                if not hasattr(mw, 'tab_current_states'):
+                    mw.tab_current_states = {}
+                mw.tab_current_states[current_tab_name] = mw.current_view_state
             finally:
                 mw.is_restoring_state = False

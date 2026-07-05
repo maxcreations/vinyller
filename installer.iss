@@ -11,7 +11,7 @@ AppId={{DBE5AA4E-1507-4518-820F-8EF4F5BBE623}
 AppName={#MyAppName}
 
 ; Version is specified directly so that the update_version.py script can update it during release
-AppVersion=1.2.1
+AppVersion=1.2.2
 
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
